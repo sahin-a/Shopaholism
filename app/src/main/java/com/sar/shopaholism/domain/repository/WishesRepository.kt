@@ -9,4 +9,6 @@ interface WishesRepository {
     suspend fun create(wish: Wish): Long
 
     suspend fun delete(wishId: Long): Boolean
+
+    suspend fun update(wish: Wish): Boolean
 }
