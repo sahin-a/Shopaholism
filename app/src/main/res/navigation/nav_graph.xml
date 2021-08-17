@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/wishesOverviewFragment">
+
+    <fragment
+        android:id="@+id/wishesOverviewFragment"
+        android:name="com.sar.shopaholism.presentation.fragment.WishesOverviewFragment"
+        android:label="fragment_wishes_overview"
+        tools:layout="@layout/fragment_wishes_overview" >
+        <action
+            android:id="@+id/action_wishesOverviewFragment_to_createWishFragment"
+            app:destination="@id/createWishFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/createWishFragment"
+        android:name="com.sar.shopaholism.presentation.fragment.CreateWishFragment"
+        android:label="fragment_create_wish"
+        tools:layout="@layout/fragment_create_wish" >
+        <action
+            android:id="@+id/action_createWishFragment_to_wishesOverviewFragment"
+            app:destination="@id/wishesOverviewFragment" />
+    </fragment>
+</navigation>

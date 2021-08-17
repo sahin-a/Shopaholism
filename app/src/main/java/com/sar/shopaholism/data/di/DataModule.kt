@@ -10,13 +10,14 @@ import org.koin.dsl.module
 private val databaseModule = module {
     single {
         Room.databaseBuilder(get(), WishesDatabase::class.java, WishesDatabase.DATABASE_NAME)
+            .build()
     }
     single { get<WishesDatabase>().wishDao() }
 }
 
 private val repositoryModule = module {
-    single<WishesRepository> { WishesRepositoryImpl(get()) }
     single { WishesDataSource(get()) }
+    single<WishesRepository> { WishesRepositoryImpl(get()) }
 }
 
 val dataModules = databaseModule + repositoryModule
