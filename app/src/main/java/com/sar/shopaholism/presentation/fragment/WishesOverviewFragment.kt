@@ -4,11 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.sar.shopaholism.R
 import com.sar.shopaholism.domain.entity.Wish
 import com.sar.shopaholism.presentation.adapter.WishesAdapter
@@ -24,36 +24,45 @@ class WishesOverviewFragment() : Fragment(), WishesOverviewView {
 
     // Views
     private lateinit var wishesRecyclerView: RecyclerView
-    private lateinit var createWishButton: Button
+    private lateinit var createWishButton: FloatingActionButton
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_wishes_overview, container, false)
-    }
+        val view = inflater.inflate(R.layout.fragment_wishes_overview, container, false)
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        wishesRecyclerView = view.rootView.findViewById(R.id.wishes_recycler_view)
-        val wishesAdapter = WishesAdapter()
-        wishes.observe(viewLifecycleOwner, { wishes -> wishesAdapter.submitList(wishes) })
-        wishesRecyclerView.adapter = wishesAdapter
+        setupRecyclerView(view)
+        setupCreateButton(view)
 
         presenter.attachView(this)
         presenter.loadWishes()
 
-        createWishButton = view.rootView.findViewById(R.id.create_wish_button)
+        return view
+    }
+
+    private fun setupRecyclerView(view: View) {
+        wishesRecyclerView = view.findViewById(R.id.wishes_recycler_view)
+        val wishesAdapter = WishesAdapter()
+        wishes.observe(viewLifecycleOwner, { wishes -> wishesAdapter.submitList(wishes) })
+        wishesRecyclerView.adapter = wishesAdapter
+    }
+
+    private fun setupCreateButton(view: View) {
+        createWishButton = view.findViewById(R.id.create_wish_button)
         createWishButton.setOnClickListener {
-            view.findNavController()
-                .navigate(R.id.action_wishesOverviewFragment_to_createWishFragment)
+            presenter.createWish()
         }
     }
 
     override fun showWishes(wishes: List<Wish>) {
         this.wishes.value = wishes
+    }
+
+    override fun navigateTo(resourceActionId: Int) {
+        view?.findNavController()
+            ?.navigate(resourceActionId)
     }
 
     override fun showLoading() {

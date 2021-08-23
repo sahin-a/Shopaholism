@@ -6,11 +6,13 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.sar.shopaholism.R
 import com.sar.shopaholism.domain.entity.Wish
+import com.sar.shopaholism.presentation.fragment.WishesOverviewFragmentDirections
 
 class WishesAdapter() :
     ListAdapter<Wish, WishesAdapter.ViewHolder>(WishesDiffCallback) {
@@ -31,10 +33,6 @@ class WishesAdapter() :
         init {
             // Define click listener for the ViewHolder's View.
             wishImageView.setImageResource(R.drawable.ic_launcher_foreground)
-
-            wishEditButton.setOnClickListener {
-
-            }
 
             reprioritizeButton.setOnClickListener {
 
@@ -60,16 +58,26 @@ class WishesAdapter() :
 
         viewHolder.wishTitleTextView.text = wish.title
         viewHolder.wishDescriptionTextView.text = wish.description
+        viewHolder.wishEditButton.setOnClickListener {
+            val action =
+                WishesOverviewFragmentDirections.actionWishesOverviewFragmentToEditWishFragment(wish.id)
+
+            viewHolder.itemView.findNavController()
+                .navigate(action)
+        }
     }
 }
 
 
 object WishesDiffCallback : DiffUtil.ItemCallback<Wish>() {
     override fun areItemsTheSame(oldItem: Wish, newItem: Wish): Boolean {
-        return oldItem == newItem
+        return oldItem.id == newItem.id
     }
 
     override fun areContentsTheSame(oldItem: Wish, newItem: Wish): Boolean {
-        return oldItem.id == newItem.id
+        return oldItem.title == newItem.title
+                && oldItem.description == newItem.description
+                && oldItem.price == newItem.price
+                && oldItem.priority == newItem.priority
     }
 }

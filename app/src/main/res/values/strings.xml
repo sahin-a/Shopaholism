@@ -4,10 +4,12 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <!-- fragment_wishes_overview.xml -->
-    <string name="create_wish_button_text">Create Wish</string>
+    <string name="create_wish_button_text">Create</string>
     <string name="reprioritize">Reprioritize</string>
     <string name="edit">Edit</string>
     <string name="wish_title_hint">Title</string>
     <string name="wish_description_hint">Description</string>
     <string name="wish_price_hint">Price</string>
+    <string name="wish_apply_changes">Apply Changes</string>
+    <string name="wish_delete">Delete</string>
 </resources>

@@ -1,5 +1,6 @@
 package com.sar.shopaholism.data.repository
 
+import com.sar.shopaholism.data.local.mapper.toWish
 import com.sar.shopaholism.data.local.mapper.toWishEntity
 import com.sar.shopaholism.data.local.mapper.toWishes
 import com.sar.shopaholism.data.local.source.WishesDataSource
@@ -21,4 +22,7 @@ class WishesRepositoryImpl(private val dataSource: WishesDataSource) : WishesRep
 
     override suspend fun update(wish: Wish): Boolean =
         dataSource.updateWish(wish.toWishEntity())
+
+    override suspend fun getWish(wishId: Long): Wish =
+        dataSource.getWish(wishId).toWish()
 }

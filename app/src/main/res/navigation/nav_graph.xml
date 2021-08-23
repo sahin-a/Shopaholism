@@ -12,7 +12,12 @@
         tools:layout="@layout/fragment_wishes_overview" >
         <action
             android:id="@+id/action_wishesOverviewFragment_to_createWishFragment"
-            app:destination="@id/createWishFragment" />
+            app:destination="@id/createWishFragment"
+            app:popUpTo="@id/wishesOverviewFragment"
+            app:popUpToInclusive="false" />
+        <action
+            android:id="@+id/action_wishesOverviewFragment_to_editWishFragment"
+            app:destination="@id/editWishFragment" />
     </fragment>
     <fragment
         android:id="@+id/createWishFragment"
@@ -21,6 +26,20 @@
         tools:layout="@layout/fragment_create_wish" >
         <action
             android:id="@+id/action_createWishFragment_to_wishesOverviewFragment"
+            app:destination="@id/wishesOverviewFragment"
+            app:popUpTo="@id/wishesOverviewFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/editWishFragment"
+        android:name="com.sar.shopaholism.presentation.fragment.EditWishFragment"
+        android:label="fragment_edit_wish"
+        tools:layout="@layout/fragment_edit_wish" >
+        <action
+            android:id="@+id/action_editWishFragment_to_wishesOverviewFragment"
             app:destination="@id/wishesOverviewFragment" />
+        <argument
+            android:name="wishId"
+            app:argType="long" />
     </fragment>
 </navigation>

@@ -6,16 +6,15 @@ import com.sar.shopaholism.domain.repository.WishesRepository
 
 class UpdateWishUseCase(private val repo: WishesRepository) {
 
-    suspend fun execute(
-        wishId: Long,
-        title: String,
-        description: String,
-        price: Double,
-        priority: Int
-    ) {
-        require(wishId > 0) { "Wish doesn't have a valid Id" }
+    suspend fun execute(wish: Wish) {
+        WishValidation.validate(
+            wishId = wish.id,
+            title = wish.title,
+            description = wish.description,
+            price = wish.price,
+            priority = wish.priority
+        )
 
-        val wish: Wish = Wish(wishId, title, description, price, priority)
         val isValueUpdated = repo.update(wish)
 
         if (!isValueUpdated) {

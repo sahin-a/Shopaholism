@@ -25,7 +25,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="194dp"
                 android:scaleType="centerCrop"
-                android:src="@drawable/ic_launcher_background" />
+                tools:src="@tools:sample/backgrounds/scenic" />
 
         </com.google.android.material.card.MaterialCardView>
 

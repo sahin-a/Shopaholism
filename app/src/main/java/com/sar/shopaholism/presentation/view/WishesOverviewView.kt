@@ -5,4 +5,5 @@ import com.sar.shopaholism.domain.entity.Wish
 interface WishesOverviewView {
     fun showLoading()
     fun showWishes(wishes: List<Wish>)
+    fun navigateTo(resourceActionId: Int)
 }
