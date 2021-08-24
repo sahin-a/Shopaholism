@@ -12,4 +12,10 @@
     <string name="wish_price_hint">Price</string>
     <string name="wish_apply_changes">Apply Changes</string>
     <string name="wish_delete">Delete</string>
+    <string name="dialog_delete_wish">Do you wanna delete this wish?</string>
+    <string name="Yes">Yes</string>
+    <string name="No">No</string>
+    <string name="OK">OK</string>
+    <string name="Cancel">Cancel</string>
+    <string name="delete">Delete</string>
 </resources>

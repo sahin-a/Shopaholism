@@ -6,15 +6,20 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.sar.shopaholism.R
 import com.sar.shopaholism.domain.entity.Wish
+import com.sar.shopaholism.presentation.fragment.DeleteWishFragmentDialog
 import com.sar.shopaholism.presentation.fragment.WishesOverviewFragmentDirections
 
-class WishesAdapter() :
+class WishesAdapter(
+    private val context: Fragment
+) :
     ListAdapter<Wish, WishesAdapter.ViewHolder>(WishesDiffCallback) {
 
     /**
@@ -25,6 +30,8 @@ class WishesAdapter() :
         var wishTitleTextView: TextView = view.findViewById(R.id.wish_title)
         var wishDescriptionTextView: TextView = view.findViewById(R.id.wish_description)
 
+        var deleteWishButton: FloatingActionButton = view.findViewById(R.id.delete_button)
+
         var wishEditButton: Button = view.findViewById(R.id.edit_button)
         var reprioritizeButton: Button = view.findViewById(R.id.reprioritize_button)
 
@@ -33,10 +40,6 @@ class WishesAdapter() :
         init {
             // Define click listener for the ViewHolder's View.
             wishImageView.setImageResource(R.drawable.ic_launcher_foreground)
-
-            reprioritizeButton.setOnClickListener {
-
-            }
         }
     }
 
@@ -58,12 +61,18 @@ class WishesAdapter() :
 
         viewHolder.wishTitleTextView.text = wish.title
         viewHolder.wishDescriptionTextView.text = wish.description
+
         viewHolder.wishEditButton.setOnClickListener {
             val action =
                 WishesOverviewFragmentDirections.actionWishesOverviewFragmentToEditWishFragment(wish.id)
 
             viewHolder.itemView.findNavController()
                 .navigate(action)
+        }
+
+        viewHolder.deleteWishButton.setOnClickListener {
+            val deleteDialog = DeleteWishFragmentDialog.newInstance(wish.id)
+            deleteDialog.show(context.childFragmentManager, "delete_wish")
         }
     }
 }

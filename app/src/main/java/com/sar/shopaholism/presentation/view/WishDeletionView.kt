@@ -1,5 +1,5 @@
 package com.sar.shopaholism.presentation.view
 
-interface WishEditingView {
+interface WishDeletionView {
     fun setCurrentData()
 }

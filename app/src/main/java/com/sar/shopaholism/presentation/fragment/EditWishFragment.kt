@@ -32,7 +32,7 @@ class EditWishFragment : WishEditingView,
         return inflater.inflate(R.layout.fragment_edit_wish, container, false)
     }
 
-    private fun setCurrentData() = runBlocking {
+    override fun setCurrentData(): Unit = runBlocking {
         coroutineScope {
             var oldWish: Wish? = null
             launch {

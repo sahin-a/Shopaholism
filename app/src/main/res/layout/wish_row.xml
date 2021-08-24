@@ -5,74 +5,100 @@
     android:id="@+id/card_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp">
+    android:layout_marginBottom="8dp">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-        <!-- Image -->
-        <ImageView
-            android:id="@+id/wish_image_view"
-            android:layout_width="match_parent"
-            android:layout_height="194dp"
-            android:scaleType="centerCrop"
-            tools:src="@tools:sample/backgrounds/scenic" />
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/delete_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:backgroundTint="@android:color/transparent"
+            android:outlineAmbientShadowColor="@android:color/transparent"
+            android:outlineSpotShadowColor="@android:color/transparent"
+            android:scaleType="center"
+            android:src="@drawable/ic_delete_wish"
+            app:borderWidth="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:maxImageSize="34dp"
+            app:tint="@android:color/holo_red_light" />
 
-        <!-- Header, Body (Description) -->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:orientation="vertical">
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-            <!-- Header -->
-            <TextView
-                android:id="@+id/wish_title"
+            <!-- Image -->
+            <ImageView
+                android:id="@+id/wish_image_view"
+                android:layout_width="match_parent"
+                android:layout_height="194dp"
+                android:scaleType="centerCrop"
+                tools:src="@tools:sample/backgrounds/scenic" />
+
+            <!-- Header, Body (Description) -->
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="4dp"
-                android:textAppearance="?attr/textAppearanceHeadline6"
-                tools:text="New Computer" />
+                android:layout_margin="8dp"
+                android:orientation="vertical">
 
-            <!-- Description -->
-            <TextView
-                android:id="@+id/wish_description"
+                <!-- Header -->
+                <TextView
+                    android:id="@+id/wish_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="4dp"
+                    android:textAppearance="?attr/textAppearanceHeadline6"
+                    tools:text="New Computer" />
+
+                <!-- Description -->
+                <TextView
+                    android:id="@+id/wish_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?attr/textAppearanceBody2"
+                    tools:text="My current computer is too slow for my hobby :(" />
+
+            </LinearLayout>
+
+            <!-- Button Bar -->
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textAppearance="?attr/textAppearanceBody2"
-                tools:text="My current computer is too slow for my hobby :(" />
+                android:layout_margin="8dp"
+                android:orientation="horizontal">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/edit_button"
+                    style="?attr/colorSecondary"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/edit"
+                    app:icon="@drawable/ic_edit_wish"
+                    app:iconGravity="textStart" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/reprioritize_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="@string/reprioritize"
+                    app:icon="@drawable/ic_wish_reprioritize"
+                    app:iconGravity="textStart" />
+
+            </LinearLayout>
 
         </LinearLayout>
 
-        <!-- Button Bar -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:orientation="horizontal">
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/edit_button"
-                style="?attr/colorSecondary"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/edit"
-                app:icon="@drawable/ic_edit_wish"
-                app:iconGravity="textStart" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/reprioritize_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:text="@string/reprioritize"
-                app:icon="@drawable/ic_wish_reprioritize"
-                app:iconGravity="textStart" />
-
-        </LinearLayout>
-
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </com.google.android.material.card.MaterialCardView>

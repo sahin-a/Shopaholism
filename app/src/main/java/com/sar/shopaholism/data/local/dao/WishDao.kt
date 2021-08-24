@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 abstract class WishDao {
     /* All */
-    @Query("SELECT * FROM wishes")
+    @Query("SELECT * FROM wishes ORDER BY priority ASC")
     abstract fun getAll(): Flow<List<WishEntity>>
 
     @Query("DELETE FROM wishes")
