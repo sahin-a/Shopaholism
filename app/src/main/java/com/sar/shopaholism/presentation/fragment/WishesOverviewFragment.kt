@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.navigation.findNavController
@@ -23,6 +25,7 @@ class WishesOverviewFragment() : Fragment(), WishesOverviewView {
     private val wishes = MutableLiveData<List<Wish>>()
 
     // Views
+    private lateinit var intermediateProgressBar: ProgressBar
     private lateinit var wishesRecyclerView: RecyclerView
     private lateinit var createWishButton: FloatingActionButton
 
@@ -33,6 +36,7 @@ class WishesOverviewFragment() : Fragment(), WishesOverviewView {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_wishes_overview, container, false)
 
+        setupIntermediateBar(view)
         setupRecyclerView(view)
         setupCreateButton(view)
 
@@ -42,10 +46,16 @@ class WishesOverviewFragment() : Fragment(), WishesOverviewView {
         return view
     }
 
+    private fun setupIntermediateBar(view: View) {
+        intermediateProgressBar = view.findViewById(R.id.indeterminate_progressbar)
+    }
+
     private fun setupRecyclerView(view: View) {
         wishesRecyclerView = view.findViewById(R.id.wishes_recycler_view)
         val wishesAdapter = WishesAdapter(this)
-        wishes.observe(viewLifecycleOwner, { wishes -> wishesAdapter.submitList(wishes) })
+        wishes.observe(
+            viewLifecycleOwner,
+            { wishes -> wishesAdapter.submitList(wishes.toMutableList()) })
         wishesRecyclerView.adapter = wishesAdapter
     }
 
@@ -65,7 +75,12 @@ class WishesOverviewFragment() : Fragment(), WishesOverviewView {
             ?.navigate(resourceActionId)
     }
 
-    override fun showLoading() {
-        TODO("Not yet implemented")
+    override fun showLoading(visible: Boolean) {
+        intermediateProgressBar.isVisible = visible
+        intermediateProgressBar.isIndeterminate = visible
+    }
+
+    override fun enableButtons(enabled: Boolean) {
+        createWishButton.isEnabled = enabled
     }
 }

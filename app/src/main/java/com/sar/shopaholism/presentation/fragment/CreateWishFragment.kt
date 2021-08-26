@@ -14,8 +14,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.koin.android.ext.android.inject
 
-class CreateWishFragment : WishCreationView,
-    BaseCreateWishFragment<WishCreationView, WishCreationPresenter>() {
+class CreateWishFragment : BaseCreateWishFragment<WishCreationView, WishCreationPresenter>() {
 
     val presenter: WishCreationPresenter by inject()
 
@@ -35,9 +34,14 @@ class CreateWishFragment : WishCreationView,
                     var success: Boolean = false
 
                     launch {
-                        success = createWish(action = { title, description, price ->
+                        success = createWish(action = { title, imageUri, description, price ->
                             try {
-                                presenter.createWish(title, description, price)
+                                presenter.createWish(
+                                    title = title,
+                                    imageUri = imageUri,
+                                    description = description,
+                                    price = price
+                                )
                                 return@createWish true
                             } catch (e: WishNotCreatedException) {
 
@@ -53,7 +57,7 @@ class CreateWishFragment : WishCreationView,
                         true -> {
                             Toast.makeText(
                                 requireContext(),
-                                "Wish created",
+                                getString(R.string.wish_created_toast),
                                 Toast.LENGTH_SHORT
                             ).show()
 
@@ -62,13 +66,26 @@ class CreateWishFragment : WishCreationView,
 
                         false -> Toast.makeText(
                             requireContext(),
-                            "Failed to create Wish",
+                            getString(R.string.wish_creation_failed_toast),
                             Toast.LENGTH_SHORT
                         ).show()
                     }
                 }
             }
         }
+        presenter.getData() // sets data from model to view
         createButton.isEnabled = ctaEnabled()
     }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+
+        presenter.updateModelData(
+            title = titleEditText.text.toString(),
+            imageUri = imageImageView.imageUri.toString(),
+            description = descriptionEditText.text.toString(),
+            price = priceEditText.text.toString().toDoubleOrNull()
+        )
+    }
+
 }

@@ -15,17 +15,16 @@
             android:id="@+id/delete_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="4dp"
-            android:backgroundTint="@android:color/transparent"
-            android:outlineAmbientShadowColor="@android:color/transparent"
-            android:outlineSpotShadowColor="@android:color/transparent"
+            android:layout_margin="16dp"
+            android:backgroundTint="@color/material_on_primary_emphasis_high_type"
+            android:contentDescription="@string/delete"
             android:scaleType="center"
             android:src="@drawable/ic_delete_wish"
             app:borderWidth="0dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:maxImageSize="34dp"
-            app:tint="@android:color/holo_red_light" />
+            app:maxImageSize="30dp"
+            app:tint="@color/purple_500" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -38,9 +37,10 @@
 
             <!-- Image -->
             <ImageView
-                android:id="@+id/wish_image_view"
+                android:id="@+id/wish_image"
                 android:layout_width="match_parent"
                 android:layout_height="194dp"
+                android:importantForAccessibility="no"
                 android:scaleType="centerCrop"
                 tools:src="@tools:sample/backgrounds/scenic" />
 
@@ -78,21 +78,21 @@
                 android:orientation="horizontal">
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/edit_button"
-                    style="?attr/colorSecondary"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/edit"
-                    app:icon="@drawable/ic_edit_wish"
-                    app:iconGravity="textStart" />
-
-                <com.google.android.material.button.MaterialButton
                     android:id="@+id/reprioritize_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
                     android:text="@string/reprioritize"
                     app:icon="@drawable/ic_wish_reprioritize"
+                    app:iconGravity="textStart" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/edit_button"
+                    style="?attr/materialButtonOutlinedStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="@string/edit"
+                    app:icon="@drawable/ic_edit_wish"
                     app:iconGravity="textStart" />
 
             </LinearLayout>

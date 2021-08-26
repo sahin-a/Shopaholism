@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
-    tools:context=".presentation.fragment.EditWishFragment">
+    tools:context=".presentation.fragment.EditWishFragment"
+    >
 
     <include layout="@layout/wish_create_template" />
 

@@ -6,10 +6,10 @@
     android:layout_height="wrap_content"
     android:layout_marginBottom="8dp"
     android:orientation="vertical"
-    android:padding="16dp"
+    android:padding="8dp"
     tools:context=".presentation.fragment.DeleteWishFragmentDialog">
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+    <!-- <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/cancel_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -20,94 +20,101 @@
         android:text="@string/action_cancel"
         app:borderWidth="0dp"
         app:iconGravity="textStart"
-        app:layout_constraintBottom_toTopOf="@id/content_layout"
+        app:layout_constraintBottom_toTopOf="@id/main_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:maxImageSize="30dp" />
+        app:maxImageSize="30dp" /> -->
 
-    <LinearLayout
-        android:id="@+id/content_layout"
+    <ScrollView
+        android:id="@+id/main_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/cancel_button">
 
-        <com.google.android.material.card.MaterialCardView
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp">
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="8dp">
 
-            <ImageView
-                android:id="@+id/wish_image_view"
-                android:layout_width="match_parent"
-                android:layout_height="194dp"
-                android:scaleType="centerCrop"
-                tools:src="@tools:sample/backgrounds/scenic" />
-
-        </com.google.android.material.card.MaterialCardView>
-
-        <com.google.android.material.card.MaterialCardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp">
-
-            <TextView
-                android:id="@+id/wish_title"
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:drawablePadding="4dp"
-                android:gravity="center_vertical"
-                app:drawableStartCompat="@drawable/ic_wish_title"
-                tools:text="New Computer" />
+                android:layout_marginBottom="8dp">
 
-        </com.google.android.material.card.MaterialCardView>
+                <ImageView
+                    android:id="@+id/wish_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="194dp"
+                    android:scaleType="centerCrop"
+                    tools:src="@tools:sample/backgrounds/scenic" />
 
-        <com.google.android.material.card.MaterialCardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp">
+            </com.google.android.material.card.MaterialCardView>
 
-            <TextView
-                android:id="@+id/wish_description"
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:drawablePadding="4dp"
-                android:gravity="center_vertical"
-                app:drawableStartCompat="@drawable/ic_wish_description"
-                tools:text="I need one for work" />
+                android:layout_marginBottom="8dp">
 
-        </com.google.android.material.card.MaterialCardView>
+                <TextView
+                    android:id="@+id/wish_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:drawablePadding="4dp"
+                    android:gravity="center_vertical"
+                    app:drawableStartCompat="@drawable/ic_wish_title"
+                    tools:text="New Computer" />
 
-        <com.google.android.material.card.MaterialCardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp">
+            </com.google.android.material.card.MaterialCardView>
 
-            <TextView
-                android:id="@+id/wish_price"
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:drawablePadding="4dp"
-                android:gravity="center_vertical"
-                app:drawableStartCompat="@drawable/ic_wish_price"
-                tools:text="500 €" />
+                android:layout_marginBottom="8dp">
 
-        </com.google.android.material.card.MaterialCardView>
+                <TextView
+                    android:id="@+id/wish_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:drawablePadding="4dp"
+                    android:gravity="center_vertical"
+                    app:drawableStartCompat="@drawable/ic_wish_description"
+                    tools:text="I need one for work" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/delete_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/delete"
-            app:icon="@drawable/ic_delete_wish"
-            app:iconGravity="textStart" />
+            </com.google.android.material.card.MaterialCardView>
 
-    </LinearLayout>
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp">
+
+                <TextView
+                    android:id="@+id/wish_price"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:drawablePadding="4dp"
+                    android:gravity="center_vertical"
+                    app:drawableStartCompat="@drawable/ic_wish_price"
+                    tools:text="500 €" />
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/delete_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/delete"
+                app:icon="@drawable/ic_delete_wish"
+                app:iconGravity="textStart" />
+
+        </LinearLayout>
+
+    </ScrollView>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

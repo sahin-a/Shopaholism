@@ -8,8 +8,8 @@
     <fragment
         android:id="@+id/wishesOverviewFragment"
         android:name="com.sar.shopaholism.presentation.fragment.WishesOverviewFragment"
-        android:label="fragment_wishes_overview"
-        tools:layout="@layout/fragment_wishes_overview" >
+        android:label="@string/fragment_overview_header"
+        tools:layout="@layout/fragment_wishes_overview">
         <action
             android:id="@+id/action_wishesOverviewFragment_to_createWishFragment"
             app:destination="@id/createWishFragment"
@@ -22,8 +22,8 @@
     <fragment
         android:id="@+id/createWishFragment"
         android:name="com.sar.shopaholism.presentation.fragment.CreateWishFragment"
-        android:label="fragment_create_wish"
-        tools:layout="@layout/fragment_create_wish" >
+        android:label="@string/fragment_create_header"
+        tools:layout="@layout/fragment_create_wish">
         <action
             android:id="@+id/action_createWishFragment_to_wishesOverviewFragment"
             app:destination="@id/wishesOverviewFragment"
@@ -33,8 +33,8 @@
     <fragment
         android:id="@+id/editWishFragment"
         android:name="com.sar.shopaholism.presentation.fragment.EditWishFragment"
-        android:label="fragment_edit_wish"
-        tools:layout="@layout/fragment_edit_wish" >
+        android:label="@string/fragment_edit_header"
+        tools:layout="@layout/fragment_edit_wish">
         <action
             android:id="@+id/action_editWishFragment_to_wishesOverviewFragment"
             app:destination="@id/wishesOverviewFragment" />

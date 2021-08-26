@@ -10,6 +10,9 @@ data class WishEntity(
     @ColumnInfo(name = "id")
     val id: Long,
 
+    @ColumnInfo(name = "image_uri")
+    val imageUri: String,
+
     @ColumnInfo(name = "title")
     val title: String,
 

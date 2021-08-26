@@ -1,5 +1,5 @@
 package com.sar.shopaholism.presentation.view
 
-interface WishEditingView {
-    fun setCurrentData()
+interface WishEditingView : WishCreationView {
+    fun getWishId(): Long
 }

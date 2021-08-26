@@ -25,6 +25,7 @@ class WishesRepositoryImplTest {
     @Test
     fun `update data source call`() = runBlockingTest {
         val id = 2L
+        val imageUri = "imageUri"
         val title = "Hallo Test!"
         val description = "Hallo Description!"
         val price = 20.0
@@ -32,22 +33,24 @@ class WishesRepositoryImplTest {
 
         wishesRepositoryImpl.update(
             Wish(
-                id,
-                title,
-                description,
-                price,
-                priority
+                id = id,
+                imageUri = imageUri,
+                title = title,
+                description = description,
+                price = price,
+                priority = priority
             )
         )
 
         coVerify {
             dataSource.updateWish(
                 WishEntity(
-                    id,
-                    title,
-                    description,
-                    price,
-                    priority
+                    id = id,
+                    imageUri = imageUri,
+                    title = title,
+                    description = description,
+                    price = price,
+                    priority = priority
                 )
             )
         }
@@ -81,17 +84,19 @@ class WishesRepositoryImplTest {
     @Test
     fun `create wish data source call`() = runBlockingTest {
         val id = 0L
+        val imageUri = "New Uri"
         val title = "New Wish"
         val description = "Epic Description"
         val price = 20.0
         val priority = 5
 
         val wish = Wish(
-            id,
-            title,
-            description,
-            price,
-            priority
+            id = id,
+            imageUri = imageUri,
+            title = title,
+            description = description,
+            price = price,
+            priority = priority
         )
 
         wishesRepositoryImpl.create(wish)
@@ -99,11 +104,12 @@ class WishesRepositoryImplTest {
         coVerify {
             dataSource.insert(
                 WishEntity(
-                    id,
-                    title,
-                    description,
-                    price,
-                    priority
+                    id = id,
+                    imageUri = imageUri,
+                    title = title,
+                    description = description,
+                    price = price,
+                    priority = priority
                 )
             )
         }

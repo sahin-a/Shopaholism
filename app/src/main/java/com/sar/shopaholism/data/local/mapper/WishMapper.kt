@@ -8,6 +8,7 @@ import com.sar.shopaholism.domain.entity.Wish
 private fun map(wishEntity: WishEntity) =
     Wish(
         id = wishEntity.id,
+        imageUri = wishEntity.imageUri,
         title = wishEntity.title,
         description = wishEntity.description,
         price = wishEntity.price,
@@ -22,6 +23,7 @@ fun List<WishEntity>.toWishes() = map { it.toWish() }
 private fun map(wish: Wish) =
     WishEntity(
         id = wish.id,
+        imageUri = wish.imageUri,
         title = wish.title,
         description = wish.description,
         price = wish.price,

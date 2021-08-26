@@ -1,18 +1,18 @@
 package com.sar.shopaholism.presentation.fragment
 
-import android.content.DialogInterface
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.Fragment
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.sar.shopaholism.R
 import com.sar.shopaholism.domain.entity.Wish
+import com.sar.shopaholism.domain.exception.WishNotFoundException
 import com.sar.shopaholism.presentation.presenter.WishDeletionPresenter
 import com.sar.shopaholism.presentation.view.WishDeletionView
 import kotlinx.coroutines.coroutineScope
@@ -25,8 +25,9 @@ class DeleteWishFragmentDialog : DialogFragment(), WishDeletionView {
 
     // Views
     private lateinit var deleteButton: Button
-    private lateinit var cancelButton: FloatingActionButton
+    //private lateinit var cancelButton: FloatingActionButton
 
+    private lateinit var imageImageView: ImageView
     private lateinit var titleTextView: TextView
     private lateinit var descriptionTextView: TextView
     private lateinit var priceTextView: TextView
@@ -38,11 +39,12 @@ class DeleteWishFragmentDialog : DialogFragment(), WishDeletionView {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_delete_wish, container, false)
 
+        imageImageView = view.findViewById(R.id.wish_image)
         titleTextView = view.findViewById(R.id.wish_title)
         descriptionTextView = view.findViewById(R.id.wish_description)
         priceTextView = view.findViewById(R.id.wish_price)
         deleteButton = view.findViewById(R.id.delete_button)
-        cancelButton = view.findViewById(R.id.cancel_button)
+        //cancelButton = view.findViewById(R.id.cancel_button)
 
         deleteButton.setOnClickListener {
             runBlocking {
@@ -63,9 +65,9 @@ class DeleteWishFragmentDialog : DialogFragment(), WishDeletionView {
                 }
             }
         }
-        cancelButton.setOnClickListener {
+        /*cancelButton.setOnClickListener {
             dialog?.cancel()
-        }
+        }*/
 
         setCurrentData()
 
@@ -81,24 +83,21 @@ class DeleteWishFragmentDialog : DialogFragment(), WishDeletionView {
             var wish: Wish? = null
 
             launch {
-                wish = presenter.getWish(getWishId())
+                try {
+                    wish = presenter.getWish(getWishId())
+                } catch (e: WishNotFoundException) {
+
+                } catch (e: IllegalArgumentException) {
+
+                }
             }.join()
 
             wish?.let { wish ->
-                titleTextView.setText(wish.title)
-                descriptionTextView.setText(wish.description)
-                priceTextView.setText(wish.price.toString())
+                imageImageView.setImageURI(Uri.parse(wish.imageUri))
+                titleTextView.text = wish.title
+                descriptionTextView.text = wish.description
+                priceTextView.text = wish.price.toString()
             }
-        }
-    }
-
-    override fun onDismiss(dialog: DialogInterface) {
-        super.onDismiss(dialog)
-
-        val fragment: Fragment = requireParentFragment()
-
-        if (fragment is DialogInterface.OnDismissListener) {
-            (fragment as DialogInterface.OnDismissListener).onDismiss(dialog)
         }
     }
 

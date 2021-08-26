@@ -5,7 +5,7 @@
 
     <!-- fragment_wishes_overview.xml -->
     <string name="create_wish_button_text">Create</string>
-    <string name="reprioritize">Reprioritize</string>
+    <string name="reprioritize">Sort</string>
     <string name="edit">Edit</string>
     <string name="wish_title_hint">Title</string>
     <string name="wish_description_hint">Description</string>
@@ -18,4 +18,11 @@
     <string name="OK">OK</string>
     <string name="Cancel">Cancel</string>
     <string name="delete">Delete</string>
+    <string name="select_image">Select Image</string>
+    <string name="wish_created_toast">Wish created</string>
+    <string name="wish_creation_failed_toast">Wish couldn\'t be created</string>
+    <string name="fragment_overview_header">Overview</string>
+    <string name="fragment_edit_header">Edit Wish</string>
+    <string name="fragment_delete_header">Delete?</string>
+    <string name="fragment_create_header">Create Wish</string>
 </resources>

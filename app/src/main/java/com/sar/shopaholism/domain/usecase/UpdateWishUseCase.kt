@@ -9,6 +9,7 @@ class UpdateWishUseCase(private val repo: WishesRepository) {
     suspend fun execute(wish: Wish) {
         WishValidation.validate(
             wishId = wish.id,
+            imageUri = wish.imageUri,
             title = wish.title,
             description = wish.description,
             price = wish.price,

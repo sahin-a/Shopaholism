@@ -5,7 +5,6 @@ import com.sar.shopaholism.domain.usecase.CreateWishUseCase
 import com.sar.shopaholism.presentation.di.presentationModules
 import com.sar.shopaholism.presentation.view.WishCreationView
 import io.mockk.coVerify
-import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.jupiter.api.BeforeAll
@@ -19,8 +18,8 @@ import org.koin.test.KoinTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class WishCreationPresenterTest : KoinTest {
     private val createWishUseCase: CreateWishUseCase = mockk(relaxed = true)
-    private val logger: Logger = mockk(relaxed = true)
-    val view: WishCreationView = mockk(relaxed = true)
+    private val logger: Logger = mockk()
+    private val view: WishCreationView = mockk(relaxed = true)
 
     private lateinit var presenter: WishCreationPresenter
 
@@ -44,19 +43,26 @@ class WishCreationPresenterTest : KoinTest {
 
     @Test
     fun `Create wish calls CreateWishUseCase`() = runBlockingTest {
-        every { presenter.view!!.navigateTo(any()) } returns Unit
-
         val title = "Epic title"
+        val imageUri = "epicFile.png"
         val description = "Epic description"
         val price = 20.0
 
         presenter.createWish(
             title,
+            imageUri,
             description,
             price
         )
 
-        coVerify { createWishUseCase.execute(title, description, price) }
+        coVerify {
+            createWishUseCase.execute(
+                title = title,
+                imageUri = imageUri,
+                description = description,
+                price = price
+            )
+        }
     }
 
     @Test

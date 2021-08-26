@@ -7,6 +7,7 @@ object WishValidation {
      */
     fun validate(
         wishId: Long? = null,
+        imageUri: String? = null,
         title: String? = null,
         description: String? = null,
         price: Double? = null,
@@ -14,6 +15,10 @@ object WishValidation {
     ) {
         wishId?.let {
             require(it > 0) { "Wish doesn't have a valid Id" }
+        }
+
+        imageUri?.let {
+            require(it.isNotBlank()) { "Wish Image can't be blank" }
         }
 
         title?.let {

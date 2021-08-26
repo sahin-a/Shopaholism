@@ -1,5 +1,6 @@
 package com.sar.shopaholism.presentation.adapter
 
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -35,12 +36,7 @@ class WishesAdapter(
         var wishEditButton: Button = view.findViewById(R.id.edit_button)
         var reprioritizeButton: Button = view.findViewById(R.id.reprioritize_button)
 
-        var wishImageView: ImageView = view.findViewById(R.id.wish_image_view)
-
-        init {
-            // Define click listener for the ViewHolder's View.
-            wishImageView.setImageResource(R.drawable.ic_launcher_foreground)
-        }
+        var wishImageView: ImageView = view.findViewById(R.id.wish_image)
     }
 
     // Create new views (invoked by the layout manager)
@@ -59,6 +55,7 @@ class WishesAdapter(
         // contents of the view with that element
         val wish: Wish = getItem(position)
 
+        viewHolder.wishImageView.setImageURI(Uri.parse(wish.imageUri))
         viewHolder.wishTitleTextView.text = wish.title
         viewHolder.wishDescriptionTextView.text = wish.description
 
@@ -85,8 +82,5 @@ object WishesDiffCallback : DiffUtil.ItemCallback<Wish>() {
 
     override fun areContentsTheSame(oldItem: Wish, newItem: Wish): Boolean {
         return oldItem.title == newItem.title
-                && oldItem.description == newItem.description
-                && oldItem.price == newItem.price
-                && oldItem.priority == newItem.priority
     }
 }

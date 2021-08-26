@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.navigation.fragment.navArgs
 import com.sar.shopaholism.R
-import com.sar.shopaholism.domain.entity.Wish
 import com.sar.shopaholism.domain.exception.WishNotUpdatedException
 import com.sar.shopaholism.presentation.presenter.WishEditingPresenter
 import com.sar.shopaholism.presentation.view.WishEditingView
@@ -16,11 +15,10 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.koin.android.ext.android.inject
 
-class EditWishFragment : WishEditingView,
-    BaseCreateWishFragment<WishEditingView, WishEditingPresenter>() {
+class EditWishFragment : BaseCreateWishFragment<WishEditingView, WishEditingPresenter>(),
+    WishEditingView {
 
     private val presenter: WishEditingPresenter by inject()
-
     private val args: EditWishFragmentArgs by navArgs()
 
     override fun onCreateView(
@@ -32,24 +30,7 @@ class EditWishFragment : WishEditingView,
         return inflater.inflate(R.layout.fragment_edit_wish, container, false)
     }
 
-    override fun setCurrentData(): Unit = runBlocking {
-        coroutineScope {
-            var oldWish: Wish? = null
-            launch {
-                oldWish = presenter.getOriginalWish(args.wishId)
-            }.join()
-
-            oldWish?.let {
-                titleEditText.setText(it.title)
-                descriptionEditText.setText(it.description)
-                priceEditText.setText(it.price.toString())
-            }
-        }
-    }
-
     override fun onInit() {
-        setCurrentData()
-
         createButton.icon =
             resources.getDrawable(R.drawable.ic_save_changes, requireContext().theme)
         createButton.setText(R.string.wish_apply_changes)
@@ -59,9 +40,15 @@ class EditWishFragment : WishEditingView,
                     var success: Boolean = false
 
                     launch {
-                        success = createWish(action = { title, description, price ->
+                        success = createWish(action = { title, imageUri, description, price ->
                             try {
-                                presenter.updateWish(args.wishId, title, description, price)
+                                presenter.updateWish(
+                                    id = args.wishId,
+                                    title = title,
+                                    imageUri = imageUri,
+                                    description = description,
+                                    price = price
+                                )
                                 return@createWish true
                             } catch (e: WishNotUpdatedException) {
 
@@ -93,5 +80,23 @@ class EditWishFragment : WishEditingView,
                 }
             }
         }
+
+        presenter.getData()
     }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+
+        presenter.updateModelData(
+            title = titleEditText.text.toString(),
+            imageUri = imageImageView.imageUri.toString(),
+            description = descriptionEditText.text.toString(),
+            price = priceEditText.text.toString().toDoubleOrNull()
+        )
+    }
+
+    override fun getWishId(): Long {
+        return args.wishId
+    }
+
 }

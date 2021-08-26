@@ -21,26 +21,38 @@ class WishesOverviewPresenter(
     BasePresenter<WishesOverviewView>(),
     KoinComponent {
 
+    companion object {
+        private const val TAG: String = "WishesOverviewPresenter"
+    }
+
     fun loadWishes() {
-        GlobalScope.launch {
-            // retrieving the wishes from the local db
-            getWishesUseCase.execute()
-                .catch { e -> logger.e(tag = this::class.java.name, e.localizedMessage) }
-                .collect { wishesFromDb ->
-                    withContext(Dispatchers.Main) {
-                        model.wishes.value?.let {
-                            it.clear()
-                            it.addAll(wishesFromDb)
+        view?.let { view ->
+            GlobalScope.launch {
+                view.showLoading(visible = true)
+                view.enableButtons(enabled = false)
 
-                            logger.i(
-                                tag = this::class.java.name,
-                                message = "Retrieved ${wishesFromDb.size} Wishes from the local Db"
-                            )
+                // retrieving the wishes from the local db
+                getWishesUseCase.execute()
+                    .catch { e -> logger.e(TAG, e.message ?: "") }
+                    .collect { wishesFromDb ->
+                        withContext(Dispatchers.Main) {
+                            model.wishes.value?.let {
+                                it.clear()
+                                it.addAll(wishesFromDb)
 
-                            view?.showWishes(it)
+                                logger.i(
+                                    TAG,
+                                    message = "Retrieved ${wishesFromDb.size} Wishes from the local Db"
+                                )
+
+                                view.showWishes(it)
+
+                                view.showLoading(visible = false)
+                                view.enableButtons(enabled = true)
+                            }
                         }
                     }
-                }
+            }
         }
     }
 

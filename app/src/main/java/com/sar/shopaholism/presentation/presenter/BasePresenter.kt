@@ -6,5 +6,10 @@ abstract class BasePresenter<View> {
 
     fun attachView(view: View) {
         this.view = view
+        onAttachView()
+    }
+
+    open fun onAttachView() {
+
     }
 }
