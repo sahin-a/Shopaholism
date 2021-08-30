@@ -23,4 +23,5 @@
     <string name="fragment_edit_header">Wunsch bearbeiten</string>
     <string name="fragment_delete_header">Löschen?</string>
     <string name="fragment_create_header">Wunsch erstellen</string>
+    <string name="which_sort_preferation_question">Was gefällt dir mehr?</string>
 </resources>

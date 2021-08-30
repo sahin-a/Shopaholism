@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/wishesOverviewFragment"
         android:name="com.sar.shopaholism.presentation.fragment.WishesOverviewFragment"
-        android:label="@string/fragment_overview_header"
+        android:label="@string/app_name"
         tools:layout="@layout/fragment_wishes_overview">
         <action
             android:id="@+id/action_wishesOverviewFragment_to_createWishFragment"

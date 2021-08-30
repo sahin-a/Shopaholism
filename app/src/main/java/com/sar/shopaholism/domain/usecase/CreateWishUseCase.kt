@@ -6,6 +6,9 @@ import com.sar.shopaholism.domain.logger.Logger
 import com.sar.shopaholism.domain.repository.WishesRepository
 
 class CreateWishUseCase(private val repo: WishesRepository, private val logger: Logger) {
+    companion object {
+        const val TAG: String = "CreateWishUseCase"
+    }
 
     suspend fun execute(title: String, imageUri: String, description: String, price: Double) {
         WishValidation.validate(
@@ -16,22 +19,19 @@ class CreateWishUseCase(private val repo: WishesRepository, private val logger: 
             priority = 0
         )
 
-        val id = repo.create(Wish(id = 0, imageUri, title, description, price, priority = 0))
+        val id: Long = repo.create(Wish(id = 0L, imageUri, title, description, price, priority = 0))
 
-        if (id <= 0) {
-            val throwable = WishNotCreatedException("Wish couldn't be created")
-
-            logger.e(
-                tag = this::class.java.name,
-                message = "Failed to add new wish to local db",
-                throwable
+        if (id <= 0L) {
+            logger.d(
+                tag = TAG,
+                message = "Failed to add new wish to local db"
             )
 
-            throw throwable
+            throw WishNotCreatedException("Wish couldn't be created")
         }
 
         logger.i(
-            tag = this::class.java.name,
+            tag = TAG,
             message = "New Wish has been added to the local Db"
         )
     }

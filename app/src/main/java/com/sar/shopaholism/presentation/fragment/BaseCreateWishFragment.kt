@@ -135,4 +135,5 @@ abstract class BaseCreateWishFragment<MvpView : WishCreationView, Presenter : Ba
         descriptionEditText.setText(description)
         priceEditText.setText(price)
     }
+
 }

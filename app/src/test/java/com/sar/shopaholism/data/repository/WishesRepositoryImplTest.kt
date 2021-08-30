@@ -3,17 +3,16 @@ package com.sar.shopaholism.data.repository
 import com.sar.shopaholism.data.local.entity.WishEntity
 import com.sar.shopaholism.data.local.source.WishesDataSource
 import com.sar.shopaholism.domain.entity.Wish
-import io.mockk.clearAllMocks
-import io.mockk.coVerify
+import io.mockk.*
 import io.mockk.impl.annotations.MockK
-import io.mockk.mockk
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Test
 import org.junit.jupiter.api.BeforeEach
 
 class WishesRepositoryImplTest {
-    @MockK
-    private var dataSource: WishesDataSource = mockk(relaxed = true)
+
+    private var dataSource: WishesDataSource = mockk()
 
     private val wishesRepositoryImpl = WishesRepositoryImpl(dataSource)
 
@@ -31,34 +30,38 @@ class WishesRepositoryImplTest {
         val price = 20.0
         val priority = 5
 
-        wishesRepositoryImpl.update(
-            Wish(
-                id = id,
-                imageUri = imageUri,
-                title = title,
-                description = description,
-                price = price,
-                priority = priority
-            )
+        val wishEntity = WishEntity(
+            id = id,
+            imageUri = imageUri,
+            title = title,
+            description = description,
+            price = price,
+            priority = priority
         )
 
+        val wish = Wish(
+            id = id,
+            imageUri = imageUri,
+            title = title,
+            description = description,
+            price = price,
+            priority = priority
+        )
+
+        coEvery { dataSource.updateWish(wishEntity) } returns true
+
+        wishesRepositoryImpl.update(wish)
+
         coVerify {
-            dataSource.updateWish(
-                WishEntity(
-                    id = id,
-                    imageUri = imageUri,
-                    title = title,
-                    description = description,
-                    price = price,
-                    priority = priority
-                )
-            )
+            dataSource.updateWish(wishEntity)
         }
     }
 
     @Test
     fun `delete data source call`() = runBlockingTest {
         val id = 5L
+
+        coEvery { dataSource.deleteWish(id) } returns true
 
         wishesRepositoryImpl.delete(id)
 
@@ -67,6 +70,8 @@ class WishesRepositoryImplTest {
 
     @Test
     fun `getWishes data source call`() = runBlockingTest {
+        coEvery { dataSource.getWishes() } returns flowOf(listOf())
+
         wishesRepositoryImpl.getWishes()
 
         coVerify { dataSource.getWishes() }
@@ -75,6 +80,14 @@ class WishesRepositoryImplTest {
     @Test
     fun `get wish data source call`() = runBlockingTest {
         val id = 2L
+
+        coEvery { dataSource.getWish(id) } returns WishEntity(
+            id = id,
+            title = "",
+            imageUri = "",
+            description = "",
+            price = 1.0,
+            priority = 1)
 
         wishesRepositoryImpl.getWish(id)
 
@@ -90,6 +103,15 @@ class WishesRepositoryImplTest {
         val price = 20.0
         val priority = 5
 
+        val wishEntity = WishEntity(
+            id = id,
+            imageUri = imageUri,
+            title = title,
+            description = description,
+            price = price,
+            priority = priority
+        )
+
         val wish = Wish(
             id = id,
             imageUri = imageUri,
@@ -99,19 +121,12 @@ class WishesRepositoryImplTest {
             priority = priority
         )
 
+        coEvery { dataSource.insert(wishEntity) } returns 1
+
         wishesRepositoryImpl.create(wish)
 
         coVerify {
-            dataSource.insert(
-                WishEntity(
-                    id = id,
-                    imageUri = imageUri,
-                    title = title,
-                    description = description,
-                    price = price,
-                    priority = priority
-                )
-            )
+            dataSource.insert(wishEntity)
         }
     }
 

@@ -34,7 +34,8 @@ class CreateWishFragment : BaseCreateWishFragment<WishCreationView, WishCreation
                     var success: Boolean = false
 
                     launch {
-                        success = createWish(action = { title, imageUri, description, price ->
+                        success = createWish(
+                            action = { title, imageUri, description, price ->
                             try {
                                 presenter.createWish(
                                     title = title,
@@ -55,6 +56,9 @@ class CreateWishFragment : BaseCreateWishFragment<WishCreationView, WishCreation
 
                     when (success) {
                         true -> {
+                            // TODO: Clear fields
+
+
                             Toast.makeText(
                                 requireContext(),
                                 getString(R.string.wish_created_toast),
@@ -85,6 +89,17 @@ class CreateWishFragment : BaseCreateWishFragment<WishCreationView, WishCreation
             imageUri = imageImageView.imageUri.toString(),
             description = descriptionEditText.text.toString(),
             price = priceEditText.text.toString().toDoubleOrNull()
+        )
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        presenter.updateModelData(
+            title = "",
+            description = "",
+            imageUri = "",
+            price = -1.0
         )
     }
 

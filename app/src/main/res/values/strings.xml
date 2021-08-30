@@ -1,7 +1,5 @@
 <resources>
     <string name="app_name">Shopaholism</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <!-- fragment_wishes_overview.xml -->
     <string name="create_wish_button_text">Create</string>
@@ -25,4 +23,8 @@
     <string name="fragment_edit_header">Edit Wish</string>
     <string name="fragment_delete_header">Delete?</string>
     <string name="fragment_create_header">Create Wish</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="which_sort_preferation_question">Which one do you prefer?</string>
+    <string name="page_indicator" translatable="false">%1$s / %2$s</string>
 </resources>

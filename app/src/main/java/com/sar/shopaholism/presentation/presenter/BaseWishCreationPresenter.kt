@@ -10,20 +10,20 @@ abstract class BaseWishCreationPresenter<View : WishCreationView> : BasePresente
     protected val model: CreateWishModel by inject()
 
     fun updateModelData(
-        title: String = "",
-        imageUri: String = "",
-        description: String = "",
+        title: String? = null,
+        imageUri: String? = null,
+        description: String? = null,
         price: Double? = null
     ) {
-        if (title.isNotBlank()) {
+        if (title != null) {
             model.title = title
         }
 
-        if (imageUri.isNotBlank()) {
+        if (imageUri != null) {
             model.imageUri = imageUri
         }
 
-        if (description.isNotBlank()) {
+        if (description != null) {
             model.description = description
         }
 
