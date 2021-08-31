@@ -46,6 +46,10 @@ class WishesOverviewFragment() : Fragment(), WishesOverviewView {
         return view
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+    }
+
     private fun setupIntermediateBar(view: View) {
         intermediateProgressBar = view.findViewById(R.id.indeterminate_progressbar)
     }
@@ -62,7 +66,7 @@ class WishesOverviewFragment() : Fragment(), WishesOverviewView {
     private fun setupCreateButton(view: View) {
         createWishButton = view.findViewById(R.id.create_wish_button)
         createWishButton.setOnClickListener {
-            presenter.createWish()
+            presenter.navigateToCreateWishFragment()
         }
     }
 
@@ -78,6 +82,8 @@ class WishesOverviewFragment() : Fragment(), WishesOverviewView {
     override fun showLoading(visible: Boolean) {
         intermediateProgressBar.isVisible = visible
         intermediateProgressBar.isIndeterminate = visible
+
+        enableButtons(enabled = !visible)
     }
 
     override fun enableButtons(enabled: Boolean) {

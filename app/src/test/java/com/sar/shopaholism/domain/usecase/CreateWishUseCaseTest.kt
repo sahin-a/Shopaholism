@@ -7,9 +7,8 @@ import com.sar.shopaholism.domain.repository.WishesRepository
 import io.mockk.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
+import org.junit.Before
 import org.junit.Test
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.assertThrows
 
 @ExperimentalCoroutinesApi
 class CreateWishUseCaseTest {
@@ -18,17 +17,11 @@ class CreateWishUseCaseTest {
     private lateinit var wishesRepository: WishesRepository
     private lateinit var createWishUseCase: CreateWishUseCase
 
-    @BeforeEach
+    @Before
     fun setup() {
-        logger = mockk()
+        logger = mockk(relaxed = true)
         wishesRepository = mockk()
         createWishUseCase = CreateWishUseCase(wishesRepository, logger)
-
-        every {
-            logger.e(any(), any(), any())
-            logger.i(any(), any())
-            logger.d(any(), any())
-        } returns Unit
     }
 
     @Test
@@ -42,11 +35,6 @@ class CreateWishUseCaseTest {
             priority = 0
         )
 
-        every {
-            logger.d(any(), any())
-            logger.i(any(), any())
-        } returns Unit
-
         coEvery { wishesRepository.create(wish) } returns 1L
 
         createWishUseCase.execute(
@@ -59,7 +47,7 @@ class CreateWishUseCaseTest {
         coVerify { wishesRepository.create(wish) }
     }
 
-    @Test
+    @Test(expected = WishNotCreatedException::class)
     fun `Creation fails returns WishNotCreatedException`() = runBlockingTest {
         val wish = Wish(
             id = 0L,
@@ -74,62 +62,52 @@ class CreateWishUseCaseTest {
             wishesRepository.create(any())
         } returns 0
 
-        assertThrows<WishNotCreatedException> {
-            createWishUseCase.execute(
-                title = wish.title,
-                imageUri = wish.imageUri,
-                description = wish.description,
-                price = wish.price
-            )
-        }
+        createWishUseCase.execute(
+            title = wish.title,
+            imageUri = wish.imageUri,
+            description = wish.description,
+            price = wish.price
+        )
     }
 
-    @Test
+    @Test(expected = IllegalArgumentException::class)
     fun `Blank title parameter throws IllegalArgumentException`() = runBlockingTest {
-        assertThrows<IllegalArgumentException> {
-            createWishUseCase.execute(
-                title = "",
-                imageUri = "image lol",
-                description = "description",
-                price = 1.0
-            )
-        }
+        createWishUseCase.execute(
+            title = "",
+            imageUri = "image lol",
+            description = "description",
+            price = 1.0
+        )
     }
 
-    @Test
+    @Test(expected = IllegalArgumentException::class)
     fun `Blank description parameter throws IllegalArgumentException`() = runBlockingTest {
-        assertThrows<IllegalArgumentException> {
-            createWishUseCase.execute(
-                title = "title",
-                imageUri = "ahh",
-                description = "",
-                price = 1.0
-            )
-        }
+        createWishUseCase.execute(
+            title = "title",
+            imageUri = "ahh",
+            description = "",
+            price = 1.0
+        )
     }
 
-    @Test
+    @Test(expected = IllegalArgumentException::class)
     fun `Negative price parameter throws IllegalArgumentException`() = runBlockingTest {
-        assertThrows<IllegalArgumentException> {
-            createWishUseCase.execute(
-                title = "title",
-                imageUri = "meddl",
-                description = "description",
-                price = -1.0
-            )
-        }
+        createWishUseCase.execute(
+            title = "title",
+            imageUri = "meddl",
+            description = "description",
+            price = -1.0
+        )
     }
 
-    @Test
+    @Test(expected = IllegalArgumentException::class)
     fun `Blank imageUri parameter throws IllegalArgumentException`() = runBlockingTest {
-        assertThrows<IllegalArgumentException> {
-            createWishUseCase.execute(
-                title = "title",
-                imageUri = "",
-                description = "description",
-                price = 1.0
-            )
-        }
+        createWishUseCase.execute(
+            title = "title",
+            imageUri = "",
+            description = "description",
+            price = 1.0
+        )
     }
 
 }

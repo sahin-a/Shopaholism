@@ -5,18 +5,20 @@ import com.sar.shopaholism.data.local.source.WishesDataSource
 import com.sar.shopaholism.domain.entity.Wish
 import io.mockk.*
 import io.mockk.impl.annotations.MockK
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runBlockingTest
+import org.junit.Before
 import org.junit.Test
-import org.junit.jupiter.api.BeforeEach
 
+@ExperimentalCoroutinesApi
 class WishesRepositoryImplTest {
 
     private var dataSource: WishesDataSource = mockk()
 
     private val wishesRepositoryImpl = WishesRepositoryImpl(dataSource)
 
-    @BeforeEach
+    @Before
     fun setUpMocks() {
         clearAllMocks()
     }

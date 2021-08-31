@@ -15,7 +15,6 @@ private val modules = module {
 
     // Models
     factory { WishesModel() }
-    factory { CreateWishModel() }
 
     // Presenters
     single { WishesOverviewPresenter(getWishesUseCase = get(), model = get(), logger = get()) }
