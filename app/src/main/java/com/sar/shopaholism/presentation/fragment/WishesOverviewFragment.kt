@@ -10,12 +10,17 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import androidx.test.core.app.ActivityScenario.launch
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.sar.shopaholism.R
 import com.sar.shopaholism.domain.entity.Wish
 import com.sar.shopaholism.presentation.adapter.WishesAdapter
 import com.sar.shopaholism.presentation.presenter.WishesOverviewPresenter
 import com.sar.shopaholism.presentation.view.WishesOverviewView
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import org.koin.android.ext.android.inject
 
 
@@ -40,14 +45,17 @@ class WishesOverviewFragment() : Fragment(), WishesOverviewView {
         setupRecyclerView(view)
         setupCreateButton(view)
 
-        presenter.attachView(this)
-        presenter.loadWishes()
-
         return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        presenter.attachView(this)
+
+        CoroutineScope(Dispatchers.Main).launch {
+            presenter.loadWishes()
+        }
     }
 
     private fun setupIntermediateBar(view: View) {

@@ -90,7 +90,7 @@ abstract class BaseCreateWishFragment<MvpView : WishCreationView, Presenter : Ba
                 //Image Uri will not be null for RESULT_OK
                 val uri: Uri = data?.data!!
 
-                // Use Uri object instead of File to avoid storage permissions
+                // Use Uri object instead of File to avoid storage permissions TODO: FIX HC STRINGS
                 imageImageView.setImageURI(uri)
             }
             ImagePicker.RESULT_ERROR -> {

@@ -2,10 +2,13 @@ package com.sar.shopaholism.presentation.presenter
 
 import com.sar.shopaholism.presentation.model.CreateWishModel
 import com.sar.shopaholism.presentation.view.WishCreationView
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
-open class BaseWishCreationPresenter<View : WishCreationView> : BasePresenter<View>() {
+open class BaseWishCreationPresenter<View : WishCreationView> : BasePresenter<View>(),
+    KoinComponent {
 
-    val model = CreateWishModel()
+    val model: CreateWishModel by inject()
 
     fun updateModelData(
         title: String? = null,

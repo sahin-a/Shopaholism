@@ -84,8 +84,8 @@ class EditWishFragment : BaseCreateWishFragment<WishEditingView, WishEditingPres
         presenter.getData()
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
 
         presenter.updateModelData(
             title = titleEditText.text.toString(),
