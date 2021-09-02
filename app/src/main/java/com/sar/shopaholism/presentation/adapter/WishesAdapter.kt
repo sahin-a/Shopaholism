@@ -34,7 +34,7 @@ class WishesAdapter(
         var deleteWishButton: FloatingActionButton = view.findViewById(R.id.delete_button)
 
         var wishEditButton: Button = view.findViewById(R.id.edit_button)
-        var reprioritizeButton: Button = view.findViewById(R.id.reprioritize_button)
+        var sortButton: Button = view.findViewById(R.id.reprioritize_button)
 
         var wishImageView: ImageView = view.findViewById(R.id.wish_image)
     }
@@ -62,6 +62,14 @@ class WishesAdapter(
         viewHolder.wishEditButton.setOnClickListener {
             val action =
                 WishesOverviewFragmentDirections.actionWishesOverviewFragmentToEditWishFragment(wish.id)
+
+            viewHolder.itemView.findNavController()
+                .navigate(action)
+        }
+
+        viewHolder.sortButton.setOnClickListener {
+            val action =
+                WishesOverviewFragmentDirections.actionWishesOverviewFragmentToSortWishFragment(wish.id)
 
             viewHolder.itemView.findNavController()
                 .navigate(action)

@@ -25,32 +25,29 @@ class WishesOverviewPresenter(
     }
 
     suspend fun loadWishes() = coroutineScope {
-        launch(Dispatchers.IO) {
-
-            launch(Dispatchers.Main) {
-                onLoadData()
-            }
-
-            // retrieving the wishes from the local db
-            getWishesUseCase.execute()
-                .catch { e -> logger.e(TAG, e.message ?: "") }
-                .collect { wishesFromDb ->
-
-                    model.wishes.value?.let {
-                        it.clear()
-                        it.addAll(wishesFromDb)
-
-                        logger.i(
-                            TAG,
-                            message = "Retrieved ${wishesFromDb.size} Wishes from the local Db"
-                        )
-                    }
-
-                    launch(Dispatchers.Main) {
-                        onDataLoaded()
-                    }
-                }
+        launch(Dispatchers.Main) {
+            onLoadData()
         }
+
+        // retrieving the wishes from the local db
+        getWishesUseCase.execute()
+            .catch { e -> logger.e(TAG, e.message ?: "") }
+            .collect { wishesFromDb ->
+
+                model.wishes.value?.let {
+                    it.clear()
+                    it.addAll(wishesFromDb)
+
+                    logger.i(
+                        TAG,
+                        message = "Retrieved ${wishesFromDb.size} Wishes from the local Db"
+                    )
+                }
+
+                launch(Dispatchers.Main) {
+                    onDataLoaded()
+                }
+            }
     }
 
     private fun onLoadData() {

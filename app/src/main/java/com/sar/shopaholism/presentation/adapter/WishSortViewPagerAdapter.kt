@@ -14,7 +14,11 @@ class WishSortViewPagerAdapter(var mainWish: Wish, val otherWishes: List<Wish>) 
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val mainWishImage: ImageView = itemView.findViewById(R.id.main_image)
+        val mainWishTitle: TextView = itemView.findViewById(R.id.main_wish_title)
+
         val otherWishImage: ImageView = itemView.findViewById(R.id.other_wish_image)
+        val otherWishTitle: TextView = itemView.findViewById(R.id.other_wish_title)
+
         val pageIndicator: TextView = itemView.findViewById(R.id.page_indicator)
     }
 
@@ -29,11 +33,14 @@ class WishSortViewPagerAdapter(var mainWish: Wish, val otherWishes: List<Wish>) 
         val otherWish: Wish = otherWishes[position]
 
         holder.mainWishImage.setImageURI(Uri.parse(mainWish.imageUri))
+        holder.mainWishTitle.text = mainWish.title
+
         holder.otherWishImage.setImageURI(Uri.parse(otherWish.imageUri))
+        holder.otherWishTitle.text = otherWish.title
 
         val pageIndicatorText: String = holder.itemView.context.getString(R.string.page_indicator)
 
-        holder.pageIndicator.text = String.format(pageIndicatorText, position, itemCount)
+        holder.pageIndicator.text = String.format(pageIndicatorText, position + 1, itemCount)
     }
 
     override fun getItemCount(): Int {

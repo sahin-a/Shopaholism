@@ -30,7 +30,7 @@ class EditWishFragment : BaseCreateWishFragment<WishEditingView, WishEditingPres
         return inflater.inflate(R.layout.fragment_edit_wish, container, false)
     }
 
-    override fun onInit() {
+    override fun postInit() {
         createButton.icon =
             resources.getDrawable(R.drawable.ic_save_changes, requireContext().theme)
         createButton.setText(R.string.wish_apply_changes)

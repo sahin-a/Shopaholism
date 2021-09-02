@@ -92,11 +92,11 @@ class DeleteWishFragmentDialog : DialogFragment(), WishDeletionView {
                 }
             }.join()
 
-            wish?.let { wish ->
-                imageImageView.setImageURI(Uri.parse(wish.imageUri))
-                titleTextView.text = wish.title
-                descriptionTextView.text = wish.description
-                priceTextView.text = wish.price.toString()
+            wish?.let {
+                imageImageView.setImageURI(Uri.parse(it.imageUri))
+                titleTextView.text = it.title
+                descriptionTextView.text = it.description
+                priceTextView.text = it.price.toString()
             }
         }
     }

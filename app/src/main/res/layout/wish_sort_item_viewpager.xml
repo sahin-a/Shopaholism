@@ -3,56 +3,98 @@
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_margin="16dp">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp">
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <TextView
+                style="?attr/textAppearanceHeadline6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:text="@string/which_sort_preferation_question" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:checkable="true">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:id="@+id/main_image"
+                        android:layout_width="match_parent"
+                        android:layout_height="194dp"
+                        android:importantForAccessibility="no"
+                        android:scaleType="centerCrop"
+                        tools:src="@tools:sample/backgrounds/scenic" />
+
+                    <TextView
+                        android:id="@+id/main_wish_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        tools:text="New Bike" />
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checkable="true">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:id="@+id/other_wish_image"
+                        android:layout_width="match_parent"
+                        android:layout_height="194dp"
+                        android:importantForAccessibility="no"
+                        android:scaleType="centerCrop"
+                        tools:src="@tools:sample/backgrounds/scenic" />
+
+                    <TextView
+                        android:id="@+id/other_wish_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        tools:text="New Computer" />
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+        </LinearLayout>
 
         <TextView
-            style="?attr/textAppearanceHeadline6"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginBottom="16dp"
-            android:text="@string/which_sort_preferation_question" />
-
-        <com.google.android.material.card.MaterialCardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:checkable="true">
-
-            <ImageView
-                android:id="@+id/main_image"
-                android:layout_width="match_parent"
-                android:layout_height="194dp"
-                android:layout_margin="16dp"
-                android:importantForAccessibility="no"
-                android:scaleType="centerCrop"
-                tools:src="@tools:sample/backgrounds/scenic" />
-
-        </com.google.android.material.card.MaterialCardView>
-
-        <com.google.android.material.card.MaterialCardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:checkable="true">
-
-            <ImageView
-                android:id="@+id/other_wish_image"
-                android:layout_width="match_parent"
-                android:layout_height="194dp"
-                android:layout_margin="16dp"
-                android:importantForAccessibility="no"
-                android:scaleType="centerCrop"
-                tools:src="@tools:sample/backgrounds/scenic" />
-
-        </com.google.android.material.card.MaterialCardView>
-
-        <TextView
+            app:layout_constraintBottom_toBottomOf="parent"
             android:id="@+id/page_indicator"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -60,6 +102,7 @@
             android:textAlignment="center"
             tools:text="2 / 300" />
 
-    </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </com.google.android.material.card.MaterialCardView>

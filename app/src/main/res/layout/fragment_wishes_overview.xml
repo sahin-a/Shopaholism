@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp"
-    tools:context=".presentation.fragment.WishesOverviewFragment">
+    tools:context=".presentation.fragment.WishesOverviewFragment"
+    android:id="@+id/wishes_overview">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

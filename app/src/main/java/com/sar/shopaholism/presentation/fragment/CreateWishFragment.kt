@@ -20,10 +20,19 @@ class CreateWishFragment : BaseCreateWishFragment<WishCreationView, WishCreation
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        if (savedInstanceState == null) {
+            presenter.updateModelData(
+                title = "",
+                imageUri = "",
+                description = "",
+                price = -1.0
+            )
+        }
+
         return inflater.inflate(R.layout.fragment_create_wish, container, false)
     }
 
-    override fun onInit() {
+    override fun postInit() {
         presenter.attachView(this)
 
         createButton.setOnClickListener {

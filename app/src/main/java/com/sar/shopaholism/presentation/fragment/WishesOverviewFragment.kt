@@ -63,11 +63,13 @@ class WishesOverviewFragment() : Fragment(), WishesOverviewView {
     }
 
     private fun setupRecyclerView(view: View) {
-        wishesRecyclerView = view.findViewById(R.id.wishes_recycler_view)
         val wishesAdapter = WishesAdapter(this)
+
         wishes.observe(
             viewLifecycleOwner,
             { wishes -> wishesAdapter.submitList(wishes.toMutableList()) })
+
+        wishesRecyclerView = view.findViewById(R.id.wishes_recycler_view)
         wishesRecyclerView.adapter = wishesAdapter
     }
 

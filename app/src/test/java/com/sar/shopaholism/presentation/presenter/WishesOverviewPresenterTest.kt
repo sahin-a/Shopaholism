@@ -7,14 +7,18 @@ import com.sar.shopaholism.domain.usecase.GetWishesUseCase
 import com.sar.shopaholism.presentation.model.WishesModel
 import com.sar.shopaholism.presentation.view.WishesOverviewView
 import io.mockk.*
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.TestCoroutineDispatcher
+import kotlinx.coroutines.test.TestCoroutineScope
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Before
 import org.junit.Test
 import kotlin.test.assertTrue
 
-@ExperimentalCoroutinesApi
 class WishesOverviewPresenterTest {
 
     private lateinit var presenter: WishesOverviewPresenter
@@ -38,7 +42,9 @@ class WishesOverviewPresenterTest {
     }
 
     @Test
-    fun `loadWishes gets wishes from GetWishesUseCase and stores it in model`() = runBlockingTest {
+    fun `loadWishes gets wishes from GetWishesUseCase and stores it in model`() = runBlocking(
+        Dispatchers.IO) {
+
         val wish = Wish(
             id = 343L,
             title = "title",

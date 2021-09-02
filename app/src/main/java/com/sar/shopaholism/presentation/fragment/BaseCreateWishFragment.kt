@@ -76,7 +76,7 @@ abstract class BaseCreateWishFragment<MvpView : WishCreationView, Presenter : Ba
         createButton = view.findViewById(R.id.create_wish_button)
         createButton.isEnabled = ctaEnabled()
 
-        onInit()
+        postInit()
     }
 
     override fun onDestroyView() {
@@ -106,7 +106,7 @@ abstract class BaseCreateWishFragment<MvpView : WishCreationView, Presenter : Ba
     /**
      * This will be called after its done connecting the views to their class fields in onCreateView
      */
-    abstract fun onInit()
+    abstract fun postInit()
 
     open suspend fun createWish(action: suspend (title: String, imageUri: String, description: String, price: Double) -> Boolean): Boolean {
         return action(

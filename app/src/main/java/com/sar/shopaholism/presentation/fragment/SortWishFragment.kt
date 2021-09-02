@@ -1,32 +1,42 @@
 package com.sar.shopaholism.presentation.fragment
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.viewpager2.widget.ViewPager2
 import com.sar.shopaholism.R
+import com.sar.shopaholism.presentation.adapter.WishSortViewPagerAdapter
+import com.sar.shopaholism.presentation.presenter.WishSortPresenter
+import com.sar.shopaholism.presentation.view.WishSortView
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import org.koin.android.ext.android.inject
+import kotlin.coroutines.CoroutineContext
+import kotlin.coroutines.coroutineContext
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+private const val ARG_WISH_ID = "wishId"
 
 /**
  * A simple [Fragment] subclass.
  * Use the [SortWishFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class SortWishFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+class SortWishFragment : Fragment(), WishSortView {
+
+    private val presenter: WishSortPresenter by inject()
+
+    private var wishId: Long? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+            wishId = it.getLong(ARG_WISH_ID)
         }
     }
 
@@ -38,23 +48,49 @@ class SortWishFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_sort_wish, container, false)
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val viewPager: ViewPager2 = view.findViewById(R.id.view_pager)
+
+        presenter.attachView(this@SortWishFragment)
+
+        runBlocking {
+            launch(Dispatchers.IO) {
+                presenter.loadData()
+
+                presenter.mainWish?.let { mainWish ->
+                    presenter.otherWishes?.let { otherWishes ->
+
+                        viewPager.adapter = WishSortViewPagerAdapter(
+                            mainWish = mainWish,
+                            otherWishes = otherWishes
+                        )
+                    }
+                }
+            }
+        }
+    }
+
     companion object {
         /**
          * Use this factory method to create a new instance of
          * this fragment using the provided parameters.
          *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
+         * @param wishId Id of the wish.
          * @return A new instance of fragment SortWishFragment.
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
-        fun newInstance(param1: String, param2: String) =
+        fun newInstance(wishId: Long) =
             SortWishFragment().apply {
                 arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+                    putLong(ARG_WISH_ID, wishId)
                 }
             }
+    }
+
+    override fun getMainWishId(): Long {
+        return wishId ?: -1
     }
 }
