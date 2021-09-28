@@ -13,6 +13,7 @@ class WishEditingPresenter(
 ) : BaseWishCreationPresenter<WishEditingView>() {
 
     var wishId: Long? = null
+    var originalWish: Wish? = null
 
     override fun onAttachView() {
         view?.let { view ->
@@ -36,15 +37,13 @@ class WishEditingPresenter(
     }
 
     private suspend fun getOriginalWish(wishId: Long): Wish? {
-        var wish: Wish? = null
-
-        try {
-            wish = getWishUseCase.execute(wishId)
+        originalWish = try {
+            getWishUseCase.execute(wishId)
         } catch (e: WishNotFoundException) {
-
+            null
         }
 
-        return wish
+        return originalWish
     }
 
     suspend fun updateWish(
@@ -61,7 +60,7 @@ class WishEditingPresenter(
                 imageUri = imageUri,
                 description = description,
                 price = price,
-                priority = 0
+                priority = originalWish?.priority ?: 0
             )
         )
     }
