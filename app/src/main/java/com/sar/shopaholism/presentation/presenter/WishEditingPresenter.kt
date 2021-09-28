@@ -1,6 +1,7 @@
 package com.sar.shopaholism.presentation.presenter
 
 import com.sar.shopaholism.domain.entity.Wish
+import com.sar.shopaholism.domain.exception.WishNotFoundException
 import com.sar.shopaholism.domain.usecase.GetWishUseCase
 import com.sar.shopaholism.domain.usecase.UpdateWishUseCase
 import com.sar.shopaholism.presentation.view.WishEditingView
@@ -11,7 +12,7 @@ class WishEditingPresenter(
     private val getWishUseCase: GetWishUseCase
 ) : BaseWishCreationPresenter<WishEditingView>() {
 
-    private var wishId: Long? = null
+    var wishId: Long? = null
 
     override fun onAttachView() {
         view?.let { view ->
@@ -20,9 +21,9 @@ class WishEditingPresenter(
                     wishId = view.getWishId()
 
                     wishId?.let { wishId ->
-                        val originalWish = getWishUseCase.execute(wishId)
+                        val originalWish = getOriginalWish(wishId)
 
-                        originalWish.apply {
+                        originalWish?.apply {
                             model.title = title
                             model.imageUri = imageUri
                             model.description = description
@@ -34,9 +35,16 @@ class WishEditingPresenter(
         }
     }
 
-    private suspend fun getOriginalWish(wishId: Long): Wish {
-        // TODO: Exception handling
-        return getWishUseCase.execute(wishId)
+    private suspend fun getOriginalWish(wishId: Long): Wish? {
+        var wish: Wish? = null
+
+        try {
+            wish = getWishUseCase.execute(wishId)
+        } catch (e: WishNotFoundException) {
+
+        }
+
+        return wish;
     }
 
     suspend fun updateWish(

@@ -35,6 +35,7 @@ object WishValidation {
 
         priority?.let {
             require(it >= 0) { "Wish priority can't be less than 0" }
+            require(it <= 100) { "Wish priority can't be greater than 100" }
         }
     }
 }

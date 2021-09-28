@@ -30,6 +30,8 @@ class WishesAdapter(
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         var wishTitleTextView: TextView = view.findViewById(R.id.wish_title)
         var wishDescriptionTextView: TextView = view.findViewById(R.id.wish_description)
+        var wishPriorityTextView: TextView = view.findViewById(R.id.wish_priority)
+        var wishPriceTextView: TextView = view.findViewById(R.id.wish_price)
 
         var deleteWishButton: FloatingActionButton = view.findViewById(R.id.delete_button)
 
@@ -58,6 +60,8 @@ class WishesAdapter(
         viewHolder.wishImageView.setImageURI(Uri.parse(wish.imageUri))
         viewHolder.wishTitleTextView.text = wish.title
         viewHolder.wishDescriptionTextView.text = wish.description
+        viewHolder.wishPriorityTextView.text = wish.priority.toString()
+        viewHolder.wishPriceTextView.text = wish.price.toString()
 
         viewHolder.wishEditButton.setOnClickListener {
             val action =
@@ -74,6 +78,9 @@ class WishesAdapter(
             viewHolder.itemView.findNavController()
                 .navigate(action)
         }
+
+        //viewHolder.sortButton.visibility = if (itemCount > 1) View.VISIBLE else View.GONE
+        viewHolder.sortButton.isEnabled = itemCount > 1
 
         viewHolder.deleteWishButton.setOnClickListener {
             val deleteDialog = DeleteWishFragmentDialog.newInstance(wish.id)

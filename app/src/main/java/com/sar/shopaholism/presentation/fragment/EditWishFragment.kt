@@ -10,9 +10,9 @@ import com.sar.shopaholism.R
 import com.sar.shopaholism.domain.exception.WishNotUpdatedException
 import com.sar.shopaholism.presentation.presenter.WishEditingPresenter
 import com.sar.shopaholism.presentation.view.WishEditingView
-import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import org.koin.android.ext.android.inject
 
 class EditWishFragment : BaseCreateWishFragment<WishEditingView, WishEditingPresenter>(),
@@ -25,8 +25,13 @@ class EditWishFragment : BaseCreateWishFragment<WishEditingView, WishEditingPres
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
+        if (savedInstanceState == null) {
+            presenter.wishId = null
+        }
+
         presenter.attachView(this)
+
+        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_edit_wish, container, false)
     }
 
@@ -35,31 +40,29 @@ class EditWishFragment : BaseCreateWishFragment<WishEditingView, WishEditingPres
             resources.getDrawable(R.drawable.ic_save_changes, requireContext().theme)
         createButton.setText(R.string.wish_apply_changes)
         createButton.setOnClickListener {
-            runBlocking {
-                coroutineScope {
-                    var success: Boolean = false
+            CoroutineScope(Dispatchers.IO).launch {
+                var success: Boolean = false
 
-                    launch {
-                        success = createWish(action = { title, imageUri, description, price ->
-                            try {
-                                presenter.updateWish(
-                                    id = args.wishId,
-                                    title = title,
-                                    imageUri = imageUri,
-                                    description = description,
-                                    price = price
-                                )
-                                return@createWish true
-                            } catch (e: WishNotUpdatedException) {
+                success = createWish(action = { title, imageUri, description, price ->
+                    try {
+                        presenter.updateWish(
+                            id = args.wishId,
+                            title = title,
+                            imageUri = imageUri,
+                            description = description,
+                            price = price
+                        )
+                        return@createWish true
+                    } catch (e: WishNotUpdatedException) {
 
-                            } catch (e: IllegalArgumentException) {
+                    } catch (e: IllegalArgumentException) {
 
-                            }
+                    }
 
-                            return@createWish false
-                        })
-                    }.join()
+                    return@createWish false
+                })
 
+                launch(Dispatchers.Main) {
                     when (success) {
                         true -> {
                             Toast.makeText(

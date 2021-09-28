@@ -56,11 +56,8 @@ abstract class BaseCreateWishFragment<MvpView : WishCreationView, Presenter : Ba
         selectImageButton.setOnClickListener {
             ImagePicker.with(this)
                 .crop()
-                .compress(1024)
-                .maxResultSize(
-                    1080,
-                    1080
-                )
+                .compress(maxSize = 1024)
+                .maxResultSize(width = 1080, height = 1080)
                 .start()
         }
 
@@ -87,18 +84,25 @@ abstract class BaseCreateWishFragment<MvpView : WishCreationView, Presenter : Ba
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         when (resultCode) {
             Activity.RESULT_OK -> {
-                //Image Uri will not be null for RESULT_OK
+                // Image Uri will not be null for RESULT_OK
                 val uri: Uri = data?.data!!
 
-                // Use Uri object instead of File to avoid storage permissions TODO: FIX HC STRINGS
+                // Use Uri object instead of File to avoid storage permissions
                 imageImageView.setImageURI(uri)
             }
             ImagePicker.RESULT_ERROR -> {
-                Toast.makeText(requireContext(), ImagePicker.getError(data), Toast.LENGTH_SHORT)
-                    .show()
+                Toast.makeText(
+                    requireContext(),
+                    ImagePicker.getError(data),
+                    Toast.LENGTH_SHORT
+                ).show()
             }
             else -> {
-                Toast.makeText(requireContext(), "Task Cancelled", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    requireContext(),
+                    getString(R.string.image_selection_cancelled),
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
     }

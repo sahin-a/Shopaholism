@@ -7,7 +7,7 @@ private val modules = module {
     single { CreateWishUseCase(get(), logger = get()) }
     single { DeleteWishUseCase(get()) }
     single { GetWishesUseCase(get()) }
-    single { UpdateWishUseCase(get()) }
+    single { UpdateWishUseCase(get(), logger = get()) }
     single { GetWishUseCase(get()) }
 }
 

@@ -4,13 +4,16 @@ import com.sar.shopaholism.domain.entity.Wish
 import com.sar.shopaholism.domain.exception.WishNotCreatedException
 import com.sar.shopaholism.domain.logger.Logger
 import com.sar.shopaholism.domain.repository.WishesRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class CreateWishUseCase(private val repo: WishesRepository, private val logger: Logger) {
     companion object {
         const val TAG: String = "CreateWishUseCase"
     }
 
-    suspend fun execute(title: String, imageUri: String, description: String, price: Double) {
+    suspend fun execute(title: String, imageUri: String, description: String, price: Double)
+    = withContext(Dispatchers.IO) {
         WishValidation.validate(
             title = title,
             imageUri = imageUri,

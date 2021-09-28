@@ -24,6 +24,7 @@ private val modules = module {
     single {
         WishSortPresenter(
             getWishUseCase = get(),
+            updateWishUseCase = get(),
             getWishesUseCase = get(),
             model = get(),
             logger = get()

@@ -6,16 +6,31 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.sar.shopaholism.R
 import com.sar.shopaholism.domain.entity.Wish
+import com.sar.shopaholism.presentation.presenter.WishSortPresenter
 
-class WishSortViewPagerAdapter(var mainWish: Wish, val otherWishes: List<Wish>) : RecyclerView.Adapter<WishSortViewPagerAdapter.ViewHolder>() {
+data class SelectionResult(
+    val otherWish: Wish,
+    var isPreferred: Boolean
+)
+
+class WishSortViewPagerAdapter(
+    val presenter: WishSortPresenter,
+    val mainWish: Wish,
+    val otherWishes: List<Wish>
+    ) : RecyclerView.Adapter<WishSortViewPagerAdapter.ViewHolder>() {
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        // main wish
+        val mainCardView: CardView = itemView.findViewById(R.id.main_cardview)
         val mainWishImage: ImageView = itemView.findViewById(R.id.main_image)
         val mainWishTitle: TextView = itemView.findViewById(R.id.main_wish_title)
 
+        // other wish
+        val otherCardView: CardView = itemView.findViewById(R.id.other_cardview)
         val otherWishImage: ImageView = itemView.findViewById(R.id.other_wish_image)
         val otherWishTitle: TextView = itemView.findViewById(R.id.other_wish_title)
 
@@ -29,17 +44,41 @@ class WishSortViewPagerAdapter(var mainWish: Wish, val otherWishes: List<Wish>) 
         return ViewHolder(view)
     }
 
+    private fun addResult(result: SelectionResult, isPreferred: Boolean) {
+        result.isPreferred = isPreferred
+        presenter.addResult(result)
+    }
+
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val otherWish: Wish = otherWishes[position]
 
+        val result = SelectionResult(
+            otherWish = otherWish,
+            isPreferred = false
+        )
+
+        val cardViewOnClick = { res: SelectionResult, isPreferred: Boolean ->
+            addResult(res, isPreferred)
+            presenter.showNextPage()
+        }
+
+        // TODO: add logic to cardview onClickListener, move to next page after clicking
+
+        // main wish
         holder.mainWishImage.setImageURI(Uri.parse(mainWish.imageUri))
         holder.mainWishTitle.text = mainWish.title
+        holder.mainCardView.setOnClickListener {
+            cardViewOnClick(result, false)
+        }
 
+        // other wish
         holder.otherWishImage.setImageURI(Uri.parse(otherWish.imageUri))
         holder.otherWishTitle.text = otherWish.title
+        holder.otherCardView.setOnClickListener {
+            cardViewOnClick(result, true)
+        }
 
         val pageIndicatorText: String = holder.itemView.context.getString(R.string.page_indicator)
-
         holder.pageIndicator.text = String.format(pageIndicatorText, position + 1, itemCount)
     }
 

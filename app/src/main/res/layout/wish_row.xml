@@ -36,19 +36,64 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <!-- Image -->
-            <ImageView
-                android:id="@+id/wish_image"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="194dp"
-                android:importantForAccessibility="no"
-                android:scaleType="centerCrop"
-                tools:src="@tools:sample/backgrounds/scenic" />
+                android:layout_height="194dp">
+
+                <ImageView
+                    android:id="@+id/wish_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:importantForAccessibility="no"
+                    android:scaleType="centerCrop"
+                    tools:src="@tools:sample/backgrounds/scenic"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent" />
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_margin="16dp">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/wish_priority"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:drawableLeft="@drawable/ic_wish_priority"
+                            android:drawablePadding="2dp"
+                            android:gravity="center"
+                            tools:text="100" />
+
+                        <TextView
+                            android:id="@+id/wish_price"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:drawableLeft="@drawable/ic_wish_price"
+                            android:drawablePadding="2dp"
+                            android:gravity="center"
+                            tools:text="3000" />
+
+                    </LinearLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <!-- Header, Body (Description) -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="8dp"
+                android:layout_margin="16dp"
                 android:orientation="vertical">
 
                 <!-- Header -->
@@ -74,7 +119,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="8dp"
+                android:layout_margin="16dp"
                 android:orientation="horizontal">
 
                 <com.google.android.material.button.MaterialButton
@@ -83,14 +128,14 @@
                     android:layout_height="wrap_content"
                     android:text="@string/reprioritize"
                     app:icon="@drawable/ic_wish_reprioritize"
-                    app:iconGravity="textStart" />
+                    app:iconGravity="textStart"
+                    android:layout_marginEnd="8dp"/>
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/edit_button"
                     style="?attr/materialButtonOutlinedStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
                     android:text="@string/edit"
                     app:icon="@drawable/ic_edit_wish"
                     app:iconGravity="textStart" />

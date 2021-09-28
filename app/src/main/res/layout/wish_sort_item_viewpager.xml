@@ -12,13 +12,14 @@
         android:layout_height="match_parent">
 
         <LinearLayout
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:padding="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <TextView
                 style="?attr/textAppearanceHeadline6"
@@ -28,10 +29,12 @@
                 android:text="@string/which_sort_preferation_question" />
 
             <com.google.android.material.card.MaterialCardView
+                android:id="@+id/main_cardview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                android:checkable="true">
+                android:clickable="true"
+                app:background="?android:selectableItemBackground">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -59,9 +62,11 @@
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
+                android:id="@+id/other_cardview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:checkable="true">
+                android:clickable="true"
+                app:background="?android:selectableItemBackground">
 
                 <LinearLayout
                     android:layout_width="match_parent"

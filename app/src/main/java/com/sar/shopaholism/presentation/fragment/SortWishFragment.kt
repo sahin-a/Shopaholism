@@ -5,11 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.sar.shopaholism.R
 import com.sar.shopaholism.presentation.adapter.WishSortViewPagerAdapter
 import com.sar.shopaholism.presentation.presenter.WishSortPresenter
 import com.sar.shopaholism.presentation.view.WishSortView
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -29,8 +31,9 @@ private const val ARG_WISH_ID = "wishId"
 class SortWishFragment : Fragment(), WishSortView {
 
     private val presenter: WishSortPresenter by inject()
-
     private var wishId: Long? = null
+
+    private lateinit var viewPager: ViewPager2
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,7 +54,7 @@ class SortWishFragment : Fragment(), WishSortView {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val viewPager: ViewPager2 = view.findViewById(R.id.view_pager)
+        viewPager = view.findViewById(R.id.view_pager)
 
         presenter.attachView(this@SortWishFragment)
 
@@ -59,12 +62,13 @@ class SortWishFragment : Fragment(), WishSortView {
             launch(Dispatchers.IO) {
                 presenter.loadData()
 
-                presenter.mainWish?.let { mainWish ->
-                    presenter.otherWishes?.let { otherWishes ->
+                presenter.model.mainWish?.let { mainWish ->
+                    presenter.model.otherWishes?.let { otherWishes ->
 
                         viewPager.adapter = WishSortViewPagerAdapter(
                             mainWish = mainWish,
-                            otherWishes = otherWishes
+                            otherWishes = otherWishes,
+                            presenter = presenter
                         )
                     }
                 }
@@ -92,5 +96,22 @@ class SortWishFragment : Fragment(), WishSortView {
 
     override fun getMainWishId(): Long {
         return wishId ?: -1
+    }
+
+    override fun showNextPage() {
+        viewPager.adapter?.let { adapter ->
+            val nextIndex = viewPager.currentItem + 1
+
+            when (nextIndex <= (adapter.itemCount - 1)) {
+                true -> viewPager.setCurrentItem(nextIndex, true)
+                else -> CoroutineScope(Dispatchers.Main).launch {
+                    presenter.submitResult()
+                }
+            }
+        }
+    }
+
+    override fun resultSubmitted() {
+        findNavController().navigate(R.id.action_sortWishFragment_to_wishesOverviewFragment)
     }
 }

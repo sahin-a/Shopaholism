@@ -1,8 +1,10 @@
 package com.sar.shopaholism.presentation.model
 
 import com.sar.shopaholism.domain.entity.Wish
+import com.sar.shopaholism.presentation.adapter.SelectionResult
 
 data class SortWishModel(
-    private var mainWish: Wish? = null,
-    private var otherWishes: List<Wish>? = null
+    var mainWish: Wish? = null,
+    var otherWishes: List<Wish>? = null,
+    val selectionResults: MutableList<SelectionResult> = mutableListOf()
 )
