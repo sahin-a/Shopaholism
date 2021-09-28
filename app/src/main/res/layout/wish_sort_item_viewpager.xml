@@ -33,8 +33,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                android:clickable="true"
-                app:background="?android:selectableItemBackground">
+                android:checkable="true"
+                app:checkedIconMargin="32dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -65,8 +65,8 @@
                 android:id="@+id/other_cardview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:clickable="true"
-                app:background="?android:selectableItemBackground">
+                android:checkable="true"
+                app:checkedIconMargin="32dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"

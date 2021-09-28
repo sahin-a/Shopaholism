@@ -30,12 +30,6 @@ class WishSortPresenter(
     BasePresenter<WishSortView>(),
     KoinComponent {
 
-    /*var mainWish: Wish? = null
-        private set
-
-    var otherWishes: List<Wish>? = null
-        private set*/
-
     private fun getMainWishId(): Long {
         return view!!.getMainWishId()
     }
@@ -81,7 +75,7 @@ class WishSortPresenter(
 
         when (oldResult != null) {
             true -> {
-                val idx = model.selectionResults.indexOf(result)
+                val idx = model.selectionResults.indexOf(oldResult)
                 model.selectionResults[idx] = result
 
                 logger.d(

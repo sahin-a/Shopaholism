@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.sar.shopaholism.R
+import com.sar.shopaholism.presentation.adapter.SelectionResult
 import com.sar.shopaholism.presentation.adapter.WishSortViewPagerAdapter
 import com.sar.shopaholism.presentation.presenter.WishSortPresenter
 import com.sar.shopaholism.presentation.view.WishSortView

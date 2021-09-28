@@ -8,6 +8,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.card.MaterialCardView
 import com.sar.shopaholism.R
 import com.sar.shopaholism.domain.entity.Wish
 import com.sar.shopaholism.presentation.presenter.WishSortPresenter
@@ -20,17 +21,16 @@ data class SelectionResult(
 class WishSortViewPagerAdapter(
     val presenter: WishSortPresenter,
     val mainWish: Wish,
-    val otherWishes: List<Wish>
-    ) : RecyclerView.Adapter<WishSortViewPagerAdapter.ViewHolder>() {
+    val otherWishes: List<Wish>) : RecyclerView.Adapter<WishSortViewPagerAdapter.ViewHolder>() {
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         // main wish
-        val mainCardView: CardView = itemView.findViewById(R.id.main_cardview)
+        val mainCardView: MaterialCardView = itemView.findViewById(R.id.main_cardview)
         val mainWishImage: ImageView = itemView.findViewById(R.id.main_image)
         val mainWishTitle: TextView = itemView.findViewById(R.id.main_wish_title)
 
         // other wish
-        val otherCardView: CardView = itemView.findViewById(R.id.other_cardview)
+        val otherCardView: MaterialCardView = itemView.findViewById(R.id.other_cardview)
         val otherWishImage: ImageView = itemView.findViewById(R.id.other_wish_image)
         val otherWishTitle: TextView = itemView.findViewById(R.id.other_wish_title)
 
@@ -57,17 +57,27 @@ class WishSortViewPagerAdapter(
             isPreferred = false
         )
 
+        // isPreffered is false when the main wish has been selected
         val cardViewOnClick = { res: SelectionResult, isPreferred: Boolean ->
             addResult(res, isPreferred)
             presenter.showNextPage()
         }
 
-        // TODO: add logic to cardview onClickListener, move to next page after clicking
+        val checkCard = { checkMainCard: Boolean ->
+            holder.mainCardView.isChecked = checkMainCard
+            holder.otherCardView.isChecked = !checkMainCard
+        }
+
+        // restore selection if data available
+        presenter.model.selectionResults.findLast { res -> res.otherWish == otherWish }?.let {
+            checkCard(!it.isPreferred)
+        }
 
         // main wish
         holder.mainWishImage.setImageURI(Uri.parse(mainWish.imageUri))
         holder.mainWishTitle.text = mainWish.title
         holder.mainCardView.setOnClickListener {
+            checkCard(true)
             cardViewOnClick(result, false)
         }
 
@@ -75,6 +85,7 @@ class WishSortViewPagerAdapter(
         holder.otherWishImage.setImageURI(Uri.parse(otherWish.imageUri))
         holder.otherWishTitle.text = otherWish.title
         holder.otherCardView.setOnClickListener {
+            checkCard(false)
             cardViewOnClick(result, true)
         }
 
