@@ -23,12 +23,12 @@ abstract class BaseCreateWishFragment<MvpView : WishCreationView, Presenter : Ba
 
     // Views
 
-    protected lateinit var imageImageView: FileImageView
-    protected lateinit var selectImageButton: FloatingActionButton
-    protected lateinit var titleEditText: EditText
-    protected lateinit var descriptionEditText: EditText
-    protected lateinit var priceEditText: EditText
-    protected lateinit var createButton: MaterialButton
+    protected var imageImageView: FileImageView? = null
+    protected var selectImageButton: FloatingActionButton? = null
+    protected var titleEditText: EditText? = null
+    protected var descriptionEditText: EditText? = null
+    protected var priceEditText: EditText? = null
+    protected var createButton: MaterialButton? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -39,7 +39,7 @@ abstract class BaseCreateWishFragment<MvpView : WishCreationView, Presenter : Ba
             }
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                createButton.isEnabled = ctaEnabled()
+                createButton?.isEnabled = ctaEnabled()
             }
 
             override fun afterTextChanged(p0: Editable?) {
@@ -48,12 +48,12 @@ abstract class BaseCreateWishFragment<MvpView : WishCreationView, Presenter : Ba
         }
 
         imageImageView = view.findViewById(R.id.wish_image)
-        imageImageView.addImageUriChangedListener {
-            createButton.isEnabled = ctaEnabled()
+        imageImageView?.addImageUriChangedListener {
+            createButton?.isEnabled = ctaEnabled()
         }
 
         selectImageButton = view.findViewById(R.id.select_image_button)
-        selectImageButton.setOnClickListener {
+        selectImageButton?.setOnClickListener {
             ImagePicker.with(this)
                 .crop()
                 .compress(maxSize = 1024)
@@ -62,16 +62,16 @@ abstract class BaseCreateWishFragment<MvpView : WishCreationView, Presenter : Ba
         }
 
         titleEditText = view.findViewById(R.id.wish_title)
-        titleEditText.addTextChangedListener(textWatcher)
+        titleEditText?.addTextChangedListener(textWatcher)
 
         descriptionEditText = view.findViewById(R.id.wish_description)
-        descriptionEditText.addTextChangedListener(textWatcher)
+        descriptionEditText?.addTextChangedListener(textWatcher)
 
         priceEditText = view.findViewById(R.id.wish_price)
-        priceEditText.addTextChangedListener(textWatcher)
+        priceEditText?.addTextChangedListener(textWatcher)
 
         createButton = view.findViewById(R.id.create_wish_button)
-        createButton.isEnabled = ctaEnabled()
+        createButton?.isEnabled = ctaEnabled()
 
         postInit()
     }
@@ -88,7 +88,7 @@ abstract class BaseCreateWishFragment<MvpView : WishCreationView, Presenter : Ba
                 val uri: Uri = data?.data!!
 
                 // Use Uri object instead of File to avoid storage permissions
-                imageImageView.setImageURI(uri)
+                imageImageView?.setImageURI(uri)
             }
             ImagePicker.RESULT_ERROR -> {
                 Toast.makeText(
@@ -114,19 +114,19 @@ abstract class BaseCreateWishFragment<MvpView : WishCreationView, Presenter : Ba
 
     open suspend fun createWish(action: suspend (title: String, imageUri: String, description: String, price: Double) -> Boolean): Boolean {
         return action(
-            titleEditText.text.toString(),
-            imageImageView.imageUri.toString(),
-            descriptionEditText.text.toString(),
-            priceEditText.text.toString().toDoubleOrNull() ?: -1.0
+            titleEditText?.text.toString(),
+            imageImageView?.imageUri.toString(),
+            descriptionEditText?.text.toString(),
+            priceEditText?.text.toString().toDoubleOrNull() ?: -1.0
         )
     }
 
     open fun ctaEnabled(): Boolean {
-        return titleEditText.text.isNotBlank()
-                && descriptionEditText.text.isNotBlank()
-                && priceEditText.text.isNotBlank()
-                && imageImageView.imageUri != null
-                && imageImageView.imageUri.toString().isNotBlank()
+        return titleEditText?.text?.isNotBlank() ?: false
+                && descriptionEditText?.text?.isNotBlank() ?: false
+                && priceEditText?.text?.isNotBlank() ?: false
+                && imageImageView?.imageUri != null
+                && imageImageView?.imageUri.toString().isNotBlank()
     }
 
     open fun navigateTo(resourceActionId: Int) {
@@ -134,10 +134,10 @@ abstract class BaseCreateWishFragment<MvpView : WishCreationView, Presenter : Ba
     }
 
     override fun setData(title: String, imageUri: String, description: String, price: String) {
-        titleEditText.setText(title)
-        imageImageView.setImageURI(Uri.parse(imageUri))
-        descriptionEditText.setText(description)
-        priceEditText.setText(price)
+        titleEditText?.setText(title)
+        imageImageView?.setImageURI(Uri.parse(imageUri))
+        descriptionEditText?.setText(description)
+        priceEditText?.setText(price)
     }
 
 }

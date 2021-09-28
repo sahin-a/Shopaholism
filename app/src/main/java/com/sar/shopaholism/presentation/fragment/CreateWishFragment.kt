@@ -35,8 +35,8 @@ class CreateWishFragment : BaseCreateWishFragment<WishCreationView, WishCreation
     override fun postInit() {
         presenter.attachView(this)
 
-        createButton.setOnClickListener {
-            createButton.isEnabled = false
+        createButton?.setOnClickListener {
+            createButton?.isEnabled = false
 
             CoroutineScope(Dispatchers.IO).launch {
                 val success = createWish(
@@ -77,7 +77,7 @@ class CreateWishFragment : BaseCreateWishFragment<WishCreationView, WishCreation
                                 Toast.LENGTH_SHORT
                             ).show()
 
-                            createButton.isEnabled = ctaEnabled()
+                            createButton?.isEnabled = ctaEnabled()
                         }
                     }
                 }
@@ -85,17 +85,17 @@ class CreateWishFragment : BaseCreateWishFragment<WishCreationView, WishCreation
         }
 
         presenter.getData() // sets data from model to view
-        createButton.isEnabled = ctaEnabled()
+        createButton?.isEnabled = ctaEnabled()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
 
         presenter.updateModelData(
-            title = titleEditText.text.toString(),
-            imageUri = imageImageView.imageUri.toString(),
-            description = descriptionEditText.text.toString(),
-            price = priceEditText.text.toString().toDoubleOrNull()
+            title = titleEditText?.text.toString(),
+            imageUri = imageImageView?.imageUri.toString(),
+            description = descriptionEditText?.text.toString(),
+            price = priceEditText?.text.toString().toDoubleOrNull()
         )
     }
 

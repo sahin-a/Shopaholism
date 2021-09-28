@@ -36,10 +36,10 @@ class EditWishFragment : BaseCreateWishFragment<WishEditingView, WishEditingPres
     }
 
     override fun postInit() {
-        createButton.icon =
+        createButton?.icon =
             resources.getDrawable(R.drawable.ic_save_changes, requireContext().theme)
-        createButton.setText(R.string.wish_apply_changes)
-        createButton.setOnClickListener {
+        createButton?.setText(R.string.wish_apply_changes)
+        createButton?.setOnClickListener {
             CoroutineScope(Dispatchers.IO).launch {
                 var success: Boolean = false
 
@@ -91,10 +91,10 @@ class EditWishFragment : BaseCreateWishFragment<WishEditingView, WishEditingPres
         super.onSaveInstanceState(outState)
 
         presenter.updateModelData(
-            title = titleEditText.text.toString(),
-            imageUri = imageImageView.imageUri.toString(),
-            description = descriptionEditText.text.toString(),
-            price = priceEditText.text.toString().toDoubleOrNull()
+            title = titleEditText?.text.toString(),
+            imageUri = imageImageView?.imageUri.toString(),
+            description = descriptionEditText?.text.toString(),
+            price = priceEditText?.text.toString().toDoubleOrNull()
         )
     }
 
