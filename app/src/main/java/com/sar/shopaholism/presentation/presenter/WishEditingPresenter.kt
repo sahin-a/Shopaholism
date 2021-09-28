@@ -44,7 +44,7 @@ class WishEditingPresenter(
 
         }
 
-        return wish;
+        return wish
     }
 
     suspend fun updateWish(

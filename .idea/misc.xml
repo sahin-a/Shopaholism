@@ -4,7 +4,7 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="app/src/main/res/layout/fragment_delete_wish.xml" value="0.27717391304347827" />
-        <entry key="app/src/main/res/layout/fragment_sort_wish.xml" value="0.5052083333333334" />
+        <entry key="app/src/main/res/layout/fragment_sort_wish.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_wishes_overview.xml" value="0.2874873353596758" />
         <entry key="app/src/main/res/layout/wish_row.xml" value="0.5" />
         <entry key="app/src/main/res/layout/wish_sort_item_viewpager.xml" value="0.3078125" />

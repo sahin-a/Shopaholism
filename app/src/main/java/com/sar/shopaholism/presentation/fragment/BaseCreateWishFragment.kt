@@ -32,7 +32,7 @@ abstract class BaseCreateWishFragment<MvpView : WishCreationView, Presenter : Ba
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setHasOptionsMenu(true);
+        setHasOptionsMenu(true)
 
         val textWatcher = object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
@@ -74,11 +74,6 @@ abstract class BaseCreateWishFragment<MvpView : WishCreationView, Presenter : Ba
         createButton?.isEnabled = ctaEnabled()
 
         postInit()
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

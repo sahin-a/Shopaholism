@@ -115,7 +115,7 @@ class WishSortPresenter(
             }
 
             model.mainWish?.let { mainWish ->
-                val sorter = WishesSorter(mainWish, model.selectionResults);
+                val sorter = WishesSorter(mainWish, model.selectionResults)
                 val reprioritizedWishes = sorter.sort()
 
                 reprioritizedWishes.forEach { newWish ->

@@ -24,7 +24,7 @@ import kotlinx.coroutines.runBlocking
 import org.koin.android.ext.android.inject
 
 
-class WishesOverviewFragment() : Fragment(), WishesOverviewView {
+class WishesOverviewFragment : Fragment(), WishesOverviewView {
     val presenter: WishesOverviewPresenter by inject()
 
     private val wishes = MutableLiveData<List<Wish>>()
