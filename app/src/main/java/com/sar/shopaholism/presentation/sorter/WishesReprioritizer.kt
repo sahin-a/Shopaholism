@@ -1,7 +1,6 @@
 package com.sar.shopaholism.presentation.sorter
 
 import com.sar.shopaholism.domain.entity.Wish
-import com.sar.shopaholism.presentation.adapter.SelectionResult
 
 class WishesReprioritizer private constructor() {
 
@@ -16,7 +15,8 @@ class WishesReprioritizer private constructor() {
             val oldCount = otherWishesCount - newWishesCount
             val preferredCount: Double = oldCount * (currentPriority.toDouble() / 100)
 
-            return ((preferredCount / otherWishesCount) * 100).toInt()
+            return ((preferredCount / otherWishesCount) * 100)
+                .toInt()
         }
 
         /*fun sort(mainWish: Wish, selectionResults: List<SelectionResult>): List<Wish> {

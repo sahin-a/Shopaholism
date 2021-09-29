@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.sar.shopaholism.R
-import com.sar.shopaholism.domain.exception.WishNotCreatedException
 import com.sar.shopaholism.presentation.presenter.WishCreationPresenter
 import com.sar.shopaholism.presentation.view.WishCreationView
 import kotlinx.coroutines.*
@@ -41,21 +40,12 @@ class CreateWishFragment : BaseCreateWishFragment<WishCreationView, WishCreation
             CoroutineScope(Dispatchers.IO).launch {
                 val success = createWish(
                     action = { title, imageUri, description, price ->
-                        try {
-                            presenter.createWish(
-                                title = title,
-                                imageUri = imageUri,
-                                description = description,
-                                price = price
-                            )
-                            return@createWish true
-                        } catch (e: WishNotCreatedException) {
-
-                        } catch (e: IllegalArgumentException) {
-
-                        }
-
-                        return@createWish false
+                        return@createWish presenter.createWish(
+                            title = title,
+                            imageUri = imageUri,
+                            description = description,
+                            price = price
+                        )
                     })
 
                 launch(Dispatchers.Main) {
