@@ -55,8 +55,8 @@ class DeleteWishFragmentDialog : DialogFragment(), WishDeletionView {
                     }.join()
 
                     var message = when (success) {
-                        true -> "Wish deleted"
-                        false -> "Deletion failed"
+                        true -> getString(R.string.wish_deleted)
+                        false -> getString(R.string.wish_deletion_failed)
                     }
 
                     Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT)

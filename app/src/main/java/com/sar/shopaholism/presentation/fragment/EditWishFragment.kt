@@ -67,7 +67,7 @@ class EditWishFragment : BaseCreateWishFragment<WishEditingView, WishEditingPres
                         true -> {
                             Toast.makeText(
                                 requireContext(),
-                                "Wish changes applied",
+                                getString(R.string.wish_changes_applied),
                                 Toast.LENGTH_SHORT
                             ).show()
 
@@ -76,7 +76,7 @@ class EditWishFragment : BaseCreateWishFragment<WishEditingView, WishEditingPres
 
                         false -> Toast.makeText(
                             requireContext(),
-                            "Failed to apply changes to wish",
+                            getString(R.string.wish_apply_changes_failed),
                             Toast.LENGTH_SHORT
                         ).show()
                     }

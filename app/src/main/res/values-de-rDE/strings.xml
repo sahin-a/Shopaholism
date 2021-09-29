@@ -2,21 +2,20 @@
 <resources>
     <string name="app_name">Shopaholism</string>
     <string name="create_wish_button_text">Erstellen</string>
-    <string name="reprioritize">Einordnen</string>
-    <string name="edit">Bearbeiten</string>
+    <string name="reprioritize">Bewerten</string>
+    <string name="edit">Ändern</string>
     <string name="wish_title_hint">Titel</string>
     <string name="wish_description_hint">Beschreibung</string>
     <string name="wish_price_hint">Preis</string>
     <string name="wish_apply_changes">Speichern</string>
     <string name="wish_delete">Löschen</string>
-    <string name="dialog_delete_wish">Möchten sie diesen Wunsch löschen?</string>
+    <string name="dialog_delete_wish">Möchten sie diesen Wunsch entfernen?</string>
     <string name="Yes">Ja</string>
     <string name="No">Nein</string>
     <string name="OK">OK</string>
     <string name="Cancel">Abbrechen</string>
-    <string name="delete">Löschen</string>
+    <string name="delete">Entfernen</string>
     <string name="select_image">Bild auswählen</string>
-    <string name="hello_blank_fragment">Hallo blankes Fragment</string>
     <string name="wish_created_toast">Wunsch erstellt</string>
     <string name="wish_creation_failed_toast">Wunsch konnte nicht erstellt werden</string>
     <string name="fragment_overview_header">Übersicht</string>
@@ -24,6 +23,11 @@
     <string name="fragment_delete_header">Löschen?</string>
     <string name="fragment_create_header">Wunsch erstellen</string>
     <string name="which_sort_preferation_question">Was gefällt dir mehr?</string>
-    <string name="fragment_sort_wish">Wunsch einsortieren</string>
+    <string name="fragment_sort_wish">Wunsch bewerten</string>
     <string name="image_selection_cancelled">Foto auswahl abgebrochen</string>
+    <string name="add_wish">Erstellen</string>
+    <string name="wish_changes_applied">Änderungen vorgenommen</string>
+    <string name="wish_deleted">Wunsch entfernt</string>
+    <string name="wish_deletion_failed">Entfernen fehlgeschlagen</string>
+    <string name="wish_apply_changes_failed">Änderung wurde nicht erfolgreich übernommen</string>
 </resources>
