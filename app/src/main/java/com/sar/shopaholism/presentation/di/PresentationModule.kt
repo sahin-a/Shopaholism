@@ -18,7 +18,14 @@ private val modules = module {
 
     // Presenters
     single { WishesOverviewPresenter(getWishesUseCase = get(), model = get(), logger = get()) }
-    single { WishCreationPresenter(createWishUseCase = get()) }
+    single {
+        WishCreationPresenter(
+            createWishUseCase = get(),
+            getWishesUseCase = get(),
+            updateWishUseCase = get(),
+            logger = get()
+        )
+    }
     single { WishEditingPresenter(updateWishUseCase = get(), getWishUseCase = get()) }
     single { WishDeletionPresenter(deleteWishUseCase = get(), getWishUseCase = get()) }
     single {

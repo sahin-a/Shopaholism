@@ -1,6 +1,5 @@
 package com.sar.shopaholism.presentation.presenter
 
-import android.text.Selection
 import com.sar.shopaholism.domain.entity.Wish
 import com.sar.shopaholism.domain.exception.WishNotUpdatedException
 import com.sar.shopaholism.domain.logger.Logger
@@ -9,16 +8,14 @@ import com.sar.shopaholism.domain.usecase.GetWishesUseCase
 import com.sar.shopaholism.domain.usecase.UpdateWishUseCase
 import com.sar.shopaholism.presentation.adapter.SelectionResult
 import com.sar.shopaholism.presentation.model.SortWishModel
-import com.sar.shopaholism.presentation.sorter.WishesSorter
+import com.sar.shopaholism.presentation.sorter.WishesReprioritizer
 import com.sar.shopaholism.presentation.view.WishSortView
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.koin.core.component.KoinComponent
-import kotlin.coroutines.CoroutineContext
 
 class WishSortPresenter(
     private val getWishUseCase: GetWishUseCase,
@@ -109,8 +106,13 @@ class WishSortPresenter(
             }
 
             model.mainWish?.let { mainWish ->
-                val sorter = WishesSorter(mainWish, model.selectionResults)
-                val reprioritizedWishes = sorter.sort()
+                val reprioritizedWishes = WishesReprioritizer.sort(
+                    mainWish = mainWish,
+                    preferredWishes = model.selectionResults.filter { it.isPreferred }
+                        .map { it.otherWish },
+                    otherWishes = model.selectionResults.filter { !it.isPreferred }
+                        .map { it.otherWish }
+                )
 
                 reprioritizedWishes.forEach { newWish ->
                     updateWish(newWish)

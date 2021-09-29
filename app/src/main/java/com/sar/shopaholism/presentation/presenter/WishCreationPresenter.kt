@@ -1,10 +1,16 @@
 package com.sar.shopaholism.presentation.presenter
 
+import com.sar.shopaholism.domain.logger.Logger
 import com.sar.shopaholism.domain.usecase.CreateWishUseCase
+import com.sar.shopaholism.domain.usecase.GetWishesUseCase
+import com.sar.shopaholism.domain.usecase.UpdateWishUseCase
 import com.sar.shopaholism.presentation.view.WishCreationView
 
 class WishCreationPresenter(
-    private val createWishUseCase: CreateWishUseCase
+    private val createWishUseCase: CreateWishUseCase,
+    private val getWishesUseCase: GetWishesUseCase,
+    private val updateWishUseCase: UpdateWishUseCase,
+    private val logger: Logger
 ) : BaseWishCreationPresenter<WishCreationView>() {
     suspend fun createWish(
         title: String,
