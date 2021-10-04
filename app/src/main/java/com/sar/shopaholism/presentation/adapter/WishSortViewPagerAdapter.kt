@@ -74,7 +74,13 @@ class WishSortViewPagerAdapter(
         }
 
         // main wish
-        holder.mainWishImage.setImageURI(Uri.parse(mainWish.imageUri))
+        when (mainWish.imageUri.isNotBlank()) {
+            true -> holder.mainWishImage.setImageURI(Uri.parse(mainWish.imageUri))
+            false -> {
+                holder.mainWishImage.setImageResource(R.drawable.ic_no_image)
+                holder.mainWishImage.scaleType = ImageView.ScaleType.FIT_CENTER
+            }
+        }
         holder.mainWishTitle.text = mainWish.title
         holder.mainCardView.setOnClickListener {
             checkCard(true)
