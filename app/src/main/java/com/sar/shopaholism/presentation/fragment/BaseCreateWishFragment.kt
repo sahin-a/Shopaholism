@@ -112,16 +112,12 @@ abstract class BaseCreateWishFragment<MvpView : WishCreationView, Presenter : Ba
             titleEditText?.text.toString(),
             imageImageView?.imageUri.toString(),
             descriptionEditText?.text.toString(),
-            priceEditText?.text.toString().toDoubleOrNull() ?: -1.0
+            priceEditText?.text.toString().toDoubleOrNull() ?: 0.0
         )
     }
 
     open fun ctaEnabled(): Boolean {
         return titleEditText?.text?.isNotBlank() ?: false
-                && descriptionEditText?.text?.isNotBlank() ?: false
-                && priceEditText?.text?.isNotBlank() ?: false
-                && imageImageView?.imageUri != null
-                && imageImageView?.imageUri.toString().isNotBlank()
     }
 
     open fun navigateTo(resourceActionId: Int) {

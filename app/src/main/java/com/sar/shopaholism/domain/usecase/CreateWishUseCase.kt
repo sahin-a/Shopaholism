@@ -16,8 +16,6 @@ class CreateWishUseCase(private val repo: WishesRepository, private val logger: 
     = withContext(Dispatchers.IO) {
         WishValidation.validate(
             title = title,
-            imageUri = imageUri,
-            description = description,
             price = price,
             priority = 0
         )

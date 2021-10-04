@@ -57,11 +57,25 @@ class WishesAdapter(
         // contents of the view with that element
         val wish: Wish = getItem(position)
 
-        viewHolder.wishImageView.setImageURI(Uri.parse(wish.imageUri))
+        when (wish.imageUri.isNotBlank()) {
+            true -> viewHolder.wishImageView.setImageURI(Uri.parse(wish.imageUri))
+            false -> viewHolder.wishImageView.visibility = View.GONE
+        }
+
         viewHolder.wishTitleTextView.text = wish.title
-        viewHolder.wishDescriptionTextView.text = wish.description
+
+        when (wish.description.isNotBlank()) {
+            true -> viewHolder.wishDescriptionTextView.text = wish.description
+            false -> viewHolder.wishDescriptionTextView.visibility = View.GONE
+        }
+
         viewHolder.wishPriorityTextView.text = wish.priority.toString()
+
         viewHolder.wishPriceTextView.text = wish.price.toString()
+        viewHolder.wishPriceTextView.visibility = if (wish.price <= 0.0)
+            View.GONE
+        else
+            View.VISIBLE
 
         viewHolder.wishEditButton.setOnClickListener {
             val action =
@@ -79,7 +93,6 @@ class WishesAdapter(
                 .navigate(action)
         }
 
-        //viewHolder.sortButton.visibility = if (itemCount > 1) View.VISIBLE else View.GONE
         viewHolder.sortButton.isEnabled = itemCount > 1
 
         viewHolder.deleteWishButton.setOnClickListener {

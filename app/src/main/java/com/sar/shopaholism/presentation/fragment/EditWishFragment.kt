@@ -41,9 +41,8 @@ class EditWishFragment : BaseCreateWishFragment<WishEditingView, WishEditingPres
         createButton?.setText(R.string.wish_apply_changes)
         createButton?.setOnClickListener {
             CoroutineScope(Dispatchers.IO).launch {
-                var success: Boolean = false
 
-                success = createWish(action = { title, imageUri, description, price ->
+                var success: Boolean = createWish(action = { title, imageUri, description, price ->
                     try {
                         presenter.updateWish(
                             id = args.wishId,
@@ -52,6 +51,7 @@ class EditWishFragment : BaseCreateWishFragment<WishEditingView, WishEditingPres
                             description = description,
                             price = price
                         )
+
                         return@createWish true
                     } catch (e: WishNotUpdatedException) {
 

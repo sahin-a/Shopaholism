@@ -7,6 +7,7 @@ import android.util.AttributeSet
 class FileImageView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : androidx.appcompat.widget.AppCompatImageView(context, attrs, defStyleAttr) {
+
     var imageUriChangedListeners = mutableListOf<(imageUri: Uri?) -> Unit>()
     var imageUri: Uri? = null
 
@@ -26,4 +27,5 @@ class FileImageView @JvmOverloads constructor(
         imageUri = uri
         notifyImageUriChangedListeners()
     }
+    
 }
