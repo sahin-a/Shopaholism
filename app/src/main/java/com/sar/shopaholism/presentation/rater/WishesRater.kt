@@ -92,7 +92,7 @@ class WishesRater(
                 // it's ascending so in case the next entry matches after having its priority lowered
                 // we capture those cases as well
 
-                val penalty = 1
+                /*val penalty = 1
 
                 preferredWishes.sortedByDescending { it.priority }
                     .forEach {
@@ -106,7 +106,7 @@ class WishesRater(
                         it.priority -= penalty
                         reprioritizedWishes.add(it)
                     }
-                }
+                }*/
 
             } else {
                 mainWish.priority = 0

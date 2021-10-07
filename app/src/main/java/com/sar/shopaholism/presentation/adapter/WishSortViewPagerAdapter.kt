@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.card.MaterialCardView
 import com.sar.shopaholism.R
@@ -21,7 +20,8 @@ data class SelectionResult(
 class WishSortViewPagerAdapter(
     val presenter: WishSortPresenter,
     val mainWish: Wish,
-    val otherWishes: List<Wish>) : RecyclerView.Adapter<WishSortViewPagerAdapter.ViewHolder>() {
+    val otherWishes: List<Wish>
+) : RecyclerView.Adapter<WishSortViewPagerAdapter.ViewHolder>() {
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         // main wish
@@ -69,7 +69,7 @@ class WishSortViewPagerAdapter(
         }
 
         // restore selection if data available
-        presenter.model.selectionResults.findLast { res -> res.otherWish == otherWish }?.let {
+        presenter.model.selectionResults.findLast { res -> res.otherWish.id == otherWish.id }?.let {
             checkCard(!it.isPreferred)
         }
 

@@ -68,7 +68,7 @@ class WishSortPresenter(
     }
 
     fun addResult(result: SelectionResult) {
-        val oldResult = model.selectionResults.lastOrNull { it.otherWish == result.otherWish }
+        val oldResult = model.selectionResults.lastOrNull { it.otherWish.id == result.otherWish.id }
 
         when (oldResult != null) {
             true -> {
