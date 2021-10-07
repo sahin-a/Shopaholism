@@ -23,7 +23,6 @@
     <string name="fragment_edit_header">Edit Wish</string>
     <string name="fragment_delete_header">Delete?</string>
     <string name="fragment_create_header">Create Wish</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="which_sort_preferation_question">Which one do you want more?</string>
     <string name="page_indicator" translatable="false">%1$s / %2$s</string>
     <string name="fragment_sort_wish">Rate Wish</string>

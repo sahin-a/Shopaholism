@@ -85,7 +85,6 @@ class SortWishFragment : Fragment(), WishSortView {
          * @param wishId Id of the wish.
          * @return A new instance of fragment SortWishFragment.
          */
-        // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(wishId: Long) =
             SortWishFragment().apply {
