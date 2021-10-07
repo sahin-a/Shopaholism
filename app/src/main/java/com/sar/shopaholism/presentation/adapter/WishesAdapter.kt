@@ -57,16 +57,21 @@ class WishesAdapter(
         // contents of the view with that element
         val wish: Wish = getItem(position)
 
-        viewHolder.wishImageView.setImageURI(Uri.parse(wish.imageUri))
         when (wish.imageUri.isNotBlank()) {
-            //true -> viewHolder.wishImageView.setImageURI(Uri.parse(wish.imageUri))
+            true -> {
+                viewHolder.wishImageView.setImageURI(Uri.parse(wish.imageUri))
+                viewHolder.wishImageView.visibility = View.VISIBLE
+            }
             false -> viewHolder.wishImageView.visibility = View.GONE
         }
 
         viewHolder.wishTitleTextView.text = wish.title
 
         when (wish.description.isNotBlank()) {
-            true -> viewHolder.wishDescriptionTextView.text = wish.description
+            true -> {
+                viewHolder.wishDescriptionTextView.text = wish.description
+                viewHolder.wishDescriptionTextView.visibility = View.VISIBLE
+            }
             false -> viewHolder.wishDescriptionTextView.visibility = View.GONE
         }
 
