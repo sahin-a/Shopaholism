@@ -12,6 +12,9 @@ class WishesRater(
     private val getWishesUseCase: GetWishesUseCase
 ) {
 
+    /**
+     * recalculates the rating of all wishes and updates it in the db
+     */
     suspend fun recalculateAndUpdateRatings(oldWishesCount: (wishesCount: Int) -> Int) =
         withContext(Dispatchers.IO)
         {
