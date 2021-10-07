@@ -71,7 +71,9 @@ class CreateWishFragment : BaseCreateWishFragment<WishCreationView, WishCreation
                         }
                     }
                 }
+
             }
+
         }
 
         presenter.getData() // sets data from model to view

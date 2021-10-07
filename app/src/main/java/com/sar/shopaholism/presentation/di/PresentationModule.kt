@@ -6,6 +6,7 @@ import com.sar.shopaholism.presentation.model.CreateWishModel
 import com.sar.shopaholism.presentation.model.SortWishModel
 import com.sar.shopaholism.presentation.model.WishesModel
 import com.sar.shopaholism.presentation.presenter.*
+import com.sar.shopaholism.presentation.rater.WishesRater
 import org.koin.dsl.module
 
 private val modules = module {
@@ -17,17 +18,37 @@ private val modules = module {
     factory { SortWishModel() }
 
     // Presenters
-    single { WishesOverviewPresenter(getWishesUseCase = get(), model = get(), logger = get()) }
     single {
-        WishCreationPresenter(
-            createWishUseCase = get(),
+        WishesOverviewPresenter(
             getWishesUseCase = get(),
-            updateWishUseCase = get(),
+            model = get(),
             logger = get()
         )
     }
-    single { WishEditingPresenter(updateWishUseCase = get(), getWishUseCase = get()) }
-    single { WishDeletionPresenter(deleteWishUseCase = get(), getWishUseCase = get()) }
+
+    single {
+        WishCreationPresenter(
+            createWishUseCase = get(),
+            wishesRater = get(),
+            logger = get()
+        )
+    }
+
+    single {
+        WishEditingPresenter(
+            updateWishUseCase = get(),
+            getWishUseCase = get()
+        )
+    }
+
+    single {
+        WishDeletionPresenter(
+            deleteWishUseCase = get(),
+            getWishUseCase = get(),
+            wishesRater = get()
+        )
+    }
+
     single {
         WishSortPresenter(
             getWishUseCase = get(),
@@ -37,6 +58,14 @@ private val modules = module {
             logger = get()
         )
     }
+
+    single {
+        WishesRater(
+            updateWishUseCase = get(),
+            getWishesUseCase = get()
+        )
+    }
+
 }
 
 val presentationModules = listOf(modules)

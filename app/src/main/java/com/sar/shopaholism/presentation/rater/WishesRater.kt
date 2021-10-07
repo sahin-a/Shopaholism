@@ -1,8 +1,35 @@
-package com.sar.shopaholism.presentation.sorter
+package com.sar.shopaholism.presentation.rater
 
 import com.sar.shopaholism.domain.entity.Wish
+import com.sar.shopaholism.domain.usecase.GetWishesUseCase
+import com.sar.shopaholism.domain.usecase.UpdateWishUseCase
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.withContext
 
-class WishesReprioritizer private constructor() {
+class WishesRater(
+    private val updateWishUseCase: UpdateWishUseCase,
+    private val getWishesUseCase: GetWishesUseCase
+) {
+
+    suspend fun recalculateAndUpdateRatings(oldWishesCount: (wishesCount: Int) -> Int) =
+        withContext(Dispatchers.IO)
+        {
+            val wishes = getWishesUseCase.execute().first()
+            val wishesCount = wishes.count()
+
+            wishes.filter { it.priority > 0 }.forEach { wish ->
+                val newPriority = recalculatePriority(
+                    currentPriority = wish.priority,
+                    oldWishesCount = oldWishesCount(wishesCount),
+                    wishesCount = wishesCount
+                )
+
+                wish.priority = newPriority
+                updateWishUseCase.execute(wish)
+            }
+
+        }
 
     companion object {
         /**
@@ -10,23 +37,19 @@ class WishesReprioritizer private constructor() {
          * count of new entries added
          *
          * @param currentPriority current priority of the wish
-         * @param newWishesCount count of new wishes added
-         * @param wishesCount current count of all wishes
+         * @param oldWishesCount previous total of all wishes
+         * @param wishesCount current total of all wishes
          * @return priority
          */
-        fun recalculatePriority(currentPriority: Int, newWishesCount: Int, wishesCount: Int): Int {
-            // TODO: Wishes need to get reprioritized whenever a new one is created or one is deleted
+        fun recalculatePriority(
+            currentPriority: Int,
+            oldWishesCount: Int,
+            wishesCount: Int
 
-            val otherWishesCount = (wishesCount - 1)
+        ): Int {
+            val preferredCount: Double = oldWishesCount * (currentPriority.toDouble() / 100)
 
-            if (otherWishesCount <= 0) {
-                throw Exception("count of other wishes can't be 0 or less")
-            }
-
-            val oldCount = otherWishesCount - newWishesCount
-            val preferredCount: Double = oldCount * (currentPriority.toDouble() / 100)
-
-            return ((preferredCount / otherWishesCount) * 100)
+            return ((preferredCount / wishesCount) * 100)
                 .toInt()
         }
 
@@ -40,7 +63,11 @@ class WishesReprioritizer private constructor() {
          *
          * @return list of wishes that had their priority changed
          */
-        fun sort(mainWish: Wish, preferredWishes: List<Wish>, otherWishes: List<Wish>): List<Wish> {
+        fun rateWish(
+            mainWish: Wish,
+            preferredWishes: List<Wish>,
+            otherWishes: List<Wish>
+        ): List<Wish> {
             val reprioritizedWishes = mutableListOf<Wish>()
 
             /* $ Sorting Algorithm $

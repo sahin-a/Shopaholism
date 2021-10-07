@@ -12,28 +12,32 @@ class CreateWishUseCase(private val repo: WishesRepository, private val logger: 
         const val TAG: String = "CreateWishUseCase"
     }
 
-    suspend fun execute(title: String, imageUri: String, description: String, price: Double)
-    = withContext(Dispatchers.IO) {
-        WishValidation.validate(
-            title = title,
-            price = price,
-            priority = 0
-        )
-
-        val id: Long = repo.create(Wish(id = 0L, imageUri, title, description, price, priority = 0))
-
-        if (id <= 0L) {
-            logger.d(
-                tag = TAG,
-                message = "Failed to add new wish to local db"
+    suspend fun execute(title: String, imageUri: String, description: String, price: Double): Long =
+        withContext(Dispatchers.IO) {
+            WishValidation.validate(
+                title = title,
+                price = price,
+                priority = 0
             )
 
-            throw WishNotCreatedException("Wish couldn't be created")
-        }
+            val id: Long = repo.create(
+                Wish(id = 0L, imageUri, title, description, price, priority = 0)
+            )
 
-        logger.i(
-            tag = TAG,
-            message = "New Wish has been added to the local Db"
-        )
-    }
+            if (id <= 0L) {
+                logger.d(
+                    tag = TAG,
+                    message = "Failed to add new wish to local db"
+                )
+
+                throw WishNotCreatedException("Wish couldn't be created")
+            }
+
+            logger.i(
+                tag = TAG,
+                message = "New Wish has been added to the local Db"
+            )
+
+            return@withContext id
+        }
 }

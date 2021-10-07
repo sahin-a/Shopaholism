@@ -8,7 +8,7 @@ import com.sar.shopaholism.domain.usecase.GetWishesUseCase
 import com.sar.shopaholism.domain.usecase.UpdateWishUseCase
 import com.sar.shopaholism.presentation.adapter.SelectionResult
 import com.sar.shopaholism.presentation.model.SortWishModel
-import com.sar.shopaholism.presentation.sorter.WishesReprioritizer
+import com.sar.shopaholism.presentation.rater.WishesRater
 import com.sar.shopaholism.presentation.view.WishSortView
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.catch
@@ -106,7 +106,7 @@ class WishSortPresenter(
             }
 
             model.mainWish?.let { mainWish ->
-                val reprioritizedWishes = WishesReprioritizer.sort(
+                val reprioritizedWishes = WishesRater.rateWish(
                     mainWish = mainWish,
                     preferredWishes = model.selectionResults.filter { it.isPreferred }
                         .map { it.otherWish },
