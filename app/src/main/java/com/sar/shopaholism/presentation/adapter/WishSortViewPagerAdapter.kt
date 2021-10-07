@@ -75,7 +75,10 @@ class WishSortViewPagerAdapter(
 
         // main wish
         when (mainWish.imageUri.isNotBlank()) {
-            true -> holder.mainWishImage.setImageURI(Uri.parse(mainWish.imageUri))
+            true -> {
+                holder.mainWishImage.setImageURI(Uri.parse(mainWish.imageUri))
+                holder.mainWishImage.scaleType = ImageView.ScaleType.CENTER_CROP
+            }
             false -> {
                 holder.mainWishImage.setImageResource(R.drawable.ic_no_image)
                 holder.mainWishImage.scaleType = ImageView.ScaleType.FIT_CENTER

@@ -60,9 +60,12 @@ class WishesAdapter(
         when (wish.imageUri.isNotBlank()) {
             true -> {
                 viewHolder.wishImageView.setImageURI(Uri.parse(wish.imageUri))
-                viewHolder.wishImageView.visibility = View.VISIBLE
+                viewHolder.wishImageView.scaleType = ImageView.ScaleType.CENTER_CROP
             }
-            false -> viewHolder.wishImageView.visibility = View.GONE
+            false -> {
+                viewHolder.wishImageView.setImageResource(R.drawable.no_image_placeholder)
+                viewHolder.wishImageView.scaleType = ImageView.ScaleType.FIT_CENTER
+            }
         }
 
         viewHolder.wishTitleTextView.text = wish.title
