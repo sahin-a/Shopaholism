@@ -9,7 +9,7 @@ object WishValidation {
         wishId: Long? = null,
         title: String? = null,
         price: Double? = null,
-        priority: Int? = null
+        priority: Double? = null
     ) {
         wishId?.let {
             require(it > 0) { "Wish doesn't have a valid Id" }
@@ -25,7 +25,7 @@ object WishValidation {
 
         priority?.let {
             require(it >= 0) { "Wish priority can't be less than 0" }
-            require(it <= 100) { "Wish priority can't be greater than 100" }
+            require(it <= 100.00) { "Wish priority can't be greater than 100" }
         }
     }
 }

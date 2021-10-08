@@ -17,11 +17,11 @@ class CreateWishUseCase(private val repo: WishesRepository, private val logger: 
             WishValidation.validate(
                 title = title,
                 price = price,
-                priority = 0
+                priority = 0.0
             )
 
             val id: Long = repo.create(
-                Wish(id = 0L, imageUri, title, description, price, priority = 0)
+                Wish(id = 0L, imageUri, title, description, price, priority = 0.0)
             )
 
             if (id <= 0L) {

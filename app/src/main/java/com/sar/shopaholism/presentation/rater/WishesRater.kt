@@ -45,15 +45,14 @@ class WishesRater(
          * @return priority
          */
         fun recalculatePriority(
-            currentPriority: Int,
+            currentPriority: Double,
             oldWishesCount: Int,
             wishesCount: Int
 
-        ): Int {
-            val preferredCount: Double = oldWishesCount * (currentPriority.toDouble() / 100)
+        ): Double {
+            val preferredCount: Double = oldWishesCount * (currentPriority / 100)
 
             return ((preferredCount / wishesCount) * 100)
-                .toInt()
         }
 
         /**
@@ -83,13 +82,12 @@ class WishesRater(
             * by 1
             * */
 
-            val mainWishPreferredCount = otherWishes.count()
+            val mainWishPreferredCount: Int = otherWishes.count()
 
             // main wish has been preferred atleast once
             if (mainWishPreferredCount > 0) {
                 val totalWishes = preferredWishes.count() + otherWishes.count()
                 mainWish.priority = ((mainWishPreferredCount.toDouble() / totalWishes) * 100)
-                    .toInt()
 
                 // if it has the same priority as a preferred one, make sure it gets listed below
                 // it's ascending so in case the next entry matches after having its priority lowered
@@ -112,7 +110,7 @@ class WishesRater(
                 }*/
 
             } else {
-                mainWish.priority = 0
+                mainWish.priority = 0.0
             }
 
             reprioritizedWishes.add(mainWish)

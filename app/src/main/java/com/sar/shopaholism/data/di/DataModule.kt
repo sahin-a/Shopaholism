@@ -10,6 +10,7 @@ import org.koin.dsl.module
 private val databaseModule = module {
     single {
         Room.databaseBuilder(get(), WishesDatabase::class.java, WishesDatabase.DATABASE_NAME)
+            .addMigrations(WishesDatabase.MIGRATION_1_2)
             .build()
     }
     single { get<WishesDatabase>().wishDao() }

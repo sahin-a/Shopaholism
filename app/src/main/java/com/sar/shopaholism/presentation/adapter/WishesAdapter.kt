@@ -17,6 +17,8 @@ import com.sar.shopaholism.R
 import com.sar.shopaholism.domain.entity.Wish
 import com.sar.shopaholism.presentation.fragment.DeleteWishFragmentDialog
 import com.sar.shopaholism.presentation.fragment.WishesOverviewFragmentDirections
+import java.math.BigDecimal
+import java.math.RoundingMode
 
 class WishesAdapter(
     private val context: Fragment
@@ -78,10 +80,17 @@ class WishesAdapter(
             false -> viewHolder.wishDescriptionTextView.visibility = View.GONE
         }
 
-        viewHolder.wishPriorityTextView.text = wish.priority.toString()
+        val roundedPriority =
+            BigDecimal(wish.priority).setScale(0, RoundingMode.HALF_EVEN).toString()
+        viewHolder.wishPriorityTextView.text = roundedPriority
 
-        viewHolder.wishPriceTextView.text = wish.price.toString()
-        viewHolder.wishPriceTextView.visibility = if (wish.price <= 0.0)
+        viewHolder.wishPriceTextView.text = if ((wish.price - wish.price.toInt()) <= 0.00) {
+            roundValue(wish.price, 0).toString()
+        } else {
+            roundValue(wish.price, 2).toString()
+        }
+
+        viewHolder.wishPriceTextView.visibility = if (wish.price <= 0.00)
             View.GONE
         else
             View.VISIBLE
@@ -108,6 +117,10 @@ class WishesAdapter(
             val deleteDialog = DeleteWishFragmentDialog.newInstance(wish.id)
             deleteDialog.show(context.childFragmentManager, "delete_wish")
         }
+    }
+
+    private fun roundValue(value: Double, scale: Int): BigDecimal {
+        return BigDecimal(value).setScale(scale, RoundingMode.HALF_EVEN)
     }
 }
 

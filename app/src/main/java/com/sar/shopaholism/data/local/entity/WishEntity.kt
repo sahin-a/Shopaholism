@@ -23,5 +23,5 @@ data class WishEntity(
     val price: Double,
 
     @ColumnInfo(name = "priority")
-    val priority: Int
+    val priority: Double
 )

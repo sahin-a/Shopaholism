@@ -13,7 +13,7 @@ class Wish {
         private set
     var description: String
         private set
-    var priority: Int
+    var priority: Double
     var price: Double
         set(value: Double) {
             field = BigDecimal(value).setScale(2, RoundingMode.HALF_EVEN)
@@ -26,7 +26,7 @@ class Wish {
         title: String,
         description: String,
         price: Double,
-        priority: Int
+        priority: Double
     ) {
         this.id = id
         this.imageUri = imageUri
@@ -35,4 +35,12 @@ class Wish {
         this.price = price
         this.priority = priority
     }
+
+    private fun roundValue(value: Double, scale: Int): BigDecimal {
+        return BigDecimal(value).setScale(scale, RoundingMode.HALF_EVEN)
+    }
+
+    fun getRoundedPrice(scale: Int = 2) = roundValue(price, scale).toDouble()
+
+    fun getRoundedPriority(scale: Int = 2) = roundValue(priority, scale).toDouble()
 }

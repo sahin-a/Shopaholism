@@ -60,7 +60,7 @@ class WishEditingPresenter(
                 imageUri = imageUri,
                 description = description,
                 price = price,
-                priority = originalWish?.priority ?: 0
+                priority = originalWish?.priority ?: 0.0
             )
         )
     }
