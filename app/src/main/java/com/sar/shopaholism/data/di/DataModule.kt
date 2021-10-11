@@ -1,6 +1,7 @@
 package com.sar.shopaholism.data.di
 
 import androidx.room.Room
+import com.sar.shopaholism.data.local.dao.WishDao
 import com.sar.shopaholism.data.local.db.WishesDatabase
 import com.sar.shopaholism.data.local.source.WishesDataSource
 import com.sar.shopaholism.data.repository.WishesRepositoryImpl
@@ -13,7 +14,7 @@ private val databaseModule = module {
             .addMigrations(WishesDatabase.MIGRATION_1_2)
             .build()
     }
-    single { get<WishesDatabase>().wishDao() }
+    single<WishDao> { get<WishesDatabase>().wishDao() }
 }
 
 private val repositoryModule = module {

@@ -51,7 +51,7 @@ class WishesOverviewPresenterTest {
             imageUri = "imageUri",
             description = "description",
             price = 53.0,
-            priority = 2
+            priority = 2.0
         )
 
         coEvery { getWishesUseCase.execute() } returns flowOf(listOf(wish))

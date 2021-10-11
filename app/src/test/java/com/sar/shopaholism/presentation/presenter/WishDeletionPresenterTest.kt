@@ -3,6 +3,7 @@ package com.sar.shopaholism.presentation.presenter
 import com.sar.shopaholism.domain.entity.Wish
 import com.sar.shopaholism.domain.usecase.DeleteWishUseCase
 import com.sar.shopaholism.domain.usecase.GetWishUseCase
+import com.sar.shopaholism.presentation.rater.WishesRater
 import com.sar.shopaholism.presentation.view.WishDeletionView
 import io.mockk.*
 import kotlinx.coroutines.test.runBlockingTest
@@ -15,16 +16,20 @@ class WishDeletionPresenterTest {
     private lateinit var view: WishDeletionView
     private lateinit var deleteWishUseCase: DeleteWishUseCase
     private lateinit var getWishUseCase: GetWishUseCase
+    private lateinit var wishesRater: WishesRater
 
     @Before
     fun setup() {
         deleteWishUseCase = mockk()
         getWishUseCase = mockk()
+        view = mockk()
+        wishesRater = mockk(relaxed = true)
+
         presenter = WishDeletionPresenter(
             deleteWishUseCase = deleteWishUseCase,
-            getWishUseCase = getWishUseCase
+            getWishUseCase = getWishUseCase,
+            wishesRater = wishesRater
         )
-        view = mockk()
     }
 
     @Test
@@ -37,7 +42,7 @@ class WishDeletionPresenterTest {
             imageUri = "imageUri",
             description = "description",
             price = 2.0,
-            priority = 0
+            priority = 0.0
         )
 
         presenter.getWish(id)

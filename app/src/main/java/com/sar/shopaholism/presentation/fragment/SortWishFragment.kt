@@ -8,7 +8,6 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.sar.shopaholism.R
-import com.sar.shopaholism.presentation.adapter.SelectionResult
 import com.sar.shopaholism.presentation.adapter.WishSortViewPagerAdapter
 import com.sar.shopaholism.presentation.presenter.WishSortPresenter
 import com.sar.shopaholism.presentation.view.WishSortView
@@ -17,10 +16,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.koin.android.ext.android.inject
-import kotlin.coroutines.CoroutineContext
-import kotlin.coroutines.coroutineContext
 
-// TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_WISH_ID = "wishId"
 

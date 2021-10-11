@@ -5,12 +5,11 @@ import com.sar.shopaholism.domain.usecase.GetWishUseCase
 import com.sar.shopaholism.domain.usecase.UpdateWishUseCase
 import com.sar.shopaholism.presentation.view.WishEditingView
 import io.mockk.*
+import junit.framework.Assert.assertEquals
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Before
 import org.junit.Test
-import kotlin.reflect.KFunction
-import kotlin.reflect.full.functions
 
 @ExperimentalCoroutinesApi
 class WishEditingPresenterTest {
@@ -41,7 +40,7 @@ class WishEditingPresenterTest {
             imageUri = "imageUri",
             description = "description",
             price = 2.0,
-            priority = 0
+            priority = 0.0
         )
 
         every { view.getWishId() } returns id
@@ -59,10 +58,10 @@ class WishEditingPresenterTest {
             imageUri = "imageUri",
             description = "description",
             price = 2.0,
-            priority = 0
+            priority = 0.0
         )
 
-        coEvery { updateWishUseCase.execute(wish) } just Runs
+        coEvery { updateWishUseCase.execute(any()) } just Runs
 
         wish.apply {
             presenter.updateWish(
@@ -74,7 +73,21 @@ class WishEditingPresenterTest {
             )
         }
 
-        coVerify { updateWishUseCase.execute(wish) }
+        coVerify {
+            updateWishUseCase.execute(
+                coWithArg { pWish ->
+                    wish.apply {
+                        assertEquals(pWish.title, title)
+                        assertEquals(pWish.id, id)
+                        assertEquals(pWish.title, title)
+                        assertEquals(pWish.description, description)
+                        assertEquals(pWish.imageUri, imageUri)
+                        assertEquals(pWish.price, price)
+                        assertEquals(pWish.priority, priority)
+                    }
+                }
+            )
+        }
     }
 
 }

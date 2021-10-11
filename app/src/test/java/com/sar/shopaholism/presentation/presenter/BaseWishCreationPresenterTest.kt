@@ -28,7 +28,7 @@ class BaseWishCreationPresenterTest {
             imageUri = "imageUri",
             description = "description",
             price = 1.0,
-            priority = 0
+            priority = 0.0
         )
 
         presenter.model.apply {
@@ -67,7 +67,7 @@ class BaseWishCreationPresenterTest {
             imageUri = "imageUri",
             description = "description",
             price = -0.1,
-            priority = 0
+            priority = 0.0
         )
 
         presenter.model.apply {

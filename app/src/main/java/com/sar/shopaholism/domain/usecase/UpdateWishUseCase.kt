@@ -4,14 +4,13 @@ import com.sar.shopaholism.domain.entity.Wish
 import com.sar.shopaholism.domain.exception.WishNotUpdatedException
 import com.sar.shopaholism.domain.logger.Logger
 import com.sar.shopaholism.domain.repository.WishesRepository
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 
 class UpdateWishUseCase(
     private val repo: WishesRepository,
-    private val logger: Logger) {
+    private val logger: Logger
+) {
 
-    suspend fun execute(wish: Wish) = withContext(Dispatchers.IO) {
+    suspend fun execute(wish: Wish) {
         WishValidation.validate(
             wishId = wish.id,
             title = wish.title,

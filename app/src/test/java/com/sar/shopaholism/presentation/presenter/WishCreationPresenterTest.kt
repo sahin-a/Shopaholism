@@ -2,26 +2,32 @@ package com.sar.shopaholism.presentation.presenter
 
 import com.sar.shopaholism.domain.logger.Logger
 import com.sar.shopaholism.domain.usecase.CreateWishUseCase
-import com.sar.shopaholism.presentation.di.presentationModules
+import com.sar.shopaholism.presentation.rater.WishesRater
 import com.sar.shopaholism.presentation.view.WishCreationView
-import io.mockk.*
+import io.mockk.coEvery
+import io.mockk.coVerify
+import io.mockk.mockk
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Before
 import org.junit.Test
-import org.koin.core.context.startKoin
-import org.koin.dsl.module
 import org.koin.test.KoinTest
 
 class WishCreationPresenterTest : KoinTest {
     private val logger: Logger = mockk(relaxed = true)
     private val createWishUseCase: CreateWishUseCase = mockk()
+    private val wishesRater: WishesRater = mockk(relaxed = true)
     private val view: WishCreationView = mockk()
 
     private lateinit var presenter: WishCreationPresenter
 
+
     @Before
     fun setup() {
-        presenter = WishCreationPresenter(createWishUseCase)
+        presenter = WishCreationPresenter(
+            createWishUseCase = createWishUseCase,
+            wishesRater = wishesRater,
+            logger = logger
+        )
         presenter.attachView(view)
     }
 
@@ -39,7 +45,7 @@ class WishCreationPresenterTest : KoinTest {
                 description = description,
                 price = price
             )
-        } just Runs
+        } returns 1
 
         presenter.createWish(
             title,

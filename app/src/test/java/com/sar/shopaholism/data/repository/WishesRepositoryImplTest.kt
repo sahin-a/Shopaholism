@@ -30,7 +30,7 @@ class WishesRepositoryImplTest {
         val title = "Hallo Test!"
         val description = "Hallo Description!"
         val price = 20.0
-        val priority = 5
+        val priority = 5.0
 
         val wishEntity = WishEntity(
             id = id,
@@ -89,7 +89,7 @@ class WishesRepositoryImplTest {
             imageUri = "",
             description = "",
             price = 1.0,
-            priority = 1)
+            priority = 1.0)
 
         wishesRepositoryImpl.getWish(id)
 
@@ -103,7 +103,7 @@ class WishesRepositoryImplTest {
         val title = "New Wish"
         val description = "Epic Description"
         val price = 20.0
-        val priority = 5
+        val priority = 5.0
 
         val wishEntity = WishEntity(
             id = id,

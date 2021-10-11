@@ -7,7 +7,7 @@ import kotlinx.coroutines.withContext
 
 class DeleteWishUseCase(private val repo: WishesRepository) {
 
-    suspend fun execute(wishId: Long) = withContext(Dispatchers.IO) {
+    suspend fun execute(wishId: Long) {
         WishValidation.validate(wishId = wishId)
 
         val isDeleted = repo.delete(wishId)

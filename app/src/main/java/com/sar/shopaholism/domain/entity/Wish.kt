@@ -15,10 +15,10 @@ class Wish {
         private set
     var priority: Double
     var price: Double
-        set(value: Double) {
-            field = BigDecimal(value).setScale(2, RoundingMode.HALF_EVEN)
-                .toDouble()
-        }
+    /*set(value: Double) {
+        field = BigDecimal(value).setScale(2, RoundingMode.HALF_EVEN)
+            .toDouble()
+    }*/
 
     constructor(
         id: Long,
