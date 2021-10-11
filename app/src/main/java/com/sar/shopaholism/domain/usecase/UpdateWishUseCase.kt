@@ -4,6 +4,8 @@ import com.sar.shopaholism.domain.entity.Wish
 import com.sar.shopaholism.domain.exception.WishNotUpdatedException
 import com.sar.shopaholism.domain.logger.Logger
 import com.sar.shopaholism.domain.repository.WishesRepository
+import java.math.BigDecimal
+import java.math.RoundingMode
 
 class UpdateWishUseCase(
     private val repo: WishesRepository,
@@ -14,7 +16,8 @@ class UpdateWishUseCase(
         WishValidation.validate(
             wishId = wish.id,
             title = wish.title,
-            price = wish.price,
+            price = BigDecimal(wish.price).setScale(2, RoundingMode.HALF_EVEN)
+                .toDouble(),
             priority = wish.priority
         )
 

@@ -4,6 +4,8 @@ import com.sar.shopaholism.domain.entity.Wish
 import com.sar.shopaholism.domain.exception.WishNotCreatedException
 import com.sar.shopaholism.domain.logger.Logger
 import com.sar.shopaholism.domain.repository.WishesRepository
+import java.math.BigDecimal
+import java.math.RoundingMode
 
 class CreateWishUseCase(private val repo: WishesRepository, private val logger: Logger) {
 
@@ -20,7 +22,8 @@ class CreateWishUseCase(private val repo: WishesRepository, private val logger: 
                 imageUri = imageUri,
                 title = title,
                 description = description,
-                price = price,
+                price = BigDecimal(price).setScale(2, RoundingMode.HALF_EVEN)
+                    .toDouble(),
                 priority = 0.0
             )
         )
