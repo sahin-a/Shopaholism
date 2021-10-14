@@ -115,5 +115,14 @@ dependencies {
     testImplementation "io.mockk:mockk:$mockkVersion"
     androidTestImplementation "io.mockk:mockk-android:$mockkVersion"
 
+    def fuelVersion = "2.3.1"
+
+    //core
+    implementation "com.github.kittinunf.fuel:fuel:$fuelVersion"
+
+    //packages
+    implementation "com.github.kittinunf.fuel:fuel-coroutines:$fuelVersion"
+    implementation "com.github.kittinunf.fuel:fuel-gson:$fuelVersion"
+
     implementation("org.jetbrains.kotlin:kotlin-reflect:1.5.30")
 }

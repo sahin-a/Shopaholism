@@ -25,7 +25,6 @@ class DeleteWishFragmentDialog : DialogFragment(), WishDeletionView {
 
     // Views
     private lateinit var deleteButton: Button
-    //private lateinit var cancelButton: FloatingActionButton
 
     private lateinit var imageImageView: ImageView
     private lateinit var titleTextView: TextView
@@ -54,21 +53,17 @@ class DeleteWishFragmentDialog : DialogFragment(), WishDeletionView {
                         success = presenter.deleteWish(getWishId())
                     }.join()
 
-                    var message = when (success) {
+                    val message = when (success) {
                         true -> getString(R.string.wish_deleted)
                         false -> getString(R.string.wish_deletion_failed)
                     }
 
-                    Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT)
+                    Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
 
                     dialog?.dismiss()
                 }
             }
         }
-        /*cancelButton.setOnClickListener {
-            dialog?.cancel()
-        }*/
-
         setCurrentData()
 
         return view
