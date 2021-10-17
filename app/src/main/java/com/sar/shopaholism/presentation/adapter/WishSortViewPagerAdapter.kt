@@ -77,13 +77,12 @@ class WishSortViewPagerAdapter(
         when (mainWish.imageUri.isNotBlank()) {
             true -> {
                 holder.mainWishImage.setImageURI(Uri.parse(mainWish.imageUri))
-                holder.mainWishImage.scaleType = ImageView.ScaleType.CENTER_CROP
             }
             false -> {
-                holder.mainWishImage.setImageResource(R.drawable.ic_no_image)
-                holder.mainWishImage.scaleType = ImageView.ScaleType.FIT_CENTER
+                holder.mainWishImage.setImageResource(R.drawable.no_image_placeholder)
             }
         }
+        holder.mainWishImage.scaleType = ImageView.ScaleType.CENTER_CROP
         holder.mainWishTitle.text = mainWish.title
         holder.mainCardView.setOnClickListener {
             checkCard(true)
@@ -91,7 +90,15 @@ class WishSortViewPagerAdapter(
         }
 
         // other wish
-        holder.otherWishImage.setImageURI(Uri.parse(otherWish.imageUri))
+        when (otherWish.imageUri.isNotBlank()) {
+            true -> {
+                holder.otherWishImage.setImageURI(Uri.parse(otherWish.imageUri))
+            }
+            false -> {
+                holder.otherWishImage.setImageResource(R.drawable.no_image_placeholder)
+            }
+        }
+        holder.otherWishImage.scaleType = ImageView.ScaleType.CENTER_CROP
         holder.otherWishTitle.text = otherWish.title
         holder.otherCardView.setOnClickListener {
             checkCard(false)

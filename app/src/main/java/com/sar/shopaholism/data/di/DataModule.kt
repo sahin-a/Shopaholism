@@ -6,9 +6,9 @@ import com.sar.shopaholism.data.local.dao.WishDao
 import com.sar.shopaholism.data.local.db.WishesDatabase
 import com.sar.shopaholism.data.local.source.WishesDataSource
 import com.sar.shopaholism.data.remote.productlookup.BarcodeLookupApi
-import com.sar.shopaholism.data.remote.productlookup.source.ProductLookupDataSource
-import com.sar.shopaholism.data.remote.productlookup.source.BarcodeLookupDataSourceImpl
 import com.sar.shopaholism.data.remote.productlookup.RateLimiter
+import com.sar.shopaholism.data.remote.productlookup.source.BarcodeLookupDataSourceImpl
+import com.sar.shopaholism.data.remote.productlookup.source.ProductLookupDataSource
 import com.sar.shopaholism.data.repository.ProductLookupRepositoryImpl
 import com.sar.shopaholism.data.repository.WishesRepositoryImpl
 import com.sar.shopaholism.domain.repository.ProductLookupRepository
