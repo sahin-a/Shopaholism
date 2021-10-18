@@ -66,6 +66,14 @@ private val modules = module {
         )
     }
 
+    single {
+        WishDetailPresenter(
+            getWishUseCase = get(),
+            getProductLookupUseCase = get(),
+            logger = get()
+        )
+    }
+
 }
 
 val presentationModules = listOf(modules)

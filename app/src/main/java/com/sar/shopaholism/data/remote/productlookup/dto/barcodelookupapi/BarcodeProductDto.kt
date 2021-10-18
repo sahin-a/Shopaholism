@@ -1,5 +1,7 @@
 package com.sar.shopaholism.data.remote.productlookup.dto.barcodelookupapi
 
+import com.google.gson.annotations.SerializedName
+
 data class BarcodeProductDto(
     val asin: String = "",
     val barcode_formats: String = "",
@@ -11,7 +13,7 @@ data class BarcodeProductDto(
     val features: List<Any> = emptyList(),
     val images: List<String> = emptyList(),
     val model: String = "",
-    val barcodeReviewDtos: List<BarcodeReviewDto> = emptyList(),
-    val barcodeStoreDtos: List<BarcodeStoreDto> = emptyList(),
+    @SerializedName("reviews") val barcodeReviewDtos: List<BarcodeReviewDto> = emptyList(),
+    @SerializedName("stores") val barcodeStoreDtos: List<BarcodeStoreDto> = emptyList(),
     val title: String = ""
 )

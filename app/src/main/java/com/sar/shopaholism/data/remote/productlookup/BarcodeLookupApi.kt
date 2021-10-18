@@ -3,8 +3,8 @@ package com.sar.shopaholism.data.remote.productlookup
 import com.github.kittinunf.fuel.core.FuelError
 import com.github.kittinunf.fuel.core.FuelManager
 import com.github.kittinunf.fuel.core.Request
-import com.github.kittinunf.fuel.gson.responseObject
 import com.github.kittinunf.result.Result
+import com.google.gson.Gson
 import com.sar.shopaholism.data.remote.productlookup.dto.barcodelookupapi.BarcodeProductsDto
 import com.sar.shopaholism.data.remote.productlookup.dto.barcodelookupapi.BarcodeRateLimitDto
 import java.time.Instant
@@ -19,12 +19,17 @@ class RateLimiter {
 
     private var lastRequestSentTimestamp = Instant.now()
 
+    var isInitialized = false
+        private set
+
     fun setData(barcodeRateLimiterDto: BarcodeRateLimitDto) {
         maxRequestsPerMonth = barcodeRateLimiterDto.allowed_calls_per_month.toInt()
         maxRequestsPerMinute = barcodeRateLimiterDto.allowed_calls_per_minute.toInt()
 
         requestsLeftPerMonth = barcodeRateLimiterDto.remaining_calls_per_month.toInt()
         requestsLeftPerMinute = barcodeRateLimiterDto.remaining_calls_per_minute.toInt()
+
+        isInitialized = true
     }
 
     fun isRateLimited(): Boolean =
@@ -73,11 +78,9 @@ class BarcodeLookupApi(
     init {
         fuelManager.basePath = "https://api.barcodelookup.com/v3/"
         fuelManager.baseParams = listOf("key" to apiToken)
-
-        rateLimiter.setData(getRateLimit())
     }
 
-    private fun <T : Any> parseResponse(result: Result<T, FuelError>): T {
+    private inline fun <reified T : Any> parseResponse(result: Result<String, FuelError>): T {
         val (data, error) = result
 
         error?.let {
@@ -85,7 +88,7 @@ class BarcodeLookupApi(
         }
 
         data?.let {
-            return it
+            return Gson().fromJson(it, T::class.java)
         }
 
         throw Exception("Failed to parse Response")
@@ -93,15 +96,32 @@ class BarcodeLookupApi(
 
     private inline fun <reified ResponseDto : Any> sendRequest(
         request: Request,
-        checkRateLimit: Boolean = true
+        checkRateLimit: Boolean
     ): ResponseDto {
-        if (checkRateLimit && rateLimiter.isRateLimited()) {
+
+        if (!checkRateLimit) {
+            return sendRequest(request)
+        }
+
+        if (!rateLimiter.isInitialized) {
+            rateLimiter.setData(getRateLimit())
+        }
+
+        if (rateLimiter.isRateLimited()) {
             throw Exception("Rate limited")
         }
 
-        val (_, _, result) = request.responseObject<ResponseDto>()
+        val (_, _, result) = request.responseString()
 
         rateLimiter.increaseSentRequests()
+
+        return parseResponse(result)
+    }
+
+    private inline fun <reified ResponseDto : Any> sendRequest(
+        request: Request
+    ): ResponseDto {
+        val (_, _, result) = request.responseString()
 
         return parseResponse(result)
     }
@@ -120,7 +140,7 @@ class BarcodeLookupApi(
             parameters = listOf("title" to name)
         )
 
-        return sendRequest(request)
+        return sendRequest(request, checkRateLimit = true)
     }
 
 }

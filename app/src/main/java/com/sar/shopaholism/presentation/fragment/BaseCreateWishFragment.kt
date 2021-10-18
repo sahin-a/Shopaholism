@@ -2,6 +2,7 @@ package com.sar.shopaholism.presentation.fragment
 
 import android.app.Activity
 import android.content.Intent
+import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
@@ -22,13 +23,15 @@ abstract class BaseCreateWishFragment<MvpView : WishCreationView, Presenter : Ba
     BaseFragment(), WishCreationView {
 
     // Views
-
     protected var imageImageView: FileImageView? = null
     protected var selectImageButton: FloatingActionButton? = null
     protected var titleEditText: EditText? = null
     protected var descriptionEditText: EditText? = null
     protected var priceEditText: EditText? = null
     protected var createButton: MaterialButton? = null
+
+    // Media Player
+    private lateinit var successNotificationSound: MediaPlayer
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -73,6 +76,8 @@ abstract class BaseCreateWishFragment<MvpView : WishCreationView, Presenter : Ba
         createButton = view.findViewById(R.id.create_wish_button)
         createButton?.isEnabled = ctaEnabled()
 
+        successNotificationSound = MediaPlayer.create(context, R.raw.alert_high_intensity)
+
         postInit()
     }
 
@@ -108,12 +113,18 @@ abstract class BaseCreateWishFragment<MvpView : WishCreationView, Presenter : Ba
     abstract fun postInit()
 
     open suspend fun createWish(action: suspend (title: String, imageUri: String, description: String, price: Double) -> Boolean): Boolean {
-        return action(
+        val success = action(
             titleEditText?.text.toString(),
             imageImageView?.imageUri.toString(),
             descriptionEditText?.text.toString(),
             priceEditText?.text.toString().toDoubleOrNull() ?: 0.0
         )
+
+        if (success) {
+            successNotificationSound.start()
+        }
+
+        return success
     }
 
     open fun ctaEnabled(): Boolean {

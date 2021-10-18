@@ -12,6 +12,6 @@ data class BarcodeStoreDto(
     val name: String,
     val price: String,
     val sale_price: String,
-    val shipping: String,
-    val tax: String
+    val shipping: List<String>,
+    val tax: List<String>
 )
