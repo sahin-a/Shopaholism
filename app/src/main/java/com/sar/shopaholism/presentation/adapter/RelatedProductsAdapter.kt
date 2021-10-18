@@ -9,13 +9,13 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.sar.shopaholism.R
 import com.sar.shopaholism.domain.entity.productlookup.Product
-import com.sar.shopaholism.domain.entity.productlookup.Store
 
 class RelatedProductsAdapter :
     ListAdapter<Product, RelatedProductsAdapter.ViewHolder>(ProductDiffCallback) {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        var shopNameTextView: TextView = view.findViewById(R.id.shop_name)
+        var shopNameTextView: TextView = view.findViewById(R.id.product_name)
+        var shopOffers: RecyclerView = view.findViewById(R.id.shop_offers)
     }
 
     // Create new views (invoked by the layout manager)
@@ -36,6 +36,10 @@ class RelatedProductsAdapter :
         // contents of the view with that element
         val product = getItem(position)
 
+        val adapter = ShopOfferAdapter()
+        adapter.submitList(product.stores)
+        viewHolder.shopOffers.adapter = adapter
+
         viewHolder.apply {
             shopNameTextView.text = product.title
         }
@@ -44,12 +48,12 @@ class RelatedProductsAdapter :
 
 }
 
-object ProductDiffCallback : DiffUtil.ItemCallback<Store>() {
-    override fun areItemsTheSame(oldItem: Store, newItem: Store): Boolean {
+object ProductDiffCallback : DiffUtil.ItemCallback<Product>() {
+    override fun areItemsTheSame(oldItem: Product, newItem: Product): Boolean {
         return oldItem == newItem
     }
 
-    override fun areContentsTheSame(oldItem: Store, newItem: Store): Boolean {
-        return oldItem.url == newItem.url
+    override fun areContentsTheSame(oldItem: Product, newItem: Product): Boolean {
+        return oldItem.title == newItem.title
     }
 }
