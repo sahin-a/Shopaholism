@@ -30,4 +30,5 @@
     <string name="wish_deleted">Wunsch entfernt</string>
     <string name="wish_deletion_failed">Entfernen fehlgeschlagen</string>
     <string name="wish_apply_changes_failed">Änderung wurde nicht erfolgreich übernommen</string>
+    <string name="related_products">Ähnliche Produkte</string>
 </resources>

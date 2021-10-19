@@ -1,6 +1,7 @@
 package com.sar.shopaholism.presentation.widgets
 
 import android.content.Context
+import android.content.res.Resources
 import android.net.Uri
 import android.util.AttributeSet
 import android.view.LayoutInflater
@@ -28,12 +29,28 @@ class ImageCardView(context: Context, attrs: AttributeSet) : LinearLayout(contex
         setImage(imageResId)
     }
 
+    private fun showImageView(showImage: Boolean) {
+        imageView.visibility = if (showImage) View.VISIBLE else View.GONE
+    }
+
     fun setImage(resId: Int) {
         imageView.setImageResource(resId)
+
+        if (resId == Resources.ID_NULL) {
+            showImageView(showImage = false)
+        } else {
+            showImageView(showImage = true)
+        }
     }
 
     fun setImage(uri: Uri?) {
         imageView.setImageURI(uri)
+
+        if (uri == null) {
+            showImageView(showImage = false)
+        } else {
+            showImageView(showImage = true)
+        }
     }
 
     override fun onFinishInflate() {

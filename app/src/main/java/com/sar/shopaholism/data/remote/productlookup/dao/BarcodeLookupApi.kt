@@ -1,4 +1,4 @@
-package com.sar.shopaholism.data.remote.productlookup
+package com.sar.shopaholism.data.remote.productlookup.dao
 
 import com.github.kittinunf.fuel.core.FuelError
 import com.github.kittinunf.fuel.core.FuelManager
