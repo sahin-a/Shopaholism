@@ -5,16 +5,25 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
 import androidx.core.net.toUri
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.sar.shopaholism.R
 import com.sar.shopaholism.domain.entity.productlookup.Store
+import com.squareup.picasso.Picasso
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
-class ShopOfferAdapter : ListAdapter<Store, ShopOfferAdapter.ViewHolder>(StoreDiffCallback) {
+class ShopOfferAdapter
+    : ListAdapter<Store, ShopOfferAdapter.ViewHolder>(StoreDiffCallback),
+    KoinComponent {
+
+    private val picasso: Picasso by inject()
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        var shopImage: ImageView = view.findViewById(R.id.image_view)
         var openShop: Button = view.findViewById(R.id.shop_name)
     }
 

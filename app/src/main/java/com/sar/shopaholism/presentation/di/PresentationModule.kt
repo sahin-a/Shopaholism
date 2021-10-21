@@ -7,6 +7,8 @@ import com.sar.shopaholism.presentation.model.SortWishModel
 import com.sar.shopaholism.presentation.model.WishesModel
 import com.sar.shopaholism.presentation.presenter.*
 import com.sar.shopaholism.presentation.rater.WishesRater
+import com.squareup.picasso.Picasso
+import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 
 private val modules = module {
@@ -72,6 +74,12 @@ private val modules = module {
             getProductLookupUseCase = get(),
             logger = get()
         )
+    }
+
+    single<Picasso> {
+        Picasso
+            .Builder(androidContext())
+            .build()
     }
 
 }

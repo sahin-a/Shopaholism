@@ -22,7 +22,8 @@ fun List<StoreEntity>.toStores() = map { it.toStore() }
 private fun map(productEntity: ProductEntity): Product =
     Product(
         title = productEntity.title,
-        stores = productEntity.stores.toStores()
+        stores = productEntity.stores.toStores(),
+        images = productEntity.images
     )
 
 fun ProductEntity.toProduct() = map(this)
