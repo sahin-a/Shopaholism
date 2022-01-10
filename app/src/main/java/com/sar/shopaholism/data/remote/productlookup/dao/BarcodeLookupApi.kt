@@ -68,7 +68,7 @@ class RateLimiter {
 class BarcodeLookupApi(
     private val fuelManager: FuelManager,
     private val rateLimiter: RateLimiter,
-    private val apiToken: String = "tu2elugh7tc5ms809lj0ryuzatrk13"
+    private val apiToken: String = "zx2s0b304pabgka9uosgb1ixq5yexc"
 ) {
 
     // TODO: set geo location param, we don't wanna see us products as european

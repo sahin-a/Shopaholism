@@ -7,14 +7,15 @@ import com.sar.shopaholism.domain.entity.productlookup.Product
 import com.sar.shopaholism.domain.entity.productlookup.Store
 import com.sar.shopaholism.domain.repository.ProductLookupRepository
 import io.mockk.every
-import io.mockk.mockk
+import io.mockk.impl.annotations.MockK
 import org.junit.Before
 import org.junit.Test
 import kotlin.test.assertEquals
 
 class ProductLookupRepositoryImplTest {
 
-    private val dataSource: ProductLookupDataSource = mockk()
+    @MockK
+    private lateinit var dataSource: ProductLookupDataSource
     private lateinit var repo: ProductLookupRepository
 
     @Before
@@ -38,7 +39,8 @@ class ProductLookupRepositoryImplTest {
                         price = "500000000000",
                         currency = "EUR"
                     )
-                )
+                ),
+                images = listOf("hello I am a image link")
             )
         )
 
@@ -54,11 +56,13 @@ class ProductLookupRepositoryImplTest {
                     price = "500000000000",
                     currency = "EUR"
                 )
-            )
+            ),
+            images = listOf("hello I am a image link")
         )
 
         val productEntity = dataSource.getProductsByName("Playstation 5").first()
         assertEquals(expected = product.title, actual = productEntity.title)
+        assertEquals(expected = product.images, actual = productEntity.images)
 
         /* Store Mapping */
 

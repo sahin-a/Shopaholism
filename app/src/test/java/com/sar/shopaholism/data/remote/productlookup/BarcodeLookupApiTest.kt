@@ -1,6 +1,8 @@
 package com.sar.shopaholism.data.remote.productlookup
 
 import com.github.kittinunf.fuel.core.FuelManager
+import com.sar.shopaholism.data.remote.productlookup.dao.BarcodeLookupApi
+import com.sar.shopaholism.data.remote.productlookup.dao.RateLimiter
 import com.sar.shopaholism.data.remote.productlookup.dto.barcodelookupapi.BarcodeRateLimitDto
 import org.junit.Before
 import org.junit.Test

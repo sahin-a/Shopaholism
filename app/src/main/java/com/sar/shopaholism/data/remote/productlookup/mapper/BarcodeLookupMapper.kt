@@ -22,6 +22,7 @@ fun List<BarcodeStoreDto>.toStoreEntities() = map { it.toStoreEntity() }
 private fun map(barcodeProductDto: BarcodeProductDto) =
     ProductEntity(
         title = barcodeProductDto.title,
+        description = barcodeProductDto.description,
         stores = barcodeProductDto.barcodeStoreDtos.toStoreEntities(),
         images = barcodeProductDto.images
     )
