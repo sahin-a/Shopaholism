@@ -15,9 +15,7 @@ import com.sar.shopaholism.domain.entity.Wish
 import com.sar.shopaholism.domain.exception.WishNotFoundException
 import com.sar.shopaholism.presentation.presenter.WishDeletionPresenter
 import com.sar.shopaholism.presentation.view.WishDeletionView
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.*
 import org.koin.android.ext.android.inject
 
 class DeleteWishFragmentDialog : DialogFragment(), WishDeletionView {
@@ -43,24 +41,21 @@ class DeleteWishFragmentDialog : DialogFragment(), WishDeletionView {
         descriptionTextView = view.findViewById(R.id.wish_description)
         priceTextView = view.findViewById(R.id.wish_price)
         deleteButton = view.findViewById(R.id.delete_button)
-        //cancelButton = view.findViewById(R.id.cancel_button)
 
         deleteButton.setOnClickListener {
-            runBlocking {
+            CoroutineScope(Dispatchers.Default).launch {
                 coroutineScope {
-                    var success = false
-                    launch {
-                        success = presenter.deleteWish(getWishId())
-                    }.join()
+                    var success = presenter.deleteWish(getWishId())
 
                     val message = when (success) {
                         true -> getString(R.string.wish_deleted)
                         false -> getString(R.string.wish_deletion_failed)
                     }
 
-                    Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
-
-                    dialog?.dismiss()
+                    launch(Dispatchers.Main) {
+                        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+                        dialog?.dismiss()
+                    }
                 }
             }
         }
@@ -88,7 +83,11 @@ class DeleteWishFragmentDialog : DialogFragment(), WishDeletionView {
             }.join()
 
             wish?.let {
-                imageImageView.setImageURI(Uri.parse(it.imageUri))
+                if (it.imageUri.isEmpty()) {
+                    imageImageView.setImageResource(R.drawable.no_image_placeholder)
+                } else {
+                    imageImageView.setImageURI(Uri.parse(it.imageUri))
+                }
                 titleTextView.text = it.title
                 descriptionTextView.text = it.description
                 priceTextView.text = it.price.toString()

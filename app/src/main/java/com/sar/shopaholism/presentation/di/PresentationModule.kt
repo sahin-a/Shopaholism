@@ -31,8 +31,7 @@ private val modules = module {
     single {
         WishCreationPresenter(
             createWishUseCase = get(),
-            wishesRater = get(),
-            logger = get()
+            wishesRater = get()
         )
     }
 

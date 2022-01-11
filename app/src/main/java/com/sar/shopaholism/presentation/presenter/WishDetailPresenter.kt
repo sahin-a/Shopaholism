@@ -9,8 +9,8 @@ import com.sar.shopaholism.domain.usecase.GetWishUseCase
 import com.sar.shopaholism.domain.usecase.productlookup.ProductLookupUseCase
 import com.sar.shopaholism.presentation.view.WishDetailView
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 
 class WishDetailPresenter(
     private val getWishUseCase: GetWishUseCase,
@@ -22,8 +22,8 @@ class WishDetailPresenter(
         return view?.getWishId() ?: -1
     }
 
-    fun loadData() = runBlocking {
-        launch(Dispatchers.IO) {
+    suspend fun loadData() = coroutineScope {
+        launch {
             var wish: Wish? = null
             var relatedProducts: List<Product> = emptyList()
 
@@ -37,7 +37,10 @@ class WishDetailPresenter(
             }
 
             wish?.let {
-                showData(wish, relatedProducts)
+                launch(Dispatchers.Main) {
+                    view?.toggleLoadingIndicator(false)
+                    showData(wish, relatedProducts)
+                }
             }
         }
     }

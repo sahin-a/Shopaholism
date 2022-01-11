@@ -100,7 +100,7 @@ class SortWishFragment : Fragment(), WishSortView {
 
             when (nextIndex <= (adapter.itemCount - 1)) {
                 true -> viewPager.setCurrentItem(nextIndex, true)
-                else -> CoroutineScope(Dispatchers.Main).launch {
+                else -> CoroutineScope(Dispatchers.Default).launch {
                     presenter.submitResult()
                 }
             }

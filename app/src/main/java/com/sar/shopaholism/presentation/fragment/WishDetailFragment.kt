@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
@@ -14,6 +15,9 @@ import com.sar.shopaholism.domain.entity.productlookup.Product
 import com.sar.shopaholism.presentation.adapter.RelatedProductsAdapter
 import com.sar.shopaholism.presentation.presenter.WishDetailPresenter
 import com.sar.shopaholism.presentation.view.WishDetailView
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -33,6 +37,7 @@ class WishDetailFragment : Fragment(), WishDetailView {
     private lateinit var titleTextView: TextView
     private lateinit var descriptionTextView: TextView
     private lateinit var relatedProductsRecyclerView: RecyclerView
+    private lateinit var loadingIndicator: ProgressBar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,8 +64,11 @@ class WishDetailFragment : Fragment(), WishDetailView {
         titleTextView = view.findViewById(R.id.wish_title)
         descriptionTextView = view.findViewById(R.id.wish_description)
         relatedProductsRecyclerView = view.findViewById(R.id.related_products)
+        loadingIndicator = view.findViewById(R.id.progress_bar)
 
-        presenter.loadData()
+        CoroutineScope(Dispatchers.Default).launch {
+            presenter.loadData()
+        }
     }
 
     companion object {
@@ -88,12 +96,20 @@ class WishDetailFragment : Fragment(), WishDetailView {
     }
 
     override fun showData(title: String, imageUri: String, relatedProducts: List<Product>) {
-        productImageView.setImageURI(Uri.parse(imageUri))
+        if (imageUri.isEmpty()) {
+            productImageView.setImageResource(R.drawable.no_image_placeholder)
+        } else {
+            productImageView.setImageURI(Uri.parse(imageUri))
+        }
         titleTextView.text = title
 
         val adapter = RelatedProductsAdapter()
         adapter.submitList(relatedProducts)
 
         relatedProductsRecyclerView.adapter = adapter
+    }
+
+    override fun toggleLoadingIndicator(show: Boolean) {
+        loadingIndicator.visibility = if (show) View.VISIBLE else View.GONE
     }
 }

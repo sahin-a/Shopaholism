@@ -10,7 +10,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
-import androidx.test.core.app.ActivityScenario.launch
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.sar.shopaholism.R
 import com.sar.shopaholism.domain.entity.Wish
@@ -20,7 +19,6 @@ import com.sar.shopaholism.presentation.view.WishesOverviewView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import org.koin.android.ext.android.inject
 
 
@@ -53,7 +51,7 @@ class WishesOverviewFragment : Fragment(), WishesOverviewView {
 
         presenter.attachView(this)
 
-        CoroutineScope(Dispatchers.Main).launch {
+        CoroutineScope(Dispatchers.Default).launch {
             presenter.loadWishes()
         }
     }

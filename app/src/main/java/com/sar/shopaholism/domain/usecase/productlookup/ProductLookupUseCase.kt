@@ -4,13 +4,15 @@ import com.sar.shopaholism.domain.entity.productlookup.Product
 import com.sar.shopaholism.domain.exception.NoProductsFoundException
 import com.sar.shopaholism.domain.logger.Logger
 import com.sar.shopaholism.domain.repository.ProductLookupRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class ProductLookupUseCase(
     private val productLookupRepository: ProductLookupRepository,
     private val logger: Logger
 ) {
 
-    fun getProductsByName(name: String): List<Product> {
+    suspend fun getProductsByName(name: String): List<Product> = withContext(Dispatchers.IO) {
         var products: List<Product> = emptyList()
 
         try {
@@ -26,10 +28,10 @@ class ProductLookupUseCase(
             throw NoProductsFoundException()
         }
 
-        return products
+        return@withContext products
     }
 
-    fun getProductByName(name: String): Product? {
+    suspend fun getProductByName(name: String): Product? {
         return getProductsByName(name).firstOrNull()
     }
 

@@ -11,11 +11,10 @@ import com.sar.shopaholism.presentation.model.SortWishModel
 import com.sar.shopaholism.presentation.rater.WishesRater
 import com.sar.shopaholism.presentation.view.WishSortView
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import org.koin.core.component.KoinComponent
 
 class WishSortPresenter(
     private val getWishUseCase: GetWishUseCase,
@@ -23,9 +22,7 @@ class WishSortPresenter(
     private val updateWishUseCase: UpdateWishUseCase,
     var model: SortWishModel,
     private val logger: Logger
-) :
-    BasePresenter<WishSortView>(),
-    KoinComponent {
+) : BasePresenter<WishSortView>() {
 
     private fun getMainWishId(): Long {
         return view!!.getMainWishId()
@@ -99,8 +96,8 @@ class WishSortPresenter(
         model = SortWishModel()
     }
 
-    suspend fun submitResult() = withContext(Dispatchers.Main) {
-        launch(Dispatchers.Main) {
+    suspend fun submitResult() = coroutineScope {
+        launch {
             if (model.selectionResults.count() != model.otherWishes?.count()) {
                 return@launch
             }
@@ -114,11 +111,17 @@ class WishSortPresenter(
                         .map { it.otherWish }
                 )
 
-                reprioritizedWishes.forEach { newWish ->
-                    updateWish(newWish)
-                }
+                val updateWishesJob = launch {
+                    reprioritizedWishes.forEach { newWish ->
+                        launch {
+                            updateWish(newWish)
+                        }
+                    }
+                }.join()
 
-                postSubmitResult()
+                launch(Dispatchers.Main) {
+                    postSubmitResult()
+                }
             }
         }
     }

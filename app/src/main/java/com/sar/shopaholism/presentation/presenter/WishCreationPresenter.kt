@@ -1,16 +1,13 @@
 package com.sar.shopaholism.presentation.presenter
 
 import com.sar.shopaholism.domain.exception.WishNotCreatedException
-import com.sar.shopaholism.domain.logger.Logger
 import com.sar.shopaholism.domain.usecase.CreateWishUseCase
 import com.sar.shopaholism.presentation.rater.WishesRater
 import com.sar.shopaholism.presentation.view.WishCreationView
-import kotlinx.coroutines.*
 
 class WishCreationPresenter(
     private val createWishUseCase: CreateWishUseCase,
-    private val wishesRater: WishesRater,
-    private val logger: Logger
+    private val wishesRater: WishesRater
 ) : BaseWishCreationPresenter<WishCreationView>() {
 
     suspend fun createWish(
@@ -18,7 +15,7 @@ class WishCreationPresenter(
         imageUri: String,
         description: String,
         price: Double
-    ): Boolean = withContext(Dispatchers.IO) {
+    ): Boolean {
 
         try {
             val id = createWishUseCase.execute(
@@ -35,14 +32,14 @@ class WishCreationPresenter(
                 }
             )
 
-            return@withContext true
+            return true
         } catch (e: WishNotCreatedException) {
 
         } catch (e: IllegalArgumentException) {
 
         }
 
-        return@withContext false
+        return false
     }
 
     companion object {

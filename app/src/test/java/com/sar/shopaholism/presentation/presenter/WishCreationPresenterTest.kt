@@ -25,8 +25,7 @@ class WishCreationPresenterTest : KoinTest {
     fun setup() {
         presenter = WishCreationPresenter(
             createWishUseCase = createWishUseCase,
-            wishesRater = wishesRater,
-            logger = logger
+            wishesRater = wishesRater
         )
         presenter.attachView(view)
     }

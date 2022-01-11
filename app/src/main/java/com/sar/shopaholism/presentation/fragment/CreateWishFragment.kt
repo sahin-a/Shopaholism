@@ -37,7 +37,7 @@ class CreateWishFragment : BaseCreateWishFragment<WishCreationView, WishCreation
         createButton?.setOnClickListener {
             createButton?.isEnabled = false
 
-            CoroutineScope(Dispatchers.IO).launch {
+            CoroutineScope(Dispatchers.Default).launch {
                 val success = createWish(
                     action = { title, imageUri, description, price ->
                         return@createWish presenter.createWish(
@@ -71,9 +71,7 @@ class CreateWishFragment : BaseCreateWishFragment<WishCreationView, WishCreation
                         }
                     }
                 }
-
             }
-
         }
 
         presenter.getData() // sets data from model to view
