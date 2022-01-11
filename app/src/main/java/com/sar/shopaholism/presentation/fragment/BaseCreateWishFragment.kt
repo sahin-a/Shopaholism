@@ -30,9 +30,6 @@ abstract class BaseCreateWishFragment<MvpView : WishCreationView, Presenter : Ba
     protected var priceEditText: EditText? = null
     protected var createButton: MaterialButton? = null
 
-    // Media Player
-    private lateinit var successNotificationSound: MediaPlayer
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setHasOptionsMenu(true)
@@ -76,8 +73,6 @@ abstract class BaseCreateWishFragment<MvpView : WishCreationView, Presenter : Ba
         createButton = view.findViewById(R.id.create_wish_button)
         createButton?.isEnabled = ctaEnabled()
 
-        successNotificationSound = MediaPlayer.create(context, R.raw.alert_high_intensity)
-
         postInit()
     }
 
@@ -119,10 +114,6 @@ abstract class BaseCreateWishFragment<MvpView : WishCreationView, Presenter : Ba
             descriptionEditText?.text.toString(),
             priceEditText?.text.toString().toDoubleOrNull() ?: 0.0
         )
-
-        if (success) {
-            successNotificationSound.start()
-        }
 
         return success
     }

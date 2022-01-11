@@ -7,6 +7,7 @@ import com.sar.shopaholism.domain.usecase.GetWishUseCase
 import com.sar.shopaholism.domain.usecase.GetWishesUseCase
 import com.sar.shopaholism.domain.usecase.UpdateWishUseCase
 import com.sar.shopaholism.presentation.adapter.SelectionResult
+import com.sar.shopaholism.presentation.feedback.WishFeedbackService
 import com.sar.shopaholism.presentation.model.SortWishModel
 import com.sar.shopaholism.presentation.rater.WishesRater
 import com.sar.shopaholism.presentation.view.WishSortView
@@ -21,7 +22,8 @@ class WishSortPresenter(
     private val getWishesUseCase: GetWishesUseCase,
     private val updateWishUseCase: UpdateWishUseCase,
     var model: SortWishModel,
-    private val logger: Logger
+    private val logger: Logger,
+    private val wishFeedbackService: WishFeedbackService
 ) : BasePresenter<WishSortView>() {
 
     private fun getMainWishId(): Long {
@@ -127,6 +129,7 @@ class WishSortPresenter(
     }
 
     private fun postSubmitResult() {
+        wishFeedbackService.wishSuccessfullyRated()
         view?.resultSubmitted()
         clearModel()
     }

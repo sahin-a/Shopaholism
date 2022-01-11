@@ -1,6 +1,10 @@
 package com.sar.shopaholism.presentation.di
 
+import android.media.MediaPlayer
 import com.sar.shopaholism.domain.logger.Logger
+import com.sar.shopaholism.presentation.feedback.SoundProvider
+import com.sar.shopaholism.presentation.feedback.SoundProviderImpl
+import com.sar.shopaholism.presentation.feedback.WishFeedbackService
 import com.sar.shopaholism.presentation.logger.LoggerImpl
 import com.sar.shopaholism.presentation.model.CreateWishModel
 import com.sar.shopaholism.presentation.model.SortWishModel
@@ -31,14 +35,16 @@ private val modules = module {
     single {
         WishCreationPresenter(
             createWishUseCase = get(),
-            wishesRater = get()
+            wishesRater = get(),
+            wishFeedbackService = get()
         )
     }
 
     single {
         WishEditingPresenter(
             updateWishUseCase = get(),
-            getWishUseCase = get()
+            getWishUseCase = get(),
+            wishFeedbackService = get()
         )
     }
 
@@ -46,7 +52,8 @@ private val modules = module {
         WishDeletionPresenter(
             deleteWishUseCase = get(),
             getWishUseCase = get(),
-            wishesRater = get()
+            wishesRater = get(),
+            wishFeedbackService = get()
         )
     }
 
@@ -56,7 +63,8 @@ private val modules = module {
             updateWishUseCase = get(),
             getWishesUseCase = get(),
             model = get(),
-            logger = get()
+            logger = get(),
+            wishFeedbackService = get()
         )
     }
 
@@ -81,6 +89,10 @@ private val modules = module {
             .build()
     }
 
+    single { MediaPlayer() }
+
+    single<SoundProvider> { SoundProviderImpl(context = androidContext(), mediaPlayer = get()) }
+    single { WishFeedbackService(soundProvider = get()) }
 }
 
 val presentationModules = listOf(modules)
