@@ -2,12 +2,14 @@ package com.sar.shopaholism.presentation.presenter
 
 import com.sar.shopaholism.domain.exception.WishNotCreatedException
 import com.sar.shopaholism.domain.usecase.CreateWishUseCase
+import com.sar.shopaholism.presentation.feedback.WishFeedbackService
 import com.sar.shopaholism.presentation.rater.WishesRater
 import com.sar.shopaholism.presentation.view.WishCreationView
 
 class WishCreationPresenter(
     private val createWishUseCase: CreateWishUseCase,
-    private val wishesRater: WishesRater
+    private val wishesRater: WishesRater,
+    private val wishFeedbackService: WishFeedbackService
 ) : BaseWishCreationPresenter<WishCreationView>() {
 
     suspend fun createWish(
@@ -31,6 +33,8 @@ class WishCreationPresenter(
                     wishesCount - 1
                 }
             )
+
+            wishFeedbackService.wishSuccessfullyCreated()
 
             return true
         } catch (e: WishNotCreatedException) {

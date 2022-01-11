@@ -4,12 +4,14 @@ import com.sar.shopaholism.domain.entity.Wish
 import com.sar.shopaholism.domain.exception.WishNotFoundException
 import com.sar.shopaholism.domain.usecase.GetWishUseCase
 import com.sar.shopaholism.domain.usecase.UpdateWishUseCase
+import com.sar.shopaholism.presentation.feedback.WishFeedbackService
 import com.sar.shopaholism.presentation.view.WishEditingView
 import kotlinx.coroutines.runBlocking
 
 class WishEditingPresenter(
     private val updateWishUseCase: UpdateWishUseCase,
-    private val getWishUseCase: GetWishUseCase
+    private val getWishUseCase: GetWishUseCase,
+    private val wishFeedbackService: WishFeedbackService
 ) : BaseWishCreationPresenter<WishEditingView>() {
 
     var wishId: Long? = null
@@ -63,5 +65,7 @@ class WishEditingPresenter(
                 priority = originalWish?.priority ?: 0.0
             )
         )
+
+        wishFeedbackService.wishSuccessfullyModified()
     }
 }
