@@ -37,6 +37,12 @@ class RelatedProductsAdapter :
         return ViewHolder(view)
     }
 
+    private fun ViewHolder.showContent(show: Boolean) {
+        name.visibility = if (show) View.VISIBLE else View.INVISIBLE
+        description.visibility = if (show) View.VISIBLE else View.INVISIBLE
+        imageCard.imageView.visibility = if (show) View.VISIBLE else View.INVISIBLE
+    }
+
     // Replace the contents of a view (invoked by the layout manager)
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
         // Get element from your dataset at this position and replace the
@@ -48,6 +54,8 @@ class RelatedProductsAdapter :
         viewHolder.shopOffers.adapter = adapter
 
         viewHolder.apply {
+            showContent(false)
+
             name.text = product.title
             description.text = product.description
             product.images.firstOrNull()?.let { imageUrl ->
@@ -56,6 +64,7 @@ class RelatedProductsAdapter :
                     .into(imageCard.imageView, object : Callback {
                         override fun onSuccess() {
                             imageDownloadProgress.visibility = View.GONE
+                            showContent(true)
                         }
 
                         override fun onError(e: Exception?) {
