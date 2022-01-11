@@ -1,5 +1,7 @@
 # Shopaholism
 
+my kotlin learning adventure
+
 Working features:
 - Create/Edit/Delete Wishes
 - Rating wishes
