@@ -1,10 +1,17 @@
 package com.sar.shopaholism.data.di
 
 import androidx.room.Room
+import com.github.kittinunf.fuel.core.FuelManager
 import com.sar.shopaholism.data.local.dao.WishDao
 import com.sar.shopaholism.data.local.db.WishesDatabase
 import com.sar.shopaholism.data.local.source.WishesDataSource
+import com.sar.shopaholism.data.remote.productlookup.dao.BarcodeLookupApi
+import com.sar.shopaholism.data.remote.productlookup.dao.RateLimiter
+import com.sar.shopaholism.data.remote.productlookup.source.BarcodeLookupDataSourceImpl
+import com.sar.shopaholism.data.remote.productlookup.source.ProductLookupDataSource
+import com.sar.shopaholism.data.repository.ProductLookupRepositoryImpl
 import com.sar.shopaholism.data.repository.WishesRepositoryImpl
+import com.sar.shopaholism.domain.repository.ProductLookupRepository
 import com.sar.shopaholism.domain.repository.WishesRepository
 import org.koin.dsl.module
 
@@ -17,9 +24,18 @@ private val databaseModule = module {
     single<WishDao> { get<WishesDatabase>().wishDao() }
 }
 
-private val repositoryModule = module {
-    single { WishesDataSource(get()) }
-    single<WishesRepository> { WishesRepositoryImpl(get()) }
+private val apiModule = module {
+    factory { FuelManager() }
+    factory { RateLimiter() }
+    single { BarcodeLookupApi(fuelManager = get(), rateLimiter = get()) }
 }
 
-val dataModules = databaseModule + repositoryModule
+private val repositoryModule = module {
+    single { WishesDataSource(dao = get()) }
+    single<ProductLookupDataSource> { BarcodeLookupDataSourceImpl(apiClient = get()) }
+
+    single<WishesRepository> { WishesRepositoryImpl(dataSource = get()) }
+    single<ProductLookupRepository> { ProductLookupRepositoryImpl(dataSource = get()) }
+}
+
+val dataModules = databaseModule + apiModule + repositoryModule

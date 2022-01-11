@@ -8,11 +8,11 @@ import kotlinx.coroutines.withContext
 
 class GetWishUseCase(private val repo: WishesRepository) {
 
-    suspend fun execute(wishId: Long): Wish {
+    suspend fun execute(wishId: Long): Wish = withContext(Dispatchers.IO) {
         WishValidation.validate(wishId = wishId)
 
         try {
-            return repo.getWish(wishId)
+            return@withContext repo.getWish(wishId)
         } catch (exception: NullPointerException) {
             throw WishNotFoundException("Couldn't find a wish with the corresponding id")
         }

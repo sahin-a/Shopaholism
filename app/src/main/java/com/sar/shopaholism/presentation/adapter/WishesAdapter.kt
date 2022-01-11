@@ -1,6 +1,7 @@
 package com.sar.shopaholism.presentation.adapter
 
 import android.net.Uri
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,6 +17,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.sar.shopaholism.R
 import com.sar.shopaholism.domain.entity.Wish
 import com.sar.shopaholism.presentation.fragment.DeleteWishFragmentDialog
+import com.sar.shopaholism.presentation.fragment.WishDetailFragment
 import com.sar.shopaholism.presentation.fragment.WishesOverviewFragmentDirections
 import java.math.BigDecimal
 import java.math.RoundingMode
@@ -62,12 +64,19 @@ class WishesAdapter(
         when (wish.imageUri.isNotBlank()) {
             true -> {
                 viewHolder.wishImageView.setImageURI(Uri.parse(wish.imageUri))
-                viewHolder.wishImageView.scaleType = ImageView.ScaleType.CENTER_CROP
             }
             false -> {
                 viewHolder.wishImageView.setImageResource(R.drawable.no_image_placeholder)
-                viewHolder.wishImageView.scaleType = ImageView.ScaleType.FIT_CENTER
             }
+        }
+        viewHolder.wishImageView.scaleType = ImageView.ScaleType.CENTER_CROP
+        viewHolder.wishImageView.setOnClickListener {
+            viewHolder.itemView.findNavController()
+                .navigate(
+                    R.id.action_wishesOverviewFragment_to_wishDetailFragment, Bundle().apply {
+                        putLong(WishDetailFragment.ARG_WISH_ID, wish.id)
+                    }
+                )
         }
 
         viewHolder.wishTitleTextView.text = wish.title

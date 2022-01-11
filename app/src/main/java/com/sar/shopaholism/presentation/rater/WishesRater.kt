@@ -3,9 +3,9 @@ package com.sar.shopaholism.presentation.rater
 import com.sar.shopaholism.domain.entity.Wish
 import com.sar.shopaholism.domain.usecase.GetWishesUseCase
 import com.sar.shopaholism.domain.usecase.UpdateWishUseCase
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.launch
 
 class WishesRater(
     private val updateWishUseCase: UpdateWishUseCase,
@@ -16,22 +16,24 @@ class WishesRater(
      * recalculates the rating of all wishes and updates it in the db
      */
     suspend fun recalculateAndUpdateRatings(oldWishesCount: (wishesCount: Int) -> Int) =
-        withContext(Dispatchers.IO)
-        {
+        coroutineScope {
             val wishes = getWishesUseCase.execute().first()
             val wishesCount = wishes.count()
 
-            wishes.filter { it.priority > 0 }.forEach { wish ->
-                val newPriority = recalculatePriority(
-                    currentPriority = wish.priority,
-                    oldWishesCount = oldWishesCount(wishesCount),
-                    wishesCount = wishesCount
-                )
+            launch {
+                wishes.filter { it.priority > 0 }.forEach { wish ->
+                    launch {
+                        val newPriority = recalculatePriority(
+                            currentPriority = wish.priority,
+                            oldWishesCount = oldWishesCount(wishesCount),
+                            wishesCount = wishesCount
+                        )
 
-                wish.priority = newPriority
-                updateWishUseCase.execute(wish)
+                        wish.priority = newPriority
+                        updateWishUseCase.execute(wish)
+                    }
+                }
             }
-
         }
 
     companion object {
@@ -84,30 +86,9 @@ class WishesRater(
 
             val mainWishPreferredCount: Int = otherWishes.count()
 
-            // main wish has been preferred atleast once
             if (mainWishPreferredCount > 0) {
                 val totalWishes = preferredWishes.count() + otherWishes.count()
                 mainWish.priority = ((mainWishPreferredCount.toDouble() / totalWishes) * 100)
-
-                // if it has the same priority as a preferred one, make sure it gets listed below
-                // it's ascending so in case the next entry matches after having its priority lowered
-                // we capture those cases as well
-
-                /*val penalty = 1
-
-                preferredWishes.sortedByDescending { it.priority }
-                    .forEach {
-                        if (mainWish.priority == it.priority && mainWish.priority > 0) {
-                            mainWish.priority -= penalty
-                        }
-                    }
-
-                otherWishes.forEach {
-                    if (it.priority > 0) {
-                        it.priority -= penalty
-                        reprioritizedWishes.add(it)
-                    }
-                }*/
 
             } else {
                 mainWish.priority = 0.0
