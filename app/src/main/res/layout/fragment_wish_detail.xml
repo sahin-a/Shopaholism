@@ -1,86 +1,114 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".presentation.fragment.WishDetailFragment">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <LinearLayout
-            android:id="@+id/main_content"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintBottom_toTopOf="@id/related_products"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <ImageView
-                android:id="@+id/wish_image"
-                android:layout_width="match_parent"
-                android:layout_height="194dp"
-                android:importantForAccessibility="no"
-                android:scaleType="centerCrop"
-                app:layout_constraintBottom_toTopOf="@id/main_content"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:src="@tools:sample/backgrounds/scenic" />
+            android:layout_height="wrap_content">
 
             <LinearLayout
+                android:id="@+id/main_content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="16dp"
                 android:orientation="vertical"
+                app:layout_constraintBottom_toTopOf="@id/related_products"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/wish_image">
+                app:layout_constraintTop_toTopOf="parent">
 
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/wish_title"
-                    style="@style/TextAppearance.MaterialComponents.Headline6"
+                <ImageView
+                    android:id="@+id/wish_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="194dp"
+                    android:importantForAccessibility="no"
+                    android:scaleType="centerCrop"
+                    app:layout_constraintBottom_toTopOf="@id/main_content"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:src="@tools:sample/backgrounds/scenic" />
+
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    tools:text="Playstation 5" />
+                    android:layout_margin="16dp"
+                    android:orientation="vertical"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/wish_image">
 
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/wish_description"
-                    style="@style/TextAppearance.MaterialComponents.Body2"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    tools:text="Freue dich auf ultrakurze Ladezeiten, eine realistischere Spielerfahrung durch haptisches Feedback, adaptive Trigger-Tasten und 3D-Audio sowie eine völlig neue Generation unglaublicher PlayStation-Spiele. Nutze die Leistung der speziell angefertigten CPU, GPU und SSD mit integriertem I/O und erlebe, wie die PS5-Konsole die Gaming-Welt revolutioniert." />
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/wish_title"
+                        style="@style/TextAppearance.MaterialComponents.Headline6"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        tools:text="Playstation 5" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/wish_description"
+                        style="@style/TextAppearance.MaterialComponents.Body2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        tools:text="Freue dich auf ultrakurze Ladezeiten, eine realistischere Spielerfahrung durch haptisches Feedback, adaptive Trigger-Tasten und 3D-Audio sowie eine völlig neue Generation unglaublicher PlayStation-Spiele. Nutze die Leistung der speziell angefertigten CPU, GPU und SSD mit integriertem I/O und erlebe, wie die PS5-Konsole die Gaming-Welt revolutioniert." />
+
+                    <TextView
+                        android:id="@+id/no_products_found_error"
+                        style="@style/TextAppearance.MaterialComponents.Body2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="16dp"
+                        android:drawablePadding="8dp"
+                        android:foregroundGravity="center_vertical"
+                        android:text="@string/no_related_products_found_error"
+                        android:visibility="gone"
+                        app:drawableStartCompat="@drawable/ic_baseline_error_24"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:visibility="visible" />
+
+                </LinearLayout>
 
             </LinearLayout>
 
-        </LinearLayout>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/related_products"
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+                android:layout_margin="16dp"
+                android:nestedScrollingEnabled="false"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/main_content"
+                tools:listitem="@layout/related_product_row" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/related_products"
-            android:layout_width="match_parent"
-            android:layout_height="fill_parent"
-            android:layout_margin="16dp"
-            android:nestedScrollingEnabled="false"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/main_content"
-            tools:listitem="@layout/related_product_row" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <ProgressBar
-            android:id="@+id/progress_bar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.core.widget.NestedScrollView>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-</androidx.core.widget.NestedScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

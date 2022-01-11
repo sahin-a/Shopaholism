@@ -47,8 +47,7 @@ class WishDetailPresenter(
 
     private fun showData(wish: Wish, relatedProducts: List<Product>) {
         view?.showData(
-            wish.title,
-            wish.imageUri,
+            wish,
             relatedProducts
         )
     }

@@ -11,6 +11,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.sar.shopaholism.R
+import com.sar.shopaholism.domain.entity.Wish
 import com.sar.shopaholism.domain.entity.productlookup.Product
 import com.sar.shopaholism.presentation.adapter.RelatedProductsAdapter
 import com.sar.shopaholism.presentation.presenter.WishDetailPresenter
@@ -34,10 +35,11 @@ class WishDetailFragment : Fragment(), WishDetailView {
 
     // Views
     private lateinit var productImageView: ImageView
-    private lateinit var titleTextView: TextView
-    private lateinit var descriptionTextView: TextView
-    private lateinit var relatedProductsRecyclerView: RecyclerView
-    private lateinit var loadingIndicator: ProgressBar
+    private lateinit var titleView: TextView
+    private lateinit var descriptionView: TextView
+    private lateinit var relatedProductsView: RecyclerView
+    private lateinit var loadingIndicatorView: ProgressBar
+    private lateinit var errorIndicatorView: View
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,10 +63,11 @@ class WishDetailFragment : Fragment(), WishDetailView {
         presenter.attachView(this)
 
         productImageView = view.findViewById(R.id.wish_image)
-        titleTextView = view.findViewById(R.id.wish_title)
-        descriptionTextView = view.findViewById(R.id.wish_description)
-        relatedProductsRecyclerView = view.findViewById(R.id.related_products)
-        loadingIndicator = view.findViewById(R.id.progress_bar)
+        titleView = view.findViewById(R.id.wish_title)
+        descriptionView = view.findViewById(R.id.wish_description)
+        relatedProductsView = view.findViewById(R.id.related_products)
+        loadingIndicatorView = view.findViewById(R.id.progress_bar)
+        errorIndicatorView = view.findViewById(R.id.no_products_found_error)
 
         CoroutineScope(Dispatchers.Default).launch {
             presenter.loadData()
@@ -95,21 +98,35 @@ class WishDetailFragment : Fragment(), WishDetailView {
         return wishId ?: -1
     }
 
-    override fun showData(title: String, imageUri: String, relatedProducts: List<Product>) {
-        if (imageUri.isEmpty()) {
+    override fun showData(wish: Wish, relatedProducts: List<Product>) {
+        if (wish.imageUri.isEmpty()) {
             productImageView.setImageResource(R.drawable.no_image_placeholder)
         } else {
-            productImageView.setImageURI(Uri.parse(imageUri))
+            productImageView.setImageURI(Uri.parse(wish.imageUri))
         }
-        titleTextView.text = title
+        titleView.text = wish.title
+        descriptionView.text = wish.description
 
-        val adapter = RelatedProductsAdapter()
-        adapter.submitList(relatedProducts)
+        if (descriptionView.text.isEmpty()) {
+            descriptionView.visibility = View.GONE
+        }
 
-        relatedProductsRecyclerView.adapter = adapter
+        if (relatedProducts.isNotEmpty()) {
+            val adapter = RelatedProductsAdapter()
+            adapter.submitList(relatedProducts)
+
+            relatedProductsView.adapter = adapter
+        } else {
+            showError()
+        }
     }
 
     override fun toggleLoadingIndicator(show: Boolean) {
-        loadingIndicator.visibility = if (show) View.VISIBLE else View.GONE
+        loadingIndicatorView.visibility = if (show) View.VISIBLE else View.GONE
+    }
+
+    override fun showError() {
+        relatedProductsView.visibility = View.GONE
+        errorIndicatorView.visibility = View.VISIBLE
     }
 }
