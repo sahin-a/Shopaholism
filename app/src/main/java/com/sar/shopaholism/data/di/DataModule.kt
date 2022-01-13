@@ -2,13 +2,14 @@ package com.sar.shopaholism.data.di
 
 import androidx.room.Room
 import com.github.kittinunf.fuel.core.FuelManager
-import com.sar.shopaholism.data.local.dao.WishDao
 import com.sar.shopaholism.data.local.db.WishesDatabase
 import com.sar.shopaholism.data.local.source.WishesDataSource
 import com.sar.shopaholism.data.remote.productlookup.dao.BarcodeLookupApi
-import com.sar.shopaholism.data.remote.productlookup.dao.RateLimiter
+import com.sar.shopaholism.data.remote.productlookup.dao.BarcodeLookupApiRateLimit
 import com.sar.shopaholism.data.remote.productlookup.source.BarcodeLookupDataSourceImpl
 import com.sar.shopaholism.data.remote.productlookup.source.ProductLookupDataSource
+import com.sar.shopaholism.data.remote.web.WebApiClient
+import com.sar.shopaholism.data.remote.web.WebApiClientImpl
 import com.sar.shopaholism.data.repository.ProductLookupRepositoryImpl
 import com.sar.shopaholism.data.repository.WishesRepositoryImpl
 import com.sar.shopaholism.domain.repository.ProductLookupRepository
@@ -21,13 +22,14 @@ private val databaseModule = module {
             .addMigrations(WishesDatabase.MIGRATION_1_2)
             .build()
     }
-    single<WishDao> { get<WishesDatabase>().wishDao() }
+    single { get<WishesDatabase>().wishDao() }
 }
 
 private val apiModule = module {
     factory { FuelManager() }
-    factory { RateLimiter() }
-    single { BarcodeLookupApi(fuelManager = get(), rateLimiter = get()) }
+    factory<WebApiClient> { WebApiClientImpl(fuelManager = get(), rateLimiter = null) }
+    single { BarcodeLookupApiRateLimit() }
+    single { BarcodeLookupApi(webApiClient = get(), rateLimiter = get()) }
 }
 
 private val repositoryModule = module {

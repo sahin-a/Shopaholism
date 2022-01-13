@@ -9,7 +9,7 @@ class ProductLookupRepositoryImpl(
     private val dataSource: ProductLookupDataSource
 ) : ProductLookupRepository {
 
-    override fun getProductsByName(name: String): List<Product> =
+    override suspend fun getProductsByName(name: String): List<Product> =
         dataSource.getProductsByName(name).toProducts()
 
 }

@@ -1,5 +1,6 @@
 package com.sar.shopaholism.domain.usecase.productlookup
 
+import com.sar.shopaholism.data.remote.productlookup.exceptions.FailedToRetrieveProductsException
 import com.sar.shopaholism.domain.entity.productlookup.Product
 import com.sar.shopaholism.domain.exception.NoProductsFoundException
 import com.sar.shopaholism.domain.logger.Logger
@@ -17,9 +18,8 @@ class ProductLookupUseCase(
 
         try {
             products = productLookupRepository.getProductsByName(name)
-        } catch (e: Exception) {
-            val message = "ProductLookupRequest failed"
-            logger.d(TAG, message)
+        } catch (e: FailedToRetrieveProductsException) {
+
         }
 
         if (products.isEmpty()) {

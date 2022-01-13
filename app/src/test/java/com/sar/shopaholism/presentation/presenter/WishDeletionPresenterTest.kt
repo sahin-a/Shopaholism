@@ -3,34 +3,38 @@ package com.sar.shopaholism.presentation.presenter
 import com.sar.shopaholism.domain.entity.Wish
 import com.sar.shopaholism.domain.usecase.DeleteWishUseCase
 import com.sar.shopaholism.domain.usecase.GetWishUseCase
+import com.sar.shopaholism.presentation.feedback.WishFeedbackService
 import com.sar.shopaholism.presentation.rater.WishesRater
 import com.sar.shopaholism.presentation.view.WishDeletionView
-import io.mockk.*
+import io.mockk.Runs
+import io.mockk.coEvery
+import io.mockk.coVerify
+import io.mockk.impl.annotations.InjectMockKs
+import io.mockk.impl.annotations.MockK
+import io.mockk.impl.annotations.RelaxedMockK
+import io.mockk.just
 import kotlinx.coroutines.test.runBlockingTest
-import org.junit.Before
 import org.junit.Test
 
 class WishDeletionPresenterTest {
 
-    private lateinit var presenter: WishDeletionPresenter
-    private lateinit var view: WishDeletionView
-    private lateinit var deleteWishUseCase: DeleteWishUseCase
-    private lateinit var getWishUseCase: GetWishUseCase
+    @RelaxedMockK
     private lateinit var wishesRater: WishesRater
 
-    @Before
-    fun setup() {
-        deleteWishUseCase = mockk()
-        getWishUseCase = mockk()
-        view = mockk()
-        wishesRater = mockk(relaxed = true)
+    @MockK
+    private lateinit var wishFeedbackService: WishFeedbackService
 
-        presenter = WishDeletionPresenter(
-            deleteWishUseCase = deleteWishUseCase,
-            getWishUseCase = getWishUseCase,
-            wishesRater = wishesRater
-        )
-    }
+    @MockK
+    private lateinit var view: WishDeletionView
+
+    @MockK
+    private lateinit var deleteWishUseCase: DeleteWishUseCase
+
+    @MockK
+    private lateinit var getWishUseCase: GetWishUseCase
+
+    @InjectMockKs
+    private lateinit var presenter: WishDeletionPresenter
 
     @Test
     fun `getWish calls getWishUseCase`() = runBlockingTest {

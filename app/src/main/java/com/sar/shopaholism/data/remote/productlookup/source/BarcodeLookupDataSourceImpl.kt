@@ -8,7 +8,7 @@ class BarcodeLookupDataSourceImpl(
     private val apiClient: BarcodeLookupApi
 ) : ProductLookupDataSource {
 
-    override fun getProductsByName(name: String): List<ProductEntity> {
+    override suspend fun getProductsByName(name: String): List<ProductEntity> {
         val productsDto = apiClient.getProductsByName(name)
 
         return productsDto.barcodeProducts.toProductEntities()

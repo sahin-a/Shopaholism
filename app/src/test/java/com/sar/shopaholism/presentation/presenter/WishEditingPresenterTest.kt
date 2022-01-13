@@ -3,32 +3,33 @@ package com.sar.shopaholism.presentation.presenter
 import com.sar.shopaholism.domain.entity.Wish
 import com.sar.shopaholism.domain.usecase.GetWishUseCase
 import com.sar.shopaholism.domain.usecase.UpdateWishUseCase
+import com.sar.shopaholism.presentation.feedback.WishFeedbackService
 import com.sar.shopaholism.presentation.view.WishEditingView
 import io.mockk.*
+import io.mockk.impl.annotations.InjectMockKs
+import io.mockk.impl.annotations.MockK
 import junit.framework.Assert.assertEquals
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
-import org.junit.Before
 import org.junit.Test
 
 @ExperimentalCoroutinesApi
 class WishEditingPresenterTest {
 
-    private lateinit var presenter: WishEditingPresenter
+    @MockK
     private lateinit var view: WishEditingView
+
+    @MockK
     private lateinit var getWishUseCase: GetWishUseCase
+
+    @MockK
     private lateinit var updateWishUseCase: UpdateWishUseCase
 
-    @Before
-    fun setup() {
-        getWishUseCase = mockk()
-        updateWishUseCase = mockk()
-        view = mockk()
-        presenter = WishEditingPresenter(
-            updateWishUseCase = updateWishUseCase,
-            getWishUseCase = getWishUseCase
-        )
-    }
+    @MockK
+    private lateinit var wishFeedbackService: WishFeedbackService
+
+    @InjectMockKs
+    private lateinit var presenter: WishEditingPresenter
 
     @Test
     fun `onAttachView calls getWishUseCase to retrieve original data`() {

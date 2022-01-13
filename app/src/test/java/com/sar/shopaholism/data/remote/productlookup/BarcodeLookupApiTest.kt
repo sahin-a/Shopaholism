@@ -1,49 +1,46 @@
 package com.sar.shopaholism.data.remote.productlookup
 
-import com.github.kittinunf.fuel.core.FuelManager
 import com.sar.shopaholism.data.remote.productlookup.dao.BarcodeLookupApi
-import com.sar.shopaholism.data.remote.productlookup.dao.RateLimiter
-import com.sar.shopaholism.data.remote.productlookup.dto.barcodelookupapi.BarcodeRateLimitDto
+import com.sar.shopaholism.data.remote.productlookup.dao.BarcodeLookupApiRateLimit
+import com.sar.shopaholism.data.remote.productlookup.exceptions.FailedToRetrieveProductsException
+import com.sar.shopaholism.data.remote.ratelimiting.RateLimiter
+import com.sar.shopaholism.data.remote.ratelimiting.model.RateLimit
+import com.sar.shopaholism.data.remote.web.WebApiClient
+import io.mockk.coEvery
+import io.mockk.every
+import io.mockk.impl.annotations.InjectMockKs
+import io.mockk.impl.annotations.MockK
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Before
 import org.junit.Test
-import kotlin.test.assertTrue
 
 class BarcodeLookupApiTest {
 
-    private lateinit var fuelManager: FuelManager
-    private lateinit var rateLimiter: RateLimiter
-    private lateinit var api: BarcodeLookupApi
+    @MockK
+    private lateinit var rateLimiter: BarcodeLookupApiRateLimit
+
+    @MockK
+    private lateinit var webApiClient: WebApiClient
+
+    @InjectMockKs
+    private lateinit var sut: BarcodeLookupApi
 
     @Before
     fun setup() {
-        fuelManager = FuelManager()
-        rateLimiter = RateLimiter()
-        api = BarcodeLookupApi(fuelManager, rateLimiter)
-    }
-
-    @Test
-    fun `is rate limited when no request per month left`() {
-        rateLimiter.setData(
-            BarcodeRateLimitDto(
-                allowed_calls_per_month = "100",
-                allowed_calls_per_minute = "10",
-                remaining_calls_per_month = "5",
-                remaining_calls_per_minute = "1"
+        every { rateLimiter.rateLimiter } returns RateLimiter(
+            listOf(
+                RateLimit(maxRequestsWithinTimeSpan = 50, timeSpanInSeconds = 60)
             )
         )
-
-        rateLimiter.increaseSentRequests()
-
-        assertTrue(rateLimiter.isRateLimited())
     }
 
-    @Test
-    fun `retrieve products by name`() {
-        val title = "Playstation 5"
+    @ExperimentalCoroutinesApi
+    @Test(expected = FailedToRetrieveProductsException::class)
+    fun `WHEN web client THROWS WebRequestUnsuccessfulException THEN throw FailedToRetrieveProductsException`() =
+        runBlockingTest {
+            coEvery { webApiClient.sendRequest(any()) } throws (FailedToRetrieveProductsException())
 
-        val productsDto = api.getProductsByName(title)
-
-        assertTrue(productsDto.barcodeProducts.count() > 0)
-    }
-
+            sut.getProductsByName("Peter")
+        }
 }

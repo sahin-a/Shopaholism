@@ -4,8 +4,9 @@ import com.sar.shopaholism.domain.entity.productlookup.Product
 import com.sar.shopaholism.domain.entity.productlookup.Store
 import com.sar.shopaholism.domain.logger.Logger
 import com.sar.shopaholism.domain.repository.ProductLookupRepository
-import io.mockk.every
+import io.mockk.coEvery
 import io.mockk.mockk
+import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Before
 import org.junit.Test
 import kotlin.test.assertTrue
@@ -23,14 +24,16 @@ class ProductLookupUseCaseTest {
     }
 
     @Test
-    fun `no exception if items returned`() {
+    fun `no exception if items returned`() = runBlockingTest {
         val name = "Playstation 5"
 
-        every {
+        coEvery {
             useCase.getProductsByName(name)
         } returns listOf(
             Product(
                 title = "Playstation 5",
+                description = "Peter's Playstation 5",
+                images = listOf("peter.png"),
                 stores = listOf(
                     Store(
                         price = "200.00",
@@ -49,10 +52,10 @@ class ProductLookupUseCaseTest {
     }
 
     @Test(expected = Exception::class)
-    fun `exception thrown if no items returned`() {
+    fun `exception thrown if no items returned`() = runBlockingTest {
         val name = "Playstation 5"
 
-        every {
+        coEvery {
             useCase.getProductsByName(name)
         } returns emptyList()
 
