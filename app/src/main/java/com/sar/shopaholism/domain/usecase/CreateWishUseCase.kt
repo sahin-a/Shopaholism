@@ -4,6 +4,7 @@ import com.sar.shopaholism.domain.entity.Wish
 import com.sar.shopaholism.domain.exception.WishNotCreatedException
 import com.sar.shopaholism.domain.logger.Logger
 import com.sar.shopaholism.domain.repository.WishesRepository
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.math.BigDecimal
@@ -11,9 +12,15 @@ import java.math.RoundingMode
 
 class CreateWishUseCase(private val repo: WishesRepository, private val logger: Logger) {
 
-    suspend fun execute(title: String, imageUri: String, description: String, price: Double): Long =
+    suspend fun execute(
+        title: String,
+        imageUri: String,
+        description: String,
+        price: Double,
+        dispatcher: CoroutineDispatcher = Dispatchers.IO
+    ): Long =
         withContext(
-            Dispatchers.IO
+            dispatcher
         ) {
             WishValidation.validate(
                 title = title,

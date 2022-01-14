@@ -7,44 +7,43 @@ import com.sar.shopaholism.domain.usecase.GetWishesUseCase
 import com.sar.shopaholism.presentation.model.WishesModel
 import com.sar.shopaholism.presentation.view.WishesOverviewView
 import io.mockk.*
-import kotlinx.coroutines.Dispatchers
+import io.mockk.impl.annotations.InjectMockKs
+import io.mockk.impl.annotations.MockK
+import io.mockk.impl.annotations.RelaxedMockK
+import io.mockk.impl.annotations.SpyK
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.test.TestCoroutineDispatcher
-import kotlinx.coroutines.test.TestCoroutineScope
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Before
 import org.junit.Test
 import kotlin.test.assertTrue
 
-class WishesOverviewPresenterTest {
+class WishesOverviewPresenterTest : BasePresenterTest() {
+    @SpyK
+    private var model: WishesModel = WishesModel()
 
-    private lateinit var presenter: WishesOverviewPresenter
+    @MockK(relaxUnitFun = true)
     private lateinit var view: WishesOverviewView
+
+    @MockK
     private lateinit var getWishesUseCase: GetWishesUseCase
-    private lateinit var model: WishesModel
+
+    @RelaxedMockK
     private lateinit var logger: Logger
 
-    @Before
-    fun setup() {
-        getWishesUseCase = mockk()
-        logger = mockk(relaxed = true)
-        view = mockk()
-        model = WishesModel()
+    @InjectMockKs
+    private lateinit var sut: WishesOverviewPresenter
 
-        presenter = WishesOverviewPresenter(
-            getWishesUseCase = getWishesUseCase,
-            model = model,
-            logger = logger
-        )
+    @ExperimentalCoroutinesApi
+    @Before
+    override fun setup() {
+        super.setup()
+        MockKAnnotations.init(this)
     }
 
+    @ExperimentalCoroutinesApi
     @Test
-    fun `loadWishes gets wishes from GetWishesUseCase and stores it in model`() = runBlocking(
-        Dispatchers.IO) {
-
+    fun `loadWishes gets wishes from GetWishesUseCase and stores it in model`() = runBlockingTest {
         val wish = Wish(
             id = 343L,
             title = "title",
@@ -56,22 +55,22 @@ class WishesOverviewPresenterTest {
 
         coEvery { getWishesUseCase.execute() } returns flowOf(listOf(wish))
 
-        presenter.loadWishes()
+        sut.loadWishes()
 
         assertTrue { model.wishes.value!!.size == 1 }
     }
 
     @Test
     fun `navigateToCreateWishFragment navigates to createWishFragment`() {
-        presenter.attachView(view)
+        sut.attachView(view)
 
         every {
-            presenter.view!!.navigateTo(R.id.action_wishesOverviewFragment_to_createWishFragment)
+            sut.view!!.navigateTo(R.id.action_wishesOverviewFragment_to_createWishFragment)
         } just Runs
 
-        presenter.view!!.navigateTo(R.id.action_wishesOverviewFragment_to_createWishFragment)
+        sut.view!!.navigateTo(R.id.action_wishesOverviewFragment_to_createWishFragment)
 
-        verify { presenter.view!!.navigateTo(R.id.action_wishesOverviewFragment_to_createWishFragment) }
+        verify { sut.view!!.navigateTo(R.id.action_wishesOverviewFragment_to_createWishFragment) }
     }
 
 }

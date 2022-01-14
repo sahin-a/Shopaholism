@@ -3,25 +3,31 @@ package com.sar.shopaholism.presentation.presenter
 import com.sar.shopaholism.domain.logger.Logger
 import com.sar.shopaholism.domain.usecase.CreateWishUseCase
 import com.sar.shopaholism.presentation.feedback.WishFeedbackService
+import com.sar.shopaholism.presentation.model.CreateWishModel
 import com.sar.shopaholism.presentation.rater.WishesRater
 import com.sar.shopaholism.presentation.view.WishCreationView
+import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.impl.annotations.RelaxedMockK
+import io.mockk.impl.annotations.SpyK
 import io.mockk.mockk
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Before
 import org.junit.Test
-import org.koin.test.KoinTest
 
-class WishCreationPresenterTest : KoinTest {
+class WishCreationPresenterTest : BasePresenterTest() {
     @RelaxedMockK
     private val logger: Logger = mockk(relaxed = true)
 
     @RelaxedMockK
     private lateinit var wishesRater: WishesRater
+
+    @SpyK
+    private var createWishModel = CreateWishModel()
 
     @MockK
     private lateinit var createWishUseCase: CreateWishUseCase
@@ -29,18 +35,23 @@ class WishCreationPresenterTest : KoinTest {
     @MockK
     private lateinit var view: WishCreationView
 
-    @MockK
+    @MockK(relaxUnitFun = true)
     private lateinit var wishFeedbackService: WishFeedbackService
 
     @InjectMockKs
     private lateinit var presenter: WishCreationPresenter
 
 
+    @ExperimentalCoroutinesApi
     @Before
-    fun setup() {
+    override fun setup() {
+        super.setup()
+
+        MockKAnnotations.init(this)
         presenter.attachView(view)
     }
 
+    @ExperimentalCoroutinesApi
     @Test
     fun `Create wish calls CreateWishUseCase`() = runBlockingTest {
         val title = "Epic title"

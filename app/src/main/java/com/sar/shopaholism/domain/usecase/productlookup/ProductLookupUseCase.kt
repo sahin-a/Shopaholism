@@ -5,6 +5,7 @@ import com.sar.shopaholism.domain.entity.productlookup.Product
 import com.sar.shopaholism.domain.exception.NoProductsFoundException
 import com.sar.shopaholism.domain.logger.Logger
 import com.sar.shopaholism.domain.repository.ProductLookupRepository
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -13,7 +14,10 @@ class ProductLookupUseCase(
     private val logger: Logger
 ) {
 
-    suspend fun getProductsByName(name: String): List<Product> = withContext(Dispatchers.IO) {
+    suspend fun getProductsByName(
+        name: String,
+        dispatcher: CoroutineDispatcher = Dispatchers.IO
+    ): List<Product> = withContext(dispatcher) {
         var products: List<Product> = emptyList()
 
         try {

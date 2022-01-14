@@ -4,19 +4,21 @@ import com.sar.shopaholism.domain.entity.Wish
 import com.sar.shopaholism.domain.usecase.GetWishUseCase
 import com.sar.shopaholism.domain.usecase.UpdateWishUseCase
 import com.sar.shopaholism.presentation.feedback.WishFeedbackService
+import com.sar.shopaholism.presentation.model.CreateWishModel
 import com.sar.shopaholism.presentation.view.WishEditingView
 import io.mockk.*
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
+import io.mockk.impl.annotations.SpyK
 import junit.framework.Assert.assertEquals
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
+import org.junit.Before
 import org.junit.Test
 
 @ExperimentalCoroutinesApi
-class WishEditingPresenterTest {
-
-    @MockK
+class WishEditingPresenterTest : BasePresenterTest() {
+    @MockK(relaxUnitFun = true)
     private lateinit var view: WishEditingView
 
     @MockK
@@ -25,11 +27,20 @@ class WishEditingPresenterTest {
     @MockK
     private lateinit var updateWishUseCase: UpdateWishUseCase
 
-    @MockK
+    @MockK(relaxUnitFun = true)
     private lateinit var wishFeedbackService: WishFeedbackService
+
+    @SpyK
+    private var createWishModel = CreateWishModel()
 
     @InjectMockKs
     private lateinit var presenter: WishEditingPresenter
+
+    @Before
+    override fun setup() {
+        super.setup()
+        MockKAnnotations.init(this)
+    }
 
     @Test
     fun `onAttachView calls getWishUseCase to retrieve original data`() {

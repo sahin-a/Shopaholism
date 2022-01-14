@@ -36,7 +36,8 @@ private val modules = module {
         WishCreationPresenter(
             createWishUseCase = get(),
             wishesRater = get(),
-            wishFeedbackService = get()
+            wishFeedbackService = get(),
+            createWishModel = get()
         )
     }
 
@@ -44,7 +45,8 @@ private val modules = module {
         WishEditingPresenter(
             updateWishUseCase = get(),
             getWishUseCase = get(),
-            wishFeedbackService = get()
+            wishFeedbackService = get(),
+            createWishModel = get()
         )
     }
 

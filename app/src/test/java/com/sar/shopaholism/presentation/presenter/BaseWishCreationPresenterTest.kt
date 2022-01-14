@@ -1,22 +1,31 @@
 package com.sar.shopaholism.presentation.presenter
 
 import com.sar.shopaholism.domain.entity.Wish
+import com.sar.shopaholism.presentation.model.CreateWishModel
 import com.sar.shopaholism.presentation.view.WishCreationView
 import io.mockk.*
+import io.mockk.impl.annotations.InjectMockKs
+import io.mockk.impl.annotations.MockK
+import io.mockk.impl.annotations.SpyK
 import org.junit.Before
 import org.junit.Test
 
-class BaseWishCreationPresenterTest {
-
+class BaseWishCreationPresenterTest : BasePresenterTest() {
+    @MockK
     private lateinit var view: WishCreationView
-    private lateinit var presenter: BaseWishCreationPresenter<WishCreationView>
+
+    @SpyK
+    private var createWishModel = CreateWishModel()
+
+    @InjectMockKs
+    private lateinit var sut: BaseWishCreationPresenter<WishCreationView>
 
     @Before
-    fun setup() {
-        view = mockk()
-        presenter = BaseWishCreationPresenter<WishCreationView>()
+    override fun setup() {
+        super.setup()
 
-        presenter.attachView(view)
+        MockKAnnotations.init(this)
+        sut.attachView(view)
     }
 
     @Test
@@ -31,11 +40,11 @@ class BaseWishCreationPresenterTest {
             priority = 0.0
         )
 
-        presenter.model.apply {
-            this.title = wish.title
-            this.imageUri = wish.imageUri
-            this.description = wish.description
-            this.price = wish.price
+        sut.model.apply {
+            title = wish.title
+            imageUri = wish.imageUri
+            description = wish.description
+            price = wish.price
         }
 
         every {
@@ -47,7 +56,7 @@ class BaseWishCreationPresenterTest {
             )
         } just Runs
 
-        presenter.getData()
+        sut.getData()
 
         verify {
             view.setData(
@@ -70,11 +79,11 @@ class BaseWishCreationPresenterTest {
             priority = 0.0
         )
 
-        presenter.model.apply {
-            this.title = wish.title
-            this.imageUri = wish.imageUri
-            this.description = wish.description
-            this.price = wish.price
+        sut.model.apply {
+            title = wish.title
+            imageUri = wish.imageUri
+            description = wish.description
+            price = wish.price
         }
 
         every {
@@ -86,7 +95,7 @@ class BaseWishCreationPresenterTest {
             )
         } just Runs
 
-        presenter.getData()
+        sut.getData()
 
         verify {
             view.setData(

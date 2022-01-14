@@ -5,11 +5,12 @@ import com.sar.shopaholism.data.remote.productlookup.entity.StoreEntity
 import com.sar.shopaholism.data.remote.productlookup.source.ProductLookupDataSource
 import com.sar.shopaholism.domain.entity.productlookup.Product
 import com.sar.shopaholism.domain.entity.productlookup.Store
-import com.sar.shopaholism.domain.repository.ProductLookupRepository
+import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.test.runBlockingTest
+import org.junit.Before
 import org.junit.Test
 import kotlin.test.assertEquals
 
@@ -19,7 +20,12 @@ class ProductLookupRepositoryImplTest {
     private lateinit var dataSource: ProductLookupDataSource
 
     @InjectMockKs
-    private lateinit var sut: ProductLookupRepository
+    private lateinit var sut: ProductLookupRepositoryImpl
+
+    @Before
+    fun setup() {
+        MockKAnnotations.init(this)
+    }
 
     @Test
     fun `ProductEntity gets mapped to Product correctly`() = runBlockingTest {

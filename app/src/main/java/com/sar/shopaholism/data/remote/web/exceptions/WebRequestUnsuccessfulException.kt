@@ -1,5 +1,6 @@
 package com.sar.shopaholism.data.remote.web.exceptions
 
-class WebRequestUnsuccessfulException(message: String?, cause: Throwable?) :
-    Exception(message, cause) {
+class WebRequestUnsuccessfulException : Exception {
+    constructor(message: String? = null) : super(message)
+    constructor(message: String?, cause: Throwable?) : super(message, cause)
 }

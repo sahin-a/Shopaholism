@@ -6,22 +6,21 @@ import com.sar.shopaholism.domain.usecase.GetWishUseCase
 import com.sar.shopaholism.presentation.feedback.WishFeedbackService
 import com.sar.shopaholism.presentation.rater.WishesRater
 import com.sar.shopaholism.presentation.view.WishDeletionView
-import io.mockk.Runs
-import io.mockk.coEvery
-import io.mockk.coVerify
+import io.mockk.*
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.impl.annotations.RelaxedMockK
-import io.mockk.just
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
+import org.junit.Before
 import org.junit.Test
 
-class WishDeletionPresenterTest {
+class WishDeletionPresenterTest : BasePresenterTest() {
 
     @RelaxedMockK
     private lateinit var wishesRater: WishesRater
 
-    @MockK
+    @MockK(relaxUnitFun = true)
     private lateinit var wishFeedbackService: WishFeedbackService
 
     @MockK
@@ -35,6 +34,13 @@ class WishDeletionPresenterTest {
 
     @InjectMockKs
     private lateinit var presenter: WishDeletionPresenter
+
+    @ExperimentalCoroutinesApi
+    @Before
+    override fun setup() {
+        super.setup()
+        MockKAnnotations.init(this)
+    }
 
     @Test
     fun `getWish calls getWishUseCase`() = runBlockingTest {

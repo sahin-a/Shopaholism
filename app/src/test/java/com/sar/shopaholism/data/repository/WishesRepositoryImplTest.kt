@@ -4,6 +4,7 @@ import com.sar.shopaholism.data.local.entity.WishEntity
 import com.sar.shopaholism.data.local.source.WishesDataSource
 import com.sar.shopaholism.domain.entity.Wish
 import io.mockk.*
+import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
@@ -14,13 +15,15 @@ import org.junit.Test
 @ExperimentalCoroutinesApi
 class WishesRepositoryImplTest {
 
-    private var dataSource: WishesDataSource = mockk()
+    @MockK
+    private lateinit var dataSource: WishesDataSource
 
-    private val wishesRepositoryImpl = WishesRepositoryImpl(dataSource)
+    @InjectMockKs
+    private lateinit var sut: WishesRepositoryImpl
 
     @Before
-    fun setUpMocks() {
-        clearAllMocks()
+    fun setup() {
+        MockKAnnotations.init(this)
     }
 
     @Test
@@ -52,7 +55,7 @@ class WishesRepositoryImplTest {
 
         coEvery { dataSource.updateWish(wishEntity) } returns true
 
-        wishesRepositoryImpl.update(wish)
+        sut.update(wish)
 
         coVerify {
             dataSource.updateWish(wishEntity)
@@ -65,7 +68,7 @@ class WishesRepositoryImplTest {
 
         coEvery { dataSource.deleteWish(id) } returns true
 
-        wishesRepositoryImpl.delete(id)
+        sut.delete(id)
 
         coVerify { dataSource.deleteWish(id) }
     }
@@ -74,7 +77,7 @@ class WishesRepositoryImplTest {
     fun `getWishes data source call`() = runBlockingTest {
         coEvery { dataSource.getWishes() } returns flowOf(listOf())
 
-        wishesRepositoryImpl.getWishes()
+        sut.getWishes()
 
         coVerify { dataSource.getWishes() }
     }
@@ -91,7 +94,7 @@ class WishesRepositoryImplTest {
             price = 1.0,
             priority = 1.0)
 
-        wishesRepositoryImpl.getWish(id)
+        sut.getWish(id)
 
         coVerify { dataSource.getWish(id) }
     }
@@ -125,7 +128,7 @@ class WishesRepositoryImplTest {
 
         coEvery { dataSource.insert(wishEntity) } returns 1
 
-        wishesRepositoryImpl.create(wish)
+        sut.create(wish)
 
         coVerify {
             dataSource.insert(wishEntity)
