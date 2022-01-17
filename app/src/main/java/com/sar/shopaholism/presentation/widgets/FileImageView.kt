@@ -27,5 +27,5 @@ class FileImageView @JvmOverloads constructor(
         imageUri = uri
         notifyImageUriChangedListeners()
     }
-    
+
 }

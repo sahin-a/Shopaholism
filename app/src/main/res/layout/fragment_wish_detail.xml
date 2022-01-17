@@ -96,7 +96,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/main_content"
-                tools:listitem="@layout/related_product_row" />
+                tools:listitem="@layout/wikipage_row" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

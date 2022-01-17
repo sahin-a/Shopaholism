@@ -63,6 +63,6 @@
     <fragment
         android:id="@+id/wishDetailFragment"
         android:name="com.sar.shopaholism.presentation.fragment.WishDetailFragment"
-        android:label="@string/related_products"
+        android:label="@string/wikipages_header"
         tools:layout="@layout/fragment_wish_detail" />
 </navigation>
