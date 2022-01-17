@@ -4,15 +4,11 @@ import androidx.room.Room
 import com.github.kittinunf.fuel.core.FuelManager
 import com.sar.shopaholism.data.local.db.WishesDatabase
 import com.sar.shopaholism.data.local.source.WishesDataSource
-import com.sar.shopaholism.data.remote.productlookup.dao.BarcodeLookupApi
-import com.sar.shopaholism.data.remote.productlookup.dao.BarcodeLookupApiRateLimit
-import com.sar.shopaholism.data.remote.productlookup.source.BarcodeLookupDataSourceImpl
-import com.sar.shopaholism.data.remote.productlookup.source.ProductLookupDataSource
-import com.sar.shopaholism.data.remote.web.WebApiClient
-import com.sar.shopaholism.data.remote.web.WebApiClientImpl
-import com.sar.shopaholism.data.repository.ProductLookupRepositoryImpl
 import com.sar.shopaholism.data.repository.WishesRepositoryImpl
-import com.sar.shopaholism.domain.repository.ProductLookupRepository
+import com.sar.shopaholism.data.web.WebApiClient
+import com.sar.shopaholism.data.web.WebApiClientImpl
+import com.sar.shopaholism.data.wikipedia.WikipediaClient
+import com.sar.shopaholism.data.wikipedia.api.WikipediaApiProvider
 import com.sar.shopaholism.domain.repository.WishesRepository
 import org.koin.dsl.module
 
@@ -27,17 +23,21 @@ private val databaseModule = module {
 
 private val apiModule = module {
     factory { FuelManager() }
-    factory<WebApiClient> { WebApiClientImpl(fuelManager = get(), rateLimiter = null) }
-    single { BarcodeLookupApiRateLimit() }
-    single { BarcodeLookupApi(webApiClient = get(), rateLimiter = get()) }
+    factory<WebApiClient> {
+        WebApiClientImpl(
+            fuelManager = get(),
+            logger = get(),
+            rateLimiter = null
+        )
+    }
+    single { WikipediaApiProvider(get()) }
+    single { WikipediaClient(get()) }
 }
 
 private val repositoryModule = module {
     single { WishesDataSource(dao = get()) }
-    single<ProductLookupDataSource> { BarcodeLookupDataSourceImpl(apiClient = get()) }
 
     single<WishesRepository> { WishesRepositoryImpl(dataSource = get()) }
-    single<ProductLookupRepository> { ProductLookupRepositoryImpl(dataSource = get()) }
 }
 
 val dataModules = databaseModule + apiModule + repositoryModule

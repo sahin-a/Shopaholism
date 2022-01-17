@@ -30,6 +30,7 @@
     <string name="wish_deleted">Wunsch entfernt</string>
     <string name="wish_deletion_failed">Entfernen fehlgeschlagen</string>
     <string name="wish_apply_changes_failed">Änderung wurde nicht erfolgreich übernommen</string>
-    <string name="related_products">Ähnliche Produkte</string>
-    <string name="no_related_products_found_error">Sorry, konnte keine Daten zu ähnlichen Produkten finden :(</string>
+    <string name="wikipages_header">Wikipedia</string>
+    <string name="no_related_products_found_error">Sorry, konnte nichts dazu finden auf Wikipedia :(</string>
+    <string name="no_wikipage_description_available">Keine Beschreibung verfügbar :(</string>
 </resources>

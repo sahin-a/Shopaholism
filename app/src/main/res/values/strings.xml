@@ -35,6 +35,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
     <string name="shop_name_with_price" translatable="false">%1$s | %2$s</string>
-    <string name="related_products">Related products</string>
-    <string name="no_related_products_found_error">Sorry, couldn\'t get any data on related products :(</string>
+    <string name="wikipages_header">Wikipedia</string>
+    <string name="no_related_products_found_error">Sorry, couldn\'t find anything related to this on wikipedia :(</string>
+    <string name="no_wikipage_description_available">No description available :(</string>
 </resources>

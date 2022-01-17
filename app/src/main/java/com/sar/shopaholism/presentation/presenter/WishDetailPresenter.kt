@@ -1,12 +1,11 @@
 package com.sar.shopaholism.presentation.presenter
 
+import com.sar.shopaholism.domain.entity.WikiPage
 import com.sar.shopaholism.domain.entity.Wish
-import com.sar.shopaholism.domain.entity.productlookup.Product
-import com.sar.shopaholism.domain.exception.NoProductsFoundException
 import com.sar.shopaholism.domain.exception.WishNotFoundException
 import com.sar.shopaholism.domain.logger.Logger
+import com.sar.shopaholism.domain.usecase.GetWikiPageUseCase
 import com.sar.shopaholism.domain.usecase.GetWishUseCase
-import com.sar.shopaholism.domain.usecase.productlookup.ProductLookupUseCase
 import com.sar.shopaholism.presentation.view.WishDetailView
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
@@ -14,7 +13,7 @@ import kotlinx.coroutines.launch
 
 class WishDetailPresenter(
     private val getWishUseCase: GetWishUseCase,
-    private val getProductLookupUseCase: ProductLookupUseCase,
+    private val getWikiPageUseCase: GetWikiPageUseCase,
     private val logger: Logger
 ) : BasePresenter<WishDetailView>() {
 
@@ -25,31 +24,33 @@ class WishDetailPresenter(
     suspend fun loadData() = coroutineScope {
         launch {
             var wish: Wish? = null
-            var relatedProducts: List<Product> = emptyList()
 
             try {
                 wish = getWishUseCase.execute(getWishId())
-                relatedProducts = getProductLookupUseCase.getProductsByName(wish.title)
             } catch (e: WishNotFoundException) {
                 logger.d(TAG, "WishNotFoundException thrown")
-            } catch (e: NoProductsFoundException) {
-                logger.d(TAG, "NoProductsFoundException thrown")
             }
 
             wish?.let {
+                var wikiPages: List<WikiPage>? = null
+                try {
+                    wikiPages = getWikiPageUseCase.execute(wish.title)
+                } catch (e: Exception) {
+                    logger.d(TAG, "Couldn't retrieve wiki pages")
+                }
+
                 launch(Dispatchers.Main) {
                     view?.toggleLoadingIndicator(false)
-                    showData(wish, relatedProducts)
+                    view?.setWishData(wish)
+
+                    if (wikiPages.isNullOrEmpty()) {
+                        view?.showError()
+                    } else {
+                        view?.setWikiPages(wikiPages)
+                    }
                 }
             }
         }
-    }
-
-    private fun showData(wish: Wish, relatedProducts: List<Product>) {
-        view?.showData(
-            wish,
-            relatedProducts
-        )
     }
 
     companion object {

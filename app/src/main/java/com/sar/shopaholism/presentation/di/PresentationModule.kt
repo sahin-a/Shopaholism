@@ -80,8 +80,8 @@ private val modules = module {
     single {
         WishDetailPresenter(
             getWishUseCase = get(),
-            getProductLookupUseCase = get(),
-            logger = get()
+            logger = get(),
+            getWikiPageUseCase = get()
         )
     }
 
