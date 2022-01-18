@@ -7,7 +7,9 @@ import com.sar.shopaholism.domain.usecase.UpdateWishUseCase
 import com.sar.shopaholism.presentation.feedback.WishFeedbackService
 import com.sar.shopaholism.presentation.model.CreateWishModel
 import com.sar.shopaholism.presentation.view.WishEditingView
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class WishEditingPresenter(
     private val updateWishUseCase: UpdateWishUseCase,
@@ -21,7 +23,7 @@ class WishEditingPresenter(
 
     override fun onAttachView() {
         view?.let { view ->
-            runBlocking {
+            CoroutineScope(Dispatchers.Default).launch {
                 if (wishId == null || view.getWishId() != wishId) {
                     wishId = view.getWishId()
 

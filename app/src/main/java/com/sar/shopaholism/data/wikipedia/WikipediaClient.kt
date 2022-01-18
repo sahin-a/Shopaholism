@@ -8,6 +8,7 @@ class WikipediaClient(
 ) {
     suspend fun getPage(title: String, limit: Int): List<WikiPage> {
         val searchResultsDto = wikipediaApiProvider.searchPages(title, limit)
+
         return searchResultsDto.pages.map { searchResult ->
             searchResult.thumbnail?.apply {
                 if (url.startsWith("//")) {
@@ -17,7 +18,7 @@ class WikipediaClient(
 
             val page = wikipediaApiProvider.getPage(searchResult.title)
 
-            WikiPage(
+            return@map WikiPage(
                 title = page.title,
                 description = searchResult.description ?: "",
                 thumbnailUrl = searchResult.thumbnail?.url ?: "",

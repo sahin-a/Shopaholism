@@ -54,7 +54,6 @@ private val modules = module {
         WishDeletionPresenter(
             deleteWishUseCase = get(),
             getWishUseCase = get(),
-            wishesRater = get(),
             wishFeedbackService = get()
         )
     }

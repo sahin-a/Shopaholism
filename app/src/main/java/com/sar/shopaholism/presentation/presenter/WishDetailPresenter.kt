@@ -7,6 +7,7 @@ import com.sar.shopaholism.domain.logger.Logger
 import com.sar.shopaholism.domain.usecase.GetWikiPageUseCase
 import com.sar.shopaholism.domain.usecase.GetWishUseCase
 import com.sar.shopaholism.presentation.view.WishDetailView
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
@@ -21,7 +22,15 @@ class WishDetailPresenter(
         return view?.getWishId() ?: -1
     }
 
-    suspend fun loadData() = coroutineScope {
+    override fun onAttachView() {
+        super.onAttachView()
+
+        CoroutineScope(Dispatchers.Default).launch {
+            loadData()
+        }
+    }
+
+    private suspend fun loadData() = coroutineScope {
         launch {
             var wish: Wish? = null
 
@@ -32,16 +41,11 @@ class WishDetailPresenter(
             }
 
             wish?.let {
-                var wikiPages: List<WikiPage>? = null
-                try {
-                    wikiPages = getWikiPageUseCase.execute(wish.title)
-                } catch (e: Exception) {
-                    logger.d(TAG, "Couldn't retrieve wiki pages")
-                }
+                val wikiPages: List<WikiPage> = getWikiPageUseCase.execute(it.title)
 
                 launch(Dispatchers.Main) {
                     view?.toggleLoadingIndicator(false)
-                    view?.setWishData(wish)
+                    view?.setWishData(it)
 
                     if (wikiPages.isNullOrEmpty()) {
                         view?.showError()

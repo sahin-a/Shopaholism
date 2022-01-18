@@ -18,12 +18,7 @@ import com.sar.shopaholism.presentation.adapter.OnWikiPageListener
 import com.sar.shopaholism.presentation.adapter.WikiPagesAdapter
 import com.sar.shopaholism.presentation.presenter.WishDetailPresenter
 import com.sar.shopaholism.presentation.view.WishDetailView
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
-
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 
 /**
  * A simple [Fragment] subclass.
@@ -35,7 +30,6 @@ class WishDetailFragment : Fragment(), WishDetailView, OnWikiPageListener {
 
     private val presenter: WishDetailPresenter by inject()
 
-    // Views
     private lateinit var productImageView: ImageView
     private lateinit var titleView: TextView
     private lateinit var descriptionView: TextView
@@ -64,8 +58,6 @@ class WishDetailFragment : Fragment(), WishDetailView, OnWikiPageListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        presenter.attachView(this)
-
         productImageView = view.findViewById(R.id.wish_image)
         titleView = view.findViewById(R.id.wish_title)
         descriptionView = view.findViewById(R.id.wish_description)
@@ -74,9 +66,7 @@ class WishDetailFragment : Fragment(), WishDetailView, OnWikiPageListener {
         errorIndicatorView = view.findViewById(R.id.no_products_found_error)
         wikiPagesView.adapter = WikiPagesAdapter(onWikiPageListener = this)
 
-        CoroutineScope(Dispatchers.Default).launch {
-            presenter.loadData()
-        }
+        presenter.attachView(this)
     }
 
     companion object {
@@ -89,7 +79,6 @@ class WishDetailFragment : Fragment(), WishDetailView, OnWikiPageListener {
          * @param wishId Parameter Wish Id
          * @return A new instance of fragment WishDetailFragment.
          */
-        // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(wishId: Long) =
             WishDetailFragment().apply {
@@ -104,15 +93,15 @@ class WishDetailFragment : Fragment(), WishDetailView, OnWikiPageListener {
     }
 
     override fun setWishData(wish: Wish) {
-        if (wish.imageUri.isEmpty()) {
-            productImageView.setImageResource(R.drawable.no_image_placeholder)
-        } else {
+        titleView.text = wish.title
+
+        if (wish.imageUri.isNotEmpty()) {
             productImageView.setImageURI(Uri.parse(wish.imageUri))
         }
-        titleView.text = wish.title
-        descriptionView.text = wish.description
 
-        if (descriptionView.text.isEmpty()) {
+        if (descriptionView.text.isNotEmpty()) {
+            descriptionView.text = wish.description
+        } else {
             descriptionView.visibility = View.GONE
         }
     }

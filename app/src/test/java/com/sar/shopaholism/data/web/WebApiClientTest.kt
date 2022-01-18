@@ -13,6 +13,7 @@ import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.impl.annotations.RelaxedMockK
+import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.TestCoroutineScope
@@ -69,8 +70,14 @@ class WebApiClientTest {
             parameters = mapOf()
         )
 
+        val fuelRequest: com.github.kittinunf.fuel.core.Request = mockk(relaxed = true)
+
+        every {
+            fuelManager.request(method = any(), path = any(), parameters = any())
+        } returns fuelRequest
+
         coEvery {
-            fuelManager.request(method = any(), path = any(), parameters = any()).awaitString()
+            fuelRequest.awaitString()
         } throws Exception()
 
         sut.sendRequest(request, testDispatcher)

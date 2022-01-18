@@ -2,34 +2,59 @@ package com.sar.shopaholism.presentation.presenter
 
 import com.sar.shopaholism.domain.entity.Wish
 import com.sar.shopaholism.domain.exception.WishNotDeletedException
+import com.sar.shopaholism.domain.exception.WishNotFoundException
 import com.sar.shopaholism.domain.usecase.DeleteWishUseCase
 import com.sar.shopaholism.domain.usecase.GetWishUseCase
 import com.sar.shopaholism.presentation.feedback.WishFeedbackService
-import com.sar.shopaholism.presentation.rater.WishesRater
 import com.sar.shopaholism.presentation.view.WishDeletionView
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 
 class WishDeletionPresenter(
     private val deleteWishUseCase: DeleteWishUseCase,
     private val getWishUseCase: GetWishUseCase,
-    private val wishesRater: WishesRater,
     private val wishFeedbackService: WishFeedbackService
 ) : BasePresenter<WishDeletionView>() {
 
-    suspend fun getWish(wishId: Long): Wish {
-        return getWishUseCase.execute(wishId)
+    override fun onAttachView() {
+        super.onAttachView()
+
+        CoroutineScope(Dispatchers.Default).launch {
+            showWishDetails()
+        }
     }
 
-    suspend fun deleteWish(wishId: Long): Boolean {
-        try {
-            deleteWishUseCase.execute(wishId)
+    private suspend fun showWishDetails() = coroutineScope {
+        launch {
+            var wish: Wish? = null
 
-            // update the rating on all wishes
-            wishesRater.recalculateAndUpdateRatings(
-                oldWishesCount = { wishesCount ->
-                    wishesCount + 1
+            try {
+                wish = getWish()
+            } catch (e: WishNotFoundException) {
+
+            } catch (e: IllegalArgumentException) {
+
+            }
+
+            wish?.let {
+                launch(Dispatchers.Main) {
+                    view?.setWishData(it)
                 }
-            )
+            }
+        }
+    }
 
+    private fun getWishId(): Long = view?.getWishId() ?: -1
+
+    suspend fun getWish(): Wish {
+        return getWishUseCase.execute(getWishId())
+    }
+
+    suspend fun deleteWish(): Boolean {
+        try {
+            deleteWishUseCase.execute(getWishId())
             wishFeedbackService.wishSuccessfullyDeleted()
 
             return true
