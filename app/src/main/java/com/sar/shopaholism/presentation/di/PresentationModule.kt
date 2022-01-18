@@ -35,7 +35,6 @@ private val modules = module {
     single {
         WishCreationPresenter(
             createWishUseCase = get(),
-            wishesRater = get(),
             wishFeedbackService = get(),
             createWishModel = get()
         )

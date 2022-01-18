@@ -4,13 +4,18 @@ import com.sar.shopaholism.domain.entity.Wish
 import com.sar.shopaholism.domain.exception.WishNotCreatedException
 import com.sar.shopaholism.domain.logger.Logger
 import com.sar.shopaholism.domain.repository.WishesRepository
+import com.sar.shopaholism.presentation.rater.WishesRater
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.math.BigDecimal
 import java.math.RoundingMode
 
-class CreateWishUseCase(private val repo: WishesRepository, private val logger: Logger) {
+class CreateWishUseCase(
+    private val repo: WishesRepository,
+    private val wishesRater: WishesRater,
+    private val logger: Logger
+) {
 
     suspend fun execute(
         title: String,
@@ -18,7 +23,7 @@ class CreateWishUseCase(private val repo: WishesRepository, private val logger: 
         description: String,
         price: Double,
         dispatcher: CoroutineDispatcher = Dispatchers.IO
-    ): Long =
+    ): Unit =
         withContext(
             dispatcher
         ) {
@@ -47,14 +52,18 @@ class CreateWishUseCase(private val repo: WishesRepository, private val logger: 
                 )
 
                 throw WishNotCreatedException("Wish couldn't be created")
+            } else {
+                wishesRater.recalculateAndUpdateRatings(
+                    oldWishesCount = { wishesCount ->
+                        wishesCount - 1
+                    }
+                )
             }
 
             logger.i(
                 tag = TAG,
                 message = "New Wish has been added to the local Db"
             )
-
-            return@withContext id
         }
 
     companion object {

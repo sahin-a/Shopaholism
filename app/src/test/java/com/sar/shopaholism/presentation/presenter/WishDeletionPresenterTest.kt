@@ -1,6 +1,5 @@
 package com.sar.shopaholism.presentation.presenter
 
-import com.sar.shopaholism.domain.entity.Wish
 import com.sar.shopaholism.domain.usecase.DeleteWishUseCase
 import com.sar.shopaholism.domain.usecase.GetWishUseCase
 import com.sar.shopaholism.presentation.feedback.WishFeedbackService
@@ -15,6 +14,7 @@ import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Before
 import org.junit.Test
 
+@ExperimentalCoroutinesApi
 class WishDeletionPresenterTest : BasePresenterTest() {
 
     @RelaxedMockK
@@ -23,7 +23,7 @@ class WishDeletionPresenterTest : BasePresenterTest() {
     @MockK(relaxUnitFun = true)
     private lateinit var wishFeedbackService: WishFeedbackService
 
-    @MockK
+    @MockK(relaxUnitFun = true)
     private lateinit var view: WishDeletionView
 
     @MockK
@@ -33,9 +33,8 @@ class WishDeletionPresenterTest : BasePresenterTest() {
     private lateinit var getWishUseCase: GetWishUseCase
 
     @InjectMockKs
-    private lateinit var presenter: WishDeletionPresenter
+    private lateinit var sut: WishDeletionPresenter
 
-    @ExperimentalCoroutinesApi
     @Before
     override fun setup() {
         super.setup()
@@ -43,31 +42,26 @@ class WishDeletionPresenterTest : BasePresenterTest() {
     }
 
     @Test
-    fun `getWish calls getWishUseCase`() = runBlockingTest {
-        val id = 223L
-
-        coEvery { getWishUseCase.execute(id) } returns Wish(
-            id = id,
-            title = "title",
-            imageUri = "imageUri",
-            description = "description",
-            price = 2.0,
-            priority = 0.0
-        )
-
-        presenter.getWish(id)
-
-        coVerify { getWishUseCase.execute(id) }
-    }
-
-    @Test
     fun `deleteWish calls deleteWishUseCase`() = runBlockingTest {
         val id = 423L
 
+        every { view.getWishId() } returns id
         coEvery { deleteWishUseCase.execute(id) } just Runs
 
-        presenter.deleteWish(id)
+        sut.deleteWish()
 
         coVerify { deleteWishUseCase.execute(id) }
+    }
+
+    @Test
+    fun `WHEN exception is thrown during deletion THEN call onFailure`() = runBlockingTest {
+        val id = 423L
+
+        every { view.getWishId() } returns id
+        coEvery { deleteWishUseCase.execute(id) } throws (Exception())
+
+        sut.deleteWish()
+
+        verify { view.onFailure() }
     }
 }

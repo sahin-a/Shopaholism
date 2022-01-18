@@ -22,21 +22,23 @@ class WishEditingPresenter(
     var originalWish: Wish? = null
 
     override fun onAttachView() {
-        view?.let { view ->
-            CoroutineScope(Dispatchers.Default).launch {
-                if (wishId == null || view.getWishId() != wishId) {
-                    wishId = view.getWishId()
+        CoroutineScope(Dispatchers.Default).launch {
+            prefillWithOriginalData()
+        }
+    }
 
-                    wishId?.let { wishId ->
-                        val originalWish = getOriginalWish(wishId)
+    private suspend fun prefillWithOriginalData() {
+        if (wishId == null || view?.getWishId() != wishId) {
+            wishId = view?.getWishId()
 
-                        originalWish?.apply {
-                            model.title = title
-                            model.imageUri = imageUri
-                            model.description = description
-                            model.price = price
-                        }
-                    }
+            wishId?.let { wishId ->
+                val originalWish = getOriginalWish(wishId)
+
+                originalWish?.apply {
+                    model.title = title
+                    model.imageUri = imageUri
+                    model.description = description
+                    model.price = price
                 }
             }
         }

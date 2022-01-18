@@ -28,7 +28,6 @@ class EditWishFragment : BaseCreateWishFragment<WishEditingView, WishEditingPres
         if (savedInstanceState == null) {
             presenter.wishId = null
         }
-
         presenter.attachView(this)
 
         // Inflate the layout for this fragment

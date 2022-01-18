@@ -4,7 +4,7 @@ import com.sar.shopaholism.domain.usecase.*
 import org.koin.dsl.module
 
 private val modules = module {
-    single { CreateWishUseCase(get(), logger = get()) }
+    single { CreateWishUseCase(get(), get(), logger = get()) }
     single { DeleteWishUseCase(get(), get()) }
     single { GetWishesUseCase(get()) }
     single { UpdateWishUseCase(get(), logger = get()) }

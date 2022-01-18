@@ -16,7 +16,6 @@ import com.sar.shopaholism.presentation.presenter.WishDeletionPresenter
 import com.sar.shopaholism.presentation.view.WishDeletionView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 
@@ -40,30 +39,38 @@ class DeleteWishFragmentDialog : DialogFragment(), WishDeletionView {
         descriptionText = view.findViewById(R.id.wish_description)
         priceText = view.findViewById(R.id.wish_price)
         deleteButton = view.findViewById(R.id.delete_button)
-
         deleteButton.setOnClickListener {
             CoroutineScope(Dispatchers.Default).launch {
-                coroutineScope {
-
-                    val message = when (presenter.deleteWish()) {
-                        true -> getString(R.string.wish_deleted)
-                        false -> getString(R.string.wish_deletion_failed)
-                    }
-
-                    launch(Dispatchers.Main) {
-                        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
-                        dialog?.dismiss()
-                    }
-                }
+                presenter.deleteWish()
             }
         }
-        presenter.onAttachView()
+        presenter.attachView(this)
 
         return view
     }
 
     override fun getWishId(): Long {
         return requireArguments().getLong("wishId")
+    }
+
+    override fun onSuccess() {
+        Toast.makeText(
+            requireContext(),
+            getString(R.string.wish_deletion_success),
+            Toast.LENGTH_SHORT
+        ).show()
+
+        dialog?.dismiss()
+    }
+
+    override fun onFailure() {
+        Toast.makeText(
+            requireContext(),
+            getString(R.string.wish_deletion_failure),
+            Toast.LENGTH_SHORT
+        ).show()
+
+        dialog?.dismiss()
     }
 
     override fun setWishData(wish: Wish) {

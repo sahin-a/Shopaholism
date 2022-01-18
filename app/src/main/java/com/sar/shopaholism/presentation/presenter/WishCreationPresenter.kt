@@ -4,12 +4,10 @@ import com.sar.shopaholism.domain.exception.WishNotCreatedException
 import com.sar.shopaholism.domain.usecase.CreateWishUseCase
 import com.sar.shopaholism.presentation.feedback.WishFeedbackService
 import com.sar.shopaholism.presentation.model.CreateWishModel
-import com.sar.shopaholism.presentation.rater.WishesRater
 import com.sar.shopaholism.presentation.view.WishCreationView
 
 class WishCreationPresenter(
     private val createWishUseCase: CreateWishUseCase,
-    private val wishesRater: WishesRater,
     private val wishFeedbackService: WishFeedbackService,
     createWishModel: CreateWishModel
 ) : BaseWishCreationPresenter<WishCreationView>(createWishModel) {
@@ -22,20 +20,12 @@ class WishCreationPresenter(
     ): Boolean {
 
         try {
-            val id = createWishUseCase.execute(
+            createWishUseCase.execute(
                 title = title,
                 imageUri = imageUri,
                 description = description,
                 price = price
             )
-
-            // update the rating on all wishes
-            wishesRater.recalculateAndUpdateRatings(
-                oldWishesCount = { wishesCount ->
-                    wishesCount - 1
-                }
-            )
-
             wishFeedbackService.wishSuccessfullyCreated()
 
             return true
