@@ -24,6 +24,9 @@
         <action
             android:id="@+id/action_wishesOverviewFragment_to_wishDetailFragment"
             app:destination="@id/wishDetailFragment" />
+        <action
+            android:id="@+id/action_wishesOverviewFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
     </fragment>
     <fragment
         android:id="@+id/createWishFragment"
@@ -65,4 +68,9 @@
         android:name="com.sar.shopaholism.presentation.fragment.WishDetailFragment"
         android:label="@string/wikipages_header"
         tools:layout="@layout/fragment_wish_detail" />
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.sar.shopaholism.SettingsFragment"
+        android:label="@string/nav_settings_title"
+        tools:layout="@layout/fragment_settings" />
 </navigation>

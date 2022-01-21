@@ -127,8 +127,11 @@ dependencies {
     implementation "com.github.kittinunf.fuel:fuel-coroutines:$fuelVersion"
     implementation "com.github.kittinunf.fuel:fuel-gson:$fuelVersion"
 
-    implementation("org.jetbrains.kotlin:kotlin-reflect:1.5.30")
+    implementation("org.jetbrains.kotlin:kotlin-reflect:1.6.10")
 
     // Picasso
     implementation 'com.squareup.picasso:picasso:2.71828'
+
+    // Preference
+    implementation 'androidx.preference:preference-ktx:1.1.1'
 }

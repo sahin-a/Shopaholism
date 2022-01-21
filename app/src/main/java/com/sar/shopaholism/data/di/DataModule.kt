@@ -1,9 +1,12 @@
 package com.sar.shopaholism.data.di
 
+import androidx.preference.PreferenceManager
 import androidx.room.Room
 import com.github.kittinunf.fuel.core.FuelManager
 import com.sar.shopaholism.data.local.db.WishesDatabase
+import com.sar.shopaholism.data.local.source.PreferencesDataSource
 import com.sar.shopaholism.data.local.source.WishesDataSource
+import com.sar.shopaholism.data.local.storage.Storages
 import com.sar.shopaholism.data.repository.WishesRepositoryImpl
 import com.sar.shopaholism.data.web.WebApiClient
 import com.sar.shopaholism.data.web.WebApiClientImpl
@@ -19,6 +22,9 @@ private val databaseModule = module {
             .build()
     }
     single { get<WishesDatabase>().wishDao() }
+
+    single { PreferenceManager.getDefaultSharedPreferences(get()) }
+    single { PreferencesDataSource(sharedPreferences = get()) }
 }
 
 private val apiModule = module {
@@ -40,4 +46,8 @@ private val repositoryModule = module {
     single<WishesRepository> { WishesRepositoryImpl(dataSource = get()) }
 }
 
-val dataModules = databaseModule + apiModule + repositoryModule
+private val storageModule = module {
+    single { Storages(get()) }
+}
+
+val dataModules = databaseModule + apiModule + repositoryModule + storageModule

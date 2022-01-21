@@ -11,7 +11,7 @@ class GetWikiPageUseCase(
     private val logger: Logger
 ) {
 
-    suspend fun execute(title: String, limit: Int = 20): List<WikiPage> {
+    suspend fun execute(title: String, limit: Int = 10): List<WikiPage> {
         try {
             return wikipediaClient.getPage(title, limit)
         } catch (e: WikiPageSearchFailedException) {

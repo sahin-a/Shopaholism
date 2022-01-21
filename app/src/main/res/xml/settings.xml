@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+    <ListPreference
+        app:defaultValue="10"
+        app:entries="@array/wiki_search_max_results"
+        app:entryValues="@array/wiki_search_max_results"
+        app:icon="@drawable/ic_internet"
+        app:key="max_wiki_search_results"
+        app:title="@string/max_wiki_search_results" />
+</PreferenceScreen>
