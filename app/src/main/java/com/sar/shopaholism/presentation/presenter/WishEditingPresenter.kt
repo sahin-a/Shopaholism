@@ -7,9 +7,7 @@ import com.sar.shopaholism.domain.usecase.UpdateWishUseCase
 import com.sar.shopaholism.presentation.feedback.WishFeedbackService
 import com.sar.shopaholism.presentation.model.CreateWishModel
 import com.sar.shopaholism.presentation.view.WishEditingView
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 
 class WishEditingPresenter(
     private val updateWishUseCase: UpdateWishUseCase,
@@ -60,7 +58,7 @@ class WishEditingPresenter(
         imageUri: String,
         description: String,
         price: Double
-    ) {
+    ) = withContext(Dispatchers.Main) {
         updateWishUseCase.execute(
             Wish(
                 id = id,

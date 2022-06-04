@@ -5,6 +5,9 @@ import com.sar.shopaholism.domain.usecase.CreateWishUseCase
 import com.sar.shopaholism.presentation.feedback.WishFeedbackService
 import com.sar.shopaholism.presentation.model.CreateWishModel
 import com.sar.shopaholism.presentation.view.WishCreationView
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.withContext
 
 class WishCreationPresenter(
     private val createWishUseCase: CreateWishUseCase,
@@ -17,7 +20,7 @@ class WishCreationPresenter(
         imageUri: String,
         description: String,
         price: Double
-    ): Boolean {
+    ): Boolean = withContext(Dispatchers.Main) {
 
         try {
             createWishUseCase.execute(
@@ -28,14 +31,14 @@ class WishCreationPresenter(
             )
             wishFeedbackService.wishSuccessfullyCreated()
 
-            return true
+            return@withContext true
         } catch (e: WishNotCreatedException) {
 
         } catch (e: IllegalArgumentException) {
 
         }
 
-        return false
+        return@withContext false
     }
 
     companion object {

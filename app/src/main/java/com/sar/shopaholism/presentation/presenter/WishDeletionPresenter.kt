@@ -5,10 +5,7 @@ import com.sar.shopaholism.domain.usecase.DeleteWishUseCase
 import com.sar.shopaholism.domain.usecase.GetWishUseCase
 import com.sar.shopaholism.presentation.feedback.WishFeedbackService
 import com.sar.shopaholism.presentation.view.WishDeletionView
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 
 class WishDeletionPresenter(
     private val deleteWishUseCase: DeleteWishUseCase,
@@ -39,18 +36,22 @@ class WishDeletionPresenter(
 
     private fun getWishId(): Long = view?.getWishId() ?: -1
 
-    suspend fun deleteWish() {
+    suspend fun deleteWish() = coroutineScope {
+        var success = false
         try {
             deleteWishUseCase.execute(getWishId())
-            wishFeedbackService.wishSuccessfullyDeleted()
-
-            withContext(Dispatchers.Main) {
-                view?.onSuccess()
-            }
+            success = true
         } catch (e: Exception) {
-            withContext(Dispatchers.Main) {
+        }
+
+        launch(Dispatchers.Main) {
+            if (!success) {
                 view?.onFailure()
+                return@launch
             }
+
+            wishFeedbackService.wishSuccessfullyDeleted()
+            view?.onSuccess()
         }
     }
 
