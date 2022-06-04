@@ -1,15 +1,11 @@
 package com.sar.shopaholism.presentation.presenter
 
 import com.sar.shopaholism.domain.entity.Wish
-import com.sar.shopaholism.domain.exception.WishNotUpdatedException
 import com.sar.shopaholism.domain.logger.Logger
-import com.sar.shopaholism.domain.usecase.GetWishUseCase
-import com.sar.shopaholism.domain.usecase.GetWishesUseCase
-import com.sar.shopaholism.domain.usecase.UpdateWishUseCase
+import com.sar.shopaholism.domain.usecase.*
 import com.sar.shopaholism.presentation.adapter.SelectionResult
 import com.sar.shopaholism.presentation.feedback.WishFeedbackService
 import com.sar.shopaholism.presentation.model.SortWishModel
-import com.sar.shopaholism.presentation.rater.WishesRater
 import com.sar.shopaholism.presentation.view.WishSortView
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
@@ -20,7 +16,7 @@ import kotlinx.coroutines.launch
 class WishSortPresenter(
     private val getWishUseCase: GetWishUseCase,
     private val getWishesUseCase: GetWishesUseCase,
-    private val updateWishUseCase: UpdateWishUseCase,
+    private val updateWishPriorityByVotesUseCase: UpdateWishPriorityByVotesUseCase,
     var model: SortWishModel,
     private val logger: Logger,
     private val wishFeedbackService: WishFeedbackService
@@ -94,37 +90,29 @@ class WishSortPresenter(
         view?.showNextPage()
     }
 
-    fun clearModel() {
+    private fun clearModel() {
         model = SortWishModel()
     }
 
     suspend fun submitResult() = coroutineScope {
-        launch {
-            if (model.selectionResults.count() != model.otherWishes?.count()) {
-                return@launch
+        val isVotingComplete = model.selectionResults.count() != model.otherWishes?.count()
+        if (isVotingComplete) {
+            return@coroutineScope
+        }
+
+        if (model.mainWish == null) {
+            return@coroutineScope
+        }
+
+        val summary = VoteSummary(
+            model.mainWish!!,
+            model.selectionResults.map {
+                Vote(it.otherWish, it.isPreferred)
             }
-
-            model.mainWish?.let { mainWish ->
-                val reprioritizedWishes = WishesRater.rateWish(
-                    mainWish = mainWish,
-                    preferredWishes = model.selectionResults.filter { it.isPreferred }
-                        .map { it.otherWish },
-                    otherWishes = model.selectionResults.filter { !it.isPreferred }
-                        .map { it.otherWish }
-                )
-
-                val updateWishesJob = launch {
-                    reprioritizedWishes.forEach { newWish ->
-                        launch {
-                            updateWish(newWish)
-                        }
-                    }
-                }.join()
-
-                launch(Dispatchers.Main) {
-                    postSubmitResult()
-                }
-            }
+        )
+        updateWishPriorityByVotesUseCase.execute(summary)
+        launch(Dispatchers.Main) {
+            postSubmitResult()
         }
     }
 
@@ -132,21 +120,6 @@ class WishSortPresenter(
         wishFeedbackService.wishSuccessfullyRated()
         view?.resultSubmitted()
         clearModel()
-    }
-
-    private suspend fun updateWish(wish: Wish): Boolean {
-        try {
-            updateWishUseCase.execute(wish)
-            return true
-        } catch (e: IllegalArgumentException) {
-            logger.d(TAG, "Wish update failed because of invalid values")
-        } catch (e: WishNotUpdatedException) {
-            logger.d(TAG, "Failed to update wish")
-        } catch (e: Exception) {
-            logger.d(TAG, "Failed to update wish, Exception thrown")
-        }
-
-        return false
     }
 
     companion object {

@@ -41,5 +41,4 @@ class WishCreationPresenter(
     companion object {
         const val TAG = "WishCreationPresenter"
     }
-
 }
