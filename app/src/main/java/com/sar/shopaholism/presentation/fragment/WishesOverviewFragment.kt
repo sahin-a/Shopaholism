@@ -28,6 +28,7 @@ class WishesOverviewFragment : Fragment(), WishesOverviewView {
     private val wishes = MutableLiveData<List<Wish>>()
 
     // Views
+    private lateinit var emptyStateIndicatorView: View
     private lateinit var intermediateProgressBar: ProgressBar
     private lateinit var wishesRecyclerView: RecyclerView
     private lateinit var createWishButton: FloatingActionButton
@@ -39,6 +40,7 @@ class WishesOverviewFragment : Fragment(), WishesOverviewView {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_wishes_overview, container, false)
 
+        setupEmptyStateIndicator(view)
         setupIntermediateBar(view)
         setupRecyclerView(view)
         setupCreateButton(view)
@@ -54,6 +56,10 @@ class WishesOverviewFragment : Fragment(), WishesOverviewView {
         CoroutineScope(Dispatchers.Default).launch {
             presenter.loadWishes()
         }
+    }
+
+    private fun setupEmptyStateIndicator(view: View) {
+        emptyStateIndicatorView = view.findViewById(R.id.empty_state_indicator)
     }
 
     private fun setupIntermediateBar(view: View) {
@@ -96,5 +102,9 @@ class WishesOverviewFragment : Fragment(), WishesOverviewView {
 
     override fun enableButtons(enabled: Boolean) {
         createWishButton.isEnabled = enabled
+    }
+
+    override fun showEmptyState() {
+        emptyStateIndicatorView.visibility = View.VISIBLE
     }
 }

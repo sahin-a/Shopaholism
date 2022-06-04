@@ -7,4 +7,5 @@ interface WishesOverviewView {
     fun showWishes(wishes: List<Wish>)
     fun navigateTo(resourceActionId: Int)
     fun enableButtons(enabled: Boolean)
+    fun showEmptyState()
 }

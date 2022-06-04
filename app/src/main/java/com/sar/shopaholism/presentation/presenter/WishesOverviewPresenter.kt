@@ -59,6 +59,11 @@ class WishesOverviewPresenter(
             model.wishes.value?.let {
                 view.showWishes(it)
             }
+
+            if (model.wishes.value.isNullOrEmpty()) {
+                view.showEmptyState()
+            }
+
             view.showLoading(visible = false)
         }
     }

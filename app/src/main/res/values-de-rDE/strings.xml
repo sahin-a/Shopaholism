@@ -33,4 +33,5 @@
     <string name="wikipages_header">Wikipedia</string>
     <string name="no_related_products_found_error">Sorry, konnte nichts dazu finden auf Wikipedia :(</string>
     <string name="no_wikipage_description_available">Keine Beschreibung verfügbar :(</string>
+    <string name="no_wishes_found">Keine Wünsche gefunden :(</string>
 </resources>
