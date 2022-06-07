@@ -140,6 +140,6 @@ object WishesDiffCallback : DiffUtil.ItemCallback<Wish>() {
     }
 
     override fun areContentsTheSame(oldItem: Wish, newItem: Wish): Boolean {
-        return oldItem.title == newItem.title
+        return oldItem == newItem
     }
 }
