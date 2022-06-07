@@ -15,10 +15,6 @@ class Wish {
         private set
     var priority: Double
     var price: Double
-    /*set(value: Double) {
-        field = BigDecimal(value).setScale(2, RoundingMode.HALF_EVEN)
-            .toDouble()
-    }*/
 
     constructor(
         id: Long,
@@ -43,4 +39,14 @@ class Wish {
     fun getRoundedPrice(scale: Int = 2) = roundValue(price, scale).toDouble()
 
     fun getRoundedPriority(scale: Int = 2) = roundValue(priority, scale).toDouble()
+
+    override fun equals(other: Any?): Boolean {
+        return other is Wish
+                && other.id == id
+                && other.price == price
+                && other.priority == priority
+                && other.description == description
+                && other.imageUri == imageUri
+                && other.title == title
+    }
 }
