@@ -9,7 +9,6 @@ import com.sar.shopaholism.domain.usecase.GetWishUseCase
 import com.sar.shopaholism.presentation.view.WishDetailView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 
 class WishDetailPresenter(
@@ -24,41 +23,43 @@ class WishDetailPresenter(
 
     override fun onAttachView() {
         super.onAttachView()
-
-        CoroutineScope(Dispatchers.Default).launch {
+        CoroutineScope(Dispatchers.Main).launch {
             loadData()
         }
     }
 
-    private suspend fun loadData() = coroutineScope {
-        launch {
-            var wish: Wish? = null
+    private suspend fun getWish(): Wish? {
+        var wish: Wish? = null
+        try {
+            wish = getWishUseCase.execute(getWishId())
+        } catch (e: WishNotFoundException) {
+            logger.d(TAG, "WishNotFoundException thrown")
+        }
 
-            try {
-                wish = getWishUseCase.execute(getWishId())
-            } catch (e: WishNotFoundException) {
-                logger.d(TAG, "WishNotFoundException thrown")
-            }
+        return wish
+    }
 
-            wish?.let {
-                val wikiPages: List<WikiPage> = getWikiPageUseCase.execute(it.title)
+    private suspend fun getWikiEntries(title: String): List<WikiPage> =
+        getWikiPageUseCase.execute(title, 25)
 
-                launch(Dispatchers.Main) {
-                    view?.toggleLoadingIndicator(false)
-                    view?.setWishData(it)
+    private suspend fun loadData() {
+        getWish()?.let {
+            view?.setWishData(it)
+            setWikiPages(getWikiEntries(it.title))
+        }
+    }
 
-                    if (wikiPages.isNullOrEmpty()) {
-                        view?.showError()
-                    } else {
-                        view?.setWikiPages(wikiPages)
-                    }
-                }
-            }
+    private fun setWikiPages(pages: List<WikiPage>) {
+        view?.toggleLoadingIndicator(false)
+
+        if (pages.isNullOrEmpty()) {
+            view?.showError()
+        } else {
+            view?.setWikiPages(pages)
         }
     }
 
     companion object {
         const val TAG = "WishDetailPresenter"
     }
-
 }

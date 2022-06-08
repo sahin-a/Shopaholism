@@ -9,106 +9,110 @@
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:fillViewport="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <GridLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="0dp"
+            android:columnCount="1"
+            android:rowCount="2">
 
-            <LinearLayout
-                android:id="@+id/main_content"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintBottom_toTopOf="@id/related_products"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                android:layout_height="wrap_content">
 
-                <ImageView
-                    android:id="@+id/wish_image"
-                    android:layout_width="match_parent"
-                    android:layout_height="194dp"
-                    android:importantForAccessibility="no"
-                    android:scaleType="centerCrop"
-                    app:layout_constraintBottom_toTopOf="@id/main_content"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:src="@tools:sample/backgrounds/scenic" />
-
-                <LinearLayout
+                <androidx.cardview.widget.CardView
+                    android:id="@id/main_content"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="16dp"
-                    android:orientation="vertical"
+                    app:layout_constraintBottom_toTopOf="@id/related_products"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/wish_image">
+                    app:layout_constraintTop_toTopOf="parent">
 
-                    <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/wish_title"
-                        style="@style/TextAppearance.MaterialComponents.Headline6"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        tools:text="Playstation 5" />
+                        android:orientation="vertical">
 
-                    <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/wish_description"
-                        style="@style/TextAppearance.MaterialComponents.Body2"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        tools:text="Freue dich auf ultrakurze Ladezeiten, eine realistischere Spielerfahrung durch haptisches Feedback, adaptive Trigger-Tasten und 3D-Audio sowie eine völlig neue Generation unglaublicher PlayStation-Spiele. Nutze die Leistung der speziell angefertigten CPU, GPU und SSD mit integriertem I/O und erlebe, wie die PS5-Konsole die Gaming-Welt revolutioniert." />
+                        <ImageView
+                            android:id="@+id/wish_image"
+                            android:layout_width="match_parent"
+                            android:layout_height="194dp"
+                            android:importantForAccessibility="no"
+                            android:scaleType="centerCrop"
+                            tools:src="@tools:sample/backgrounds/scenic" />
 
-                    <TextView
-                        android:id="@+id/no_products_found_error"
-                        style="@style/TextAppearance.MaterialComponents.Body2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="16dp"
-                        android:drawablePadding="8dp"
-                        android:foregroundGravity="center_vertical"
-                        android:text="@string/no_related_products_found_error"
-                        android:visibility="gone"
-                        app:drawableStartCompat="@drawable/ic_baseline_error_24"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        tools:visibility="visible" />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:padding="16dp">
 
-                </LinearLayout>
+                            <com.google.android.material.textview.MaterialTextView
+                                android:id="@+id/wish_title"
+                                style="@style/TextAppearance.MaterialComponents.Headline6"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                tools:text="Playstation 5" />
 
-            </LinearLayout>
+                            <com.google.android.material.textview.MaterialTextView
+                                android:id="@+id/wish_description"
+                                style="@style/TextAppearance.MaterialComponents.Body2"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="16dp"
+                                tools:text="Freue dich auf ultrakurze Ladezeiten, eine realistischere Spielerfahrung durch haptisches Feedback, adaptive Trigger-Tasten und 3D-Audio sowie eine völlig neue Generation unglaublicher PlayStation-Spiele. Nutze die Leistung der speziell angefertigten CPU, GPU und SSD mit integriertem I/O und erlebe, wie die PS5-Konsole die Gaming-Welt revolutioniert." />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/related_products"
-                android:layout_width="match_parent"
-                android:layout_height="fill_parent"
-                android:layout_margin="16dp"
-                android:nestedScrollingEnabled="false"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/main_content"
-                tools:listitem="@layout/wikipage_row" />
+                            <TextView
+                                android:id="@+id/no_products_found_error"
+                                style="@style/TextAppearance.MaterialComponents.Body2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginTop="16dp"
+                                android:drawablePadding="8dp"
+                                android:foregroundGravity="center_vertical"
+                                android:text="@string/no_related_products_found_error"
+                                android:visibility="gone"
+                                app:drawableStartCompat="@drawable/ic_baseline_error_24"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                tools:visibility="gone" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                        </LinearLayout>
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/related_products"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:nestedScrollingEnabled="false"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/main_content"
+                    tools:listitem="@layout/wikipage_row"
+                    tools:visibility="gone" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <ProgressBar
+                android:id="@+id/progress_bar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center" />
+
+        </GridLayout>
 
     </androidx.core.widget.NestedScrollView>
-
-    <ProgressBar
-        android:id="@+id/progress_bar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
