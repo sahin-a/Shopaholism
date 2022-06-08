@@ -13,7 +13,7 @@ class GetWikiPageUseCase(
 
     suspend fun execute(title: String, limit: Int = 20): List<WikiPage> {
         try {
-            return wikipediaClient.getPage(title, limit)
+            return wikipediaClient.getPages(title, limit)
         } catch (e: WikiPageSearchFailedException) {
             logger.w(TAG, "Wiki search failed for $title")
         } catch (e: WikiPageRetrievalFailedException) {
@@ -24,6 +24,6 @@ class GetWikiPageUseCase(
     }
 
     companion object {
-        private const val TAG = "GetWikiPageUseCase";
+        private const val TAG = "GetWikiPageUseCase"
     }
 }
