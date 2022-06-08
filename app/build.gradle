@@ -39,10 +39,12 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
-
     packagingOptions {
-        exclude "DebugProbesKt.bin"
+        resources {
+            excludes += ['DebugProbesKt.bin']
+        }
     }
+
 }
 
 dependencies {
@@ -138,5 +140,5 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect:1.6.21")
 
     // Picasso
-    implementation 'com.squareup.picasso:picasso:2.71828'
+    implementation 'com.squareup.picasso:picasso:2.8'
 }
