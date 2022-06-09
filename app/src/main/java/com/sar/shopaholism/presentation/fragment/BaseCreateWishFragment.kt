@@ -2,7 +2,6 @@ package com.sar.shopaholism.presentation.fragment
 
 import android.app.Activity
 import android.content.Intent
-import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
@@ -19,8 +18,8 @@ import com.sar.shopaholism.presentation.presenter.BasePresenter
 import com.sar.shopaholism.presentation.view.WishCreationView
 import com.sar.shopaholism.presentation.widgets.FileImageView
 
-abstract class BaseCreateWishFragment<MvpView : WishCreationView, Presenter : BasePresenter<MvpView>> :
-    BaseFragment(), WishCreationView {
+abstract class BaseCreateWishFragment<MvpView : WishCreationView, Presenter : BasePresenter<MvpView>>
+    : BaseFragment<Presenter, MvpView>(), WishCreationView {
 
     // Views
     protected var imageImageView: FileImageView? = null
@@ -72,8 +71,6 @@ abstract class BaseCreateWishFragment<MvpView : WishCreationView, Presenter : Ba
 
         createButton = view.findViewById(R.id.create_wish_button)
         createButton?.isEnabled = ctaEnabled()
-
-        postInit()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -101,11 +98,6 @@ abstract class BaseCreateWishFragment<MvpView : WishCreationView, Presenter : Ba
             }
         }
     }
-
-    /**
-     * This will be called after its done connecting the views to their class fields in onCreateView
-     */
-    abstract fun postInit()
 
     open suspend fun createWish(action: suspend (title: String, imageUri: String, description: String, price: Double) -> Boolean): Boolean {
         val success = action(

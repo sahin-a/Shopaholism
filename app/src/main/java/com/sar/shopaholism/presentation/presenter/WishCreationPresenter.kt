@@ -3,17 +3,14 @@ package com.sar.shopaholism.presentation.presenter
 import com.sar.shopaholism.domain.exception.WishNotCreatedException
 import com.sar.shopaholism.domain.usecase.CreateWishUseCase
 import com.sar.shopaholism.presentation.feedback.WishFeedbackService
-import com.sar.shopaholism.presentation.model.CreateWishModel
 import com.sar.shopaholism.presentation.view.WishCreationView
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.withContext
 
 class WishCreationPresenter(
     private val createWishUseCase: CreateWishUseCase,
-    private val wishFeedbackService: WishFeedbackService,
-    createWishModel: CreateWishModel
-) : BaseWishCreationPresenter<WishCreationView>(createWishModel) {
+    private val wishFeedbackService: WishFeedbackService
+) : BasePresenter<WishCreationView>() {
 
     suspend fun createWish(
         title: String,

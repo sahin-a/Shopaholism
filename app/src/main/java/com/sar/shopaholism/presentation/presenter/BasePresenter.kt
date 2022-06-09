@@ -1,15 +1,30 @@
 package com.sar.shopaholism.presentation.presenter
 
-abstract class BasePresenter<View> {
-    var view: View? = null
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+
+abstract class BasePresenter<TView> {
+    var view: TView? = null
         private set
 
-    fun attachView(view: View) {
+    fun attachView(view: TView) {
+        val previousView = this.view
         this.view = view
-        onAttachView()
+
+        CoroutineScope(Dispatchers.Main).launch {
+            if (previousView == null || previousView != view) {
+                onNewViewAttached()
+            }
+            onAttachView()
+        }
     }
 
-    open fun onAttachView() {
+    open suspend fun onNewViewAttached() {
+
+    }
+
+    open suspend fun onAttachView() {
 
     }
 }

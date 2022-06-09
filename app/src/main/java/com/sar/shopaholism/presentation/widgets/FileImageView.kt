@@ -2,6 +2,8 @@ package com.sar.shopaholism.presentation.widgets
 
 import android.content.Context
 import android.net.Uri
+import android.os.Bundle
+import android.os.Parcelable
 import android.util.AttributeSet
 
 class FileImageView @JvmOverloads constructor(
@@ -26,6 +28,24 @@ class FileImageView @JvmOverloads constructor(
 
         imageUri = uri
         notifyImageUriChangedListeners()
+    }
+
+    override fun onSaveInstanceState(): Parcelable? {
+        val bundle = Bundle()
+        bundle.putParcelable("superState", super.onSaveInstanceState())
+        bundle.putString("imageUri", imageUri.toString())
+        return bundle
+    }
+
+    override fun onRestoreInstanceState(state: Parcelable?) {
+        if (state is Bundle) {
+            val bundle = state
+            setImageURI(Uri.parse(bundle.getString("imageUri")))
+            super.onRestoreInstanceState(bundle.getParcelable("superState"))
+            return
+        }
+
+        super.onRestoreInstanceState(state)
     }
 
 }

@@ -8,6 +8,7 @@ import com.sar.shopaholism.presentation.feedback.WishFeedbackService
 import com.sar.shopaholism.presentation.logger.LoggerImpl
 import com.sar.shopaholism.presentation.model.CreateWishModel
 import com.sar.shopaholism.presentation.model.SortWishModel
+import com.sar.shopaholism.presentation.model.WishDetailModel
 import com.sar.shopaholism.presentation.model.WishesModel
 import com.sar.shopaholism.presentation.presenter.*
 import com.sar.shopaholism.presentation.rater.WishesRater
@@ -22,6 +23,7 @@ private val modules = module {
     factory { WishesModel() }
     factory { CreateWishModel() }
     factory { SortWishModel() }
+    factory { WishDetailModel() }
 
     // Presenters
     single {
@@ -32,20 +34,18 @@ private val modules = module {
         )
     }
 
-    single {
+    factory {
         WishCreationPresenter(
             createWishUseCase = get(),
-            wishFeedbackService = get(),
-            createWishModel = get()
+            wishFeedbackService = get()
         )
     }
 
-    single {
+    factory {
         WishEditingPresenter(
             updateWishUseCase = get(),
             getWishUseCase = get(),
-            wishFeedbackService = get(),
-            createWishModel = get()
+            wishFeedbackService = get()
         )
     }
 
@@ -72,7 +72,8 @@ private val modules = module {
         WishDetailPresenter(
             getWishUseCase = get(),
             logger = get(),
-            getWikiPageUseCase = get()
+            getWikiPageUseCase = get(),
+            model = get()
         )
     }
 
