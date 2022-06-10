@@ -102,7 +102,7 @@ abstract class BaseCreateWishFragment<MvpView : WishCreationView, Presenter : Ba
     open suspend fun createWish(action: suspend (title: String, imageUri: String, description: String, price: Double) -> Boolean): Boolean {
         val success = action(
             titleEditText?.text.toString(),
-            imageImageView?.imageUri.toString(),
+            imageImageView?.imageUri?.toString() ?: "",
             descriptionEditText?.text.toString(),
             priceEditText?.text.toString().toDoubleOrNull() ?: 0.0
         )

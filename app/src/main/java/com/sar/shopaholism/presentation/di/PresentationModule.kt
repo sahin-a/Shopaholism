@@ -6,10 +6,7 @@ import com.sar.shopaholism.presentation.feedback.SoundProvider
 import com.sar.shopaholism.presentation.feedback.SoundProviderImpl
 import com.sar.shopaholism.presentation.feedback.WishFeedbackService
 import com.sar.shopaholism.presentation.logger.LoggerImpl
-import com.sar.shopaholism.presentation.model.CreateWishModel
-import com.sar.shopaholism.presentation.model.SortWishModel
-import com.sar.shopaholism.presentation.model.WishDetailModel
-import com.sar.shopaholism.presentation.model.WishesModel
+import com.sar.shopaholism.presentation.model.*
 import com.sar.shopaholism.presentation.presenter.*
 import com.sar.shopaholism.presentation.rater.WishesRater
 import com.squareup.picasso.Picasso
@@ -24,6 +21,7 @@ private val modules = module {
     factory { CreateWishModel() }
     factory { SortWishModel() }
     factory { WishDetailModel() }
+    factory { WishDeletionModel() }
 
     // Presenters
     single {
@@ -53,7 +51,8 @@ private val modules = module {
         WishDeletionPresenter(
             deleteWishUseCase = get(),
             getWishUseCase = get(),
-            wishFeedbackService = get()
+            wishFeedbackService = get(),
+            model = get()
         )
     }
 

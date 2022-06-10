@@ -9,7 +9,7 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
-import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.setFragmentResult
 import com.sar.shopaholism.R
 import com.sar.shopaholism.domain.entity.Wish
 import com.sar.shopaholism.presentation.presenter.WishDeletionPresenter
@@ -19,8 +19,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 
-class DeleteWishFragmentDialog : DialogFragment(), WishDeletionView {
-    private val presenter: WishDeletionPresenter by inject()
+class DeleteWishFragmentDialog : BaseDialogFragment<WishDeletionPresenter, WishDeletionView>(),
+    WishDeletionView {
+    override val presenter: WishDeletionPresenter by inject()
 
     private lateinit var deleteButton: Button
     private lateinit var imageView: ImageView
@@ -32,7 +33,11 @@ class DeleteWishFragmentDialog : DialogFragment(), WishDeletionView {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_delete_wish, container, false)
+        return inflater.inflate(R.layout.fragment_delete_wish, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         imageView = view.findViewById(R.id.wish_image)
         titleText = view.findViewById(R.id.wish_title)
@@ -44,9 +49,8 @@ class DeleteWishFragmentDialog : DialogFragment(), WishDeletionView {
                 presenter.deleteWish()
             }
         }
-        presenter.attachView(this)
 
-        return view
+        presenter.attachView(this)
     }
 
     override fun getWishId(): Long {
@@ -59,7 +63,7 @@ class DeleteWishFragmentDialog : DialogFragment(), WishDeletionView {
             getString(R.string.wish_deletion_success),
             Toast.LENGTH_SHORT
         ).show()
-
+        setFragmentResult(RESULT_KEY, createResultBundle(true))
         dialog?.dismiss()
     }
 
@@ -69,8 +73,12 @@ class DeleteWishFragmentDialog : DialogFragment(), WishDeletionView {
             getString(R.string.wish_deletion_failure),
             Toast.LENGTH_SHORT
         ).show()
-
+        setFragmentResult(RESULT_KEY, createResultBundle(false))
         dialog?.dismiss()
+    }
+
+    private fun createResultBundle(success: Boolean) = Bundle().apply {
+        putBoolean(RESULT_KEY, success)
     }
 
     override fun setWishData(wish: Wish) {
@@ -85,6 +93,7 @@ class DeleteWishFragmentDialog : DialogFragment(), WishDeletionView {
     }
 
     companion object {
+        const val RESULT_KEY = "IS_SUCCESSFUL_KEY"
         fun newInstance(wishId: Long): DeleteWishFragmentDialog {
             val dialog = DeleteWishFragmentDialog()
             val bundle = Bundle()
