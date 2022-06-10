@@ -17,7 +17,7 @@ data class SelectionResult(
     var isPreferred: Boolean
 )
 
-// TODO: Get rid of passing the datasets seperately and maybe use the vote result data class
+// TODO: Get rid of passing the datasets separately and maybe use the vote result data class
 // that already exists?
 
 class WishSortViewPagerAdapter(
