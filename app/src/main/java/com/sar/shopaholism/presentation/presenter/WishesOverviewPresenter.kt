@@ -17,8 +17,8 @@ class WishesOverviewPresenter(
     private val logger: Logger
 ) : BasePresenter<WishesOverviewView>() {
 
-    override suspend fun onAttachView() {
-        super.onAttachView()
+    override suspend fun onNewViewAttached() {
+        super.onNewViewAttached()
         loadData()
     }
 
