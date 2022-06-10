@@ -9,6 +9,7 @@ import com.sar.shopaholism.domain.usecase.GetWishUseCase
 import com.sar.shopaholism.presentation.model.WishDetailModel
 import com.sar.shopaholism.presentation.view.WishDetailView
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 
 
 class WishDetailPresenter(
@@ -22,15 +23,19 @@ class WishDetailPresenter(
         return view?.getWishId() ?: -1
     }
 
-    override suspend fun onNewViewAttached() {
+    override suspend fun onNewViewAttached(): Unit = coroutineScope {
         super.onNewViewAttached()
-        //model.onWikiPagesChanged = { setWikiSearchResults(model.wikiPages) }
         loadData()
     }
 
-    override suspend fun onAttachView() = coroutineScope {
+    override suspend fun onAttachView(): Unit = coroutineScope {
         super.onAttachView()
-        setWikiSearchResults(model.wikiPages)
+        model.wish?.let { setWish(it) }
+
+        launch {
+            loadWikiSearchResults()
+            setWikiSearchResults(model.wikiPages)
+        }
     }
 
     private suspend fun getWish(): Wish? {
@@ -48,9 +53,14 @@ class WishDetailPresenter(
         getWikiPageUseCase.execute(title, 25)
 
     private suspend fun loadData() {
-        getWish()?.let {
-            model.wish = it
-            model.wikiPages = getWikiEntries(it.title)
+        getWish()?.let { wish ->
+            model.wish = wish
+        }
+    }
+
+    private suspend fun loadWikiSearchResults() {
+        if (model.wish != null && model.wikiPages.isNullOrEmpty()) {
+            model.wikiPages = getWikiEntries(model.wish!!.title)
         }
     }
 
