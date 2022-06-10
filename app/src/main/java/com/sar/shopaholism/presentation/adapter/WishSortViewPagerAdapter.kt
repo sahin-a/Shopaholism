@@ -17,6 +17,9 @@ data class SelectionResult(
     var isPreferred: Boolean
 )
 
+// TODO: Get rid of passing the datasets seperately and maybe use the vote result data class
+// that already exists?
+
 class WishSortViewPagerAdapter(
     val presenter: WishSortPresenter,
     val mainWish: Wish,
@@ -69,9 +72,8 @@ class WishSortViewPagerAdapter(
         }
 
         // restore selection if data available
-        presenter.model.selectionResults.findLast { res -> res.otherWish.id == otherWish.id }?.let {
-            checkCard(!it.isPreferred)
-        }
+        presenter.model.selectionResults.findLast { it.otherWish.id == otherWish.id }
+            ?.let { checkCard(!it.isPreferred) }
 
         // main wish
         when (mainWish.imageUri.isNotBlank()) {

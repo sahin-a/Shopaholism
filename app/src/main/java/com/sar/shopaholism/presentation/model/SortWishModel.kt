@@ -5,6 +5,6 @@ import com.sar.shopaholism.presentation.adapter.SelectionResult
 
 data class SortWishModel(
     var mainWish: Wish? = null,
-    var otherWishes: List<Wish>? = null,
+    var otherWishes: List<Wish> = listOf(),
     val selectionResults: MutableList<SelectionResult> = mutableListOf()
 )

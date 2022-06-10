@@ -22,23 +22,26 @@ class WishSortPresenter(
     private val wishFeedbackService: WishFeedbackService
 ) : BasePresenter<WishSortView>() {
 
+    override suspend fun onNewViewAttached() {
+        super.onNewViewAttached()
+        loadData()
+    }
+
+    override suspend fun onAttachView() {
+        super.onAttachView()
+        onDataLoaded()
+    }
+
     private fun getMainWishId(): Long {
         return view!!.getMainWishId()
     }
 
     private suspend fun getMainWish(): Wish? {
-
         val id = getMainWishId()
         var wish: Wish? = null
 
-        model.mainWish?.let { mainWish ->
-            if (id != mainWish.id) {
-                clearModel()
-            }
-        }
-
         try {
-            wish = getWishUseCase.execute(wishId = id)
+            wish = getWishUseCase.execute(id)
         } catch (e: Exception) {
             logger.d(TAG, "Failed to retrieve wish with the id: $id")
         }
@@ -46,19 +49,23 @@ class WishSortPresenter(
         return wish
     }
 
-    private suspend fun getOtherWishes(): List<Wish>? {
-        val otherWishes: List<Wish>? = getWishesUseCase.execute()
+    private suspend fun getOtherWishes(): List<Wish> {
+        val otherWishes: List<Wish> = getWishesUseCase.execute()
             .catch {
                 logger.d(TAG, "Failed to retrieve all wishes")
-            }.firstOrNull()
+            }.firstOrNull() ?: listOf()
 
-        return otherWishes?.filter { otherWish -> otherWish.id != model.mainWish?.id }
+        return otherWishes.filter { otherWish -> otherWish.id != model.mainWish?.id }
     }
 
-    suspend fun loadData() {
-        this@WishSortPresenter.apply {
-            model.mainWish = getMainWish()
-            model.otherWishes = getOtherWishes()
+    private suspend fun loadData() {
+        model.mainWish = getMainWish()
+        model.otherWishes = getOtherWishes()
+    }
+
+    private fun onDataLoaded() {
+        model.mainWish?.let { wish ->
+            view?.setData(wish, model.otherWishes)
         }
     }
 
@@ -90,12 +97,8 @@ class WishSortPresenter(
         view?.showNextPage()
     }
 
-    private fun clearModel() {
-        model = SortWishModel()
-    }
-
     suspend fun submitResult() = coroutineScope {
-        val isVotingComplete = model.selectionResults.count() != model.otherWishes?.count()
+        val isVotingComplete = model.selectionResults.count() != model.otherWishes.count()
         if (isVotingComplete) {
             return@coroutineScope
         }
@@ -119,7 +122,6 @@ class WishSortPresenter(
     private fun postSubmitResult() {
         wishFeedbackService.wishSuccessfullyRated()
         view?.resultSubmitted()
-        clearModel()
     }
 
     companion object {

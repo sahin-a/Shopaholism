@@ -24,7 +24,7 @@ private val modules = module {
     factory { WishDeletionModel() }
 
     // Presenters
-    single {
+    factory {
         WishesOverviewPresenter(
             getWishesUseCase = get(),
             model = get(),
@@ -47,7 +47,7 @@ private val modules = module {
         )
     }
 
-    single {
+    factory {
         WishDeletionPresenter(
             deleteWishUseCase = get(),
             getWishUseCase = get(),
@@ -56,7 +56,7 @@ private val modules = module {
         )
     }
 
-    single {
+    factory {
         WishSortPresenter(get(), get(), get(), get(), get(), get())
     }
 
@@ -67,7 +67,7 @@ private val modules = module {
         )
     }
 
-    single {
+    factory {
         WishDetailPresenter(
             getWishUseCase = get(),
             logger = get(),
