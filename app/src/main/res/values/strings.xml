@@ -38,6 +38,7 @@
     <string name="wikipages_header">Wikipedia</string>
     <string name="no_related_products_found_error">Sorry, couldn\'t find anything related to this on wikipedia :(</string>
     <string name="no_wikipage_description_available">No description available :(</string>
+    <string name="no_wishes_found">No wishes found :(</string>
     <string name="max_wiki_search_results">Max Wiki Search Results</string>
     <string name="nav_home_title">Overview</string>
     <string name="nav_settings_title">Settings</string>

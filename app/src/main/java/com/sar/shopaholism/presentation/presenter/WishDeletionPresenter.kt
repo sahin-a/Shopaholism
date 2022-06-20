@@ -4,53 +4,55 @@ import com.sar.shopaholism.domain.entity.Wish
 import com.sar.shopaholism.domain.usecase.DeleteWishUseCase
 import com.sar.shopaholism.domain.usecase.GetWishUseCase
 import com.sar.shopaholism.presentation.feedback.WishFeedbackService
+import com.sar.shopaholism.presentation.model.WishDeletionModel
 import com.sar.shopaholism.presentation.view.WishDeletionView
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class WishDeletionPresenter(
     private val deleteWishUseCase: DeleteWishUseCase,
     private val getWishUseCase: GetWishUseCase,
-    private val wishFeedbackService: WishFeedbackService
+    private val wishFeedbackService: WishFeedbackService,
+    private val model: WishDeletionModel
 ) : BasePresenter<WishDeletionView>() {
 
-    override fun onAttachView() {
-        super.onAttachView()
+    override suspend fun onNewViewAttached() {
+        super.onNewViewAttached()
+        loadData()
+    }
 
-        CoroutineScope(Dispatchers.Default).launch {
-            loadData()
-        }
+    override suspend fun onAttachView() {
+        super.onAttachView()
+        model.wish?.let { view?.setWishData(it) }
     }
 
     private suspend fun loadData() {
-        val wish = getWish()
-        showWish(wish)
+        getWish().let { model.wish = it }
     }
 
     private suspend fun getWish(): Wish {
         return getWishUseCase.execute(getWishId())
     }
 
-    private suspend fun showWish(wish: Wish) = withContext(Dispatchers.Main) {
-        view?.setWishData(wish)
-    }
-
     private fun getWishId(): Long = view?.getWishId() ?: -1
 
-    suspend fun deleteWish() {
+    suspend fun deleteWish(): Unit = coroutineScope {
+        var success = false
         try {
             deleteWishUseCase.execute(getWishId())
-            wishFeedbackService.wishSuccessfullyDeleted()
-
-            withContext(Dispatchers.Main) {
-                view?.onSuccess()
-            }
+            success = true
         } catch (e: Exception) {
-            withContext(Dispatchers.Main) {
+        }
+
+        launch(Dispatchers.Main) {
+            if (!success) {
                 view?.onFailure()
+                return@launch
             }
+
+            wishFeedbackService.wishSuccessfullyDeleted()
+            view?.onSuccess()
         }
     }
 

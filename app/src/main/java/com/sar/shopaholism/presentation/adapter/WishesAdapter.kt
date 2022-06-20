@@ -9,6 +9,7 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -17,13 +18,15 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.sar.shopaholism.R
 import com.sar.shopaholism.domain.entity.Wish
 import com.sar.shopaholism.presentation.fragment.DeleteWishFragmentDialog
+import com.sar.shopaholism.presentation.fragment.DeleteWishFragmentDialog.Companion.RESULT_KEY
 import com.sar.shopaholism.presentation.fragment.WishDetailFragment
 import com.sar.shopaholism.presentation.fragment.WishesOverviewFragmentDirections
 import java.math.BigDecimal
 import java.math.RoundingMode
 
 class WishesAdapter(
-    private val context: Fragment
+    private val context: Fragment,
+    private val onWishDeleteDialogSuccessful: () -> Unit
 ) :
     ListAdapter<Wish, WishesAdapter.ViewHolder>(WishesDiffCallback) {
 
@@ -125,6 +128,11 @@ class WishesAdapter(
         viewHolder.deleteWishButton.setOnClickListener {
             val deleteDialog = DeleteWishFragmentDialog.newInstance(wish.id)
             deleteDialog.show(context.childFragmentManager, "delete_wish")
+            deleteDialog.setFragmentResultListener(RESULT_KEY) { _: String, bundle: Bundle ->
+                if (bundle.getBoolean(RESULT_KEY)) {
+                    onWishDeleteDialogSuccessful()
+                }
+            }
         }
     }
 
@@ -140,6 +148,6 @@ object WishesDiffCallback : DiffUtil.ItemCallback<Wish>() {
     }
 
     override fun areContentsTheSame(oldItem: Wish, newItem: Wish): Boolean {
-        return oldItem.title == newItem.title
+        return oldItem == newItem
     }
 }

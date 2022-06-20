@@ -10,6 +10,8 @@ private val modules = module {
     single { UpdateWishUseCase(get(), logger = get()) }
     single { GetWishUseCase(get()) }
     single { GetWikiPageUseCase(get(), logger = get()) }
+    single { UpdateWishPriorityByVotesUseCase(get()) }
+    single { UpdateAllWishesPriorityUseCase(get(), get()) }
 }
 
 val domainModules = listOf(modules)

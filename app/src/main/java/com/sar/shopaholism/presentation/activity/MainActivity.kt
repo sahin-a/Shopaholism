@@ -26,6 +26,7 @@ class MainActivity : AppCompatActivity() {
             .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.navController
 
+        setupActionBarWithNavController(navController)
         drawerLayout = findViewById(R.id.drawer_layout)
         appBarConfiguration = AppBarConfiguration(navController.graph, drawerLayout)
         setupActionBarWithNavController(navController, appBarConfiguration)

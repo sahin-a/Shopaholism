@@ -25,12 +25,13 @@ import org.koin.android.ext.android.inject
  * Use the [WishDetailFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class WishDetailFragment : Fragment(), WishDetailView, OnWikiPageListener {
+class WishDetailFragment : BaseFragment<WishDetailPresenter, WishDetailView>(), WishDetailView,
+    OnWikiPageListener {
     private var wishId: Long? = null
 
-    private val presenter: WishDetailPresenter by inject()
+    override val presenter: WishDetailPresenter by inject()
 
-    private lateinit var productImageView: ImageView
+    private lateinit var wishImageView: ImageView
     private lateinit var titleView: TextView
     private lateinit var descriptionView: TextView
     private lateinit var wikiPagesView: RecyclerView
@@ -51,14 +52,13 @@ class WishDetailFragment : Fragment(), WishDetailView, OnWikiPageListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_wish_detail, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        productImageView = view.findViewById(R.id.wish_image)
+        wishImageView = view.findViewById(R.id.wish_image)
         titleView = view.findViewById(R.id.wish_title)
         descriptionView = view.findViewById(R.id.wish_description)
         wikiPagesView = view.findViewById(R.id.related_products)
@@ -96,10 +96,12 @@ class WishDetailFragment : Fragment(), WishDetailView, OnWikiPageListener {
         titleView.text = wish.title
 
         if (wish.imageUri.isNotEmpty()) {
-            productImageView.setImageURI(Uri.parse(wish.imageUri))
+            wishImageView.setImageURI(Uri.parse(wish.imageUri))
+        } else {
+            wishImageView.visibility = View.GONE
         }
 
-        if (descriptionView.text.isNotEmpty()) {
+        if (wish.description.isNotEmpty()) {
             descriptionView.text = wish.description
         } else {
             descriptionView.visibility = View.GONE

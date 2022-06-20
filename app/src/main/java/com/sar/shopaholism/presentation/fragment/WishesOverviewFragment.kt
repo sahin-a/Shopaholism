@@ -6,28 +6,26 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.sar.shopaholism.R
 import com.sar.shopaholism.domain.entity.Wish
+import com.sar.shopaholism.domain.logger.Logger
 import com.sar.shopaholism.presentation.adapter.WishesAdapter
 import com.sar.shopaholism.presentation.presenter.WishesOverviewPresenter
 import com.sar.shopaholism.presentation.view.WishesOverviewView
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 
 
-class WishesOverviewFragment : Fragment(), WishesOverviewView {
-    val presenter: WishesOverviewPresenter by inject()
-
+class WishesOverviewFragment : BaseFragment<WishesOverviewPresenter, WishesOverviewView>(),
+    WishesOverviewView {
+    override val presenter: WishesOverviewPresenter by inject()
+    private val logger: Logger by inject()
     private val wishes = MutableLiveData<List<Wish>>()
 
-    // Views
+    private lateinit var emptyStateIndicatorView: View
     private lateinit var intermediateProgressBar: ProgressBar
     private lateinit var wishesRecyclerView: RecyclerView
     private lateinit var createWishButton: FloatingActionButton
@@ -37,23 +35,22 @@ class WishesOverviewFragment : Fragment(), WishesOverviewView {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_wishes_overview, container, false)
-
-        setupIntermediateBar(view)
-        setupRecyclerView(view)
-        setupCreateButton(view)
-
-        return view
+        logger.d("DEBUG EPIC", "onCreateView")
+        return inflater.inflate(R.layout.fragment_wishes_overview, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        setupEmptyStateIndicator(view)
+        setupIntermediateBar(view)
+        setupRecyclerView(view)
+        setupCreateButton(view)
+        logger.d("DEBUG EPIC", "onViewCreated")
         presenter.attachView(this)
+    }
 
-        CoroutineScope(Dispatchers.Default).launch {
-            presenter.loadWishes()
-        }
+    private fun setupEmptyStateIndicator(view: View) {
+        emptyStateIndicatorView = view.findViewById(R.id.empty_state_indicator)
     }
 
     private fun setupIntermediateBar(view: View) {
@@ -61,11 +58,13 @@ class WishesOverviewFragment : Fragment(), WishesOverviewView {
     }
 
     private fun setupRecyclerView(view: View) {
-        val wishesAdapter = WishesAdapter(this)
+        val wishesAdapter = WishesAdapter(this) {
+            presenter.onWishDeleted()
+        }
 
-        wishes.observe(
-            viewLifecycleOwner,
-            { wishes -> wishesAdapter.submitList(wishes.toMutableList()) })
+        wishes.observe(viewLifecycleOwner) { wishes ->
+            wishesAdapter.submitList(wishes)
+        }
 
         wishesRecyclerView = view.findViewById(R.id.wishes_recycler_view)
         wishesRecyclerView.adapter = wishesAdapter
@@ -96,5 +95,9 @@ class WishesOverviewFragment : Fragment(), WishesOverviewView {
 
     override fun enableButtons(enabled: Boolean) {
         createWishButton.isEnabled = enabled
+    }
+
+    override fun showEmptyState() {
+        emptyStateIndicatorView.visibility = View.VISIBLE
     }
 }
