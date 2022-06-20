@@ -6,9 +6,7 @@ import com.sar.shopaholism.presentation.feedback.SoundProvider
 import com.sar.shopaholism.presentation.feedback.SoundProviderImpl
 import com.sar.shopaholism.presentation.feedback.WishFeedbackService
 import com.sar.shopaholism.presentation.logger.LoggerImpl
-import com.sar.shopaholism.presentation.model.CreateWishModel
-import com.sar.shopaholism.presentation.model.SortWishModel
-import com.sar.shopaholism.presentation.model.WishesModel
+import com.sar.shopaholism.presentation.model.*
 import com.sar.shopaholism.presentation.presenter.*
 import com.sar.shopaholism.presentation.rater.WishesRater
 import com.squareup.picasso.Picasso
@@ -22,9 +20,11 @@ private val modules = module {
     factory { WishesModel() }
     factory { CreateWishModel() }
     factory { SortWishModel() }
+    factory { WishDetailModel() }
+    factory { WishDeletionModel() }
 
     // Presenters
-    single {
+    factory {
         WishesOverviewPresenter(
             getWishesUseCase = get(),
             model = get(),
@@ -32,32 +32,31 @@ private val modules = module {
         )
     }
 
-    single {
+    factory {
         WishCreationPresenter(
             createWishUseCase = get(),
-            wishFeedbackService = get(),
-            createWishModel = get()
+            wishFeedbackService = get()
         )
     }
 
-    single {
+    factory {
         WishEditingPresenter(
             updateWishUseCase = get(),
-            getWishUseCase = get(),
-            wishFeedbackService = get(),
-            createWishModel = get()
-        )
-    }
-
-    single {
-        WishDeletionPresenter(
-            deleteWishUseCase = get(),
             getWishUseCase = get(),
             wishFeedbackService = get()
         )
     }
 
-    single {
+    factory {
+        WishDeletionPresenter(
+            deleteWishUseCase = get(),
+            getWishUseCase = get(),
+            wishFeedbackService = get(),
+            model = get()
+        )
+    }
+
+    factory {
         WishSortPresenter(get(), get(), get(), get(), get(), get())
     }
 
@@ -68,11 +67,12 @@ private val modules = module {
         )
     }
 
-    single {
+    factory {
         WishDetailPresenter(
             getWishUseCase = get(),
             logger = get(),
-            getWikiPageUseCase = get()
+            getWikiPageUseCase = get(),
+            model = get()
         )
     }
 

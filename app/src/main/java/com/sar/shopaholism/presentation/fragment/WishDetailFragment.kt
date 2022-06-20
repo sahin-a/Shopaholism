@@ -25,10 +25,11 @@ import org.koin.android.ext.android.inject
  * Use the [WishDetailFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class WishDetailFragment : Fragment(), WishDetailView, OnWikiPageListener {
+class WishDetailFragment : BaseFragment<WishDetailPresenter, WishDetailView>(), WishDetailView,
+    OnWikiPageListener {
     private var wishId: Long? = null
 
-    private val presenter: WishDetailPresenter by inject()
+    override val presenter: WishDetailPresenter by inject()
 
     private lateinit var wishImageView: ImageView
     private lateinit var titleView: TextView
@@ -51,7 +52,6 @@ class WishDetailFragment : Fragment(), WishDetailView, OnWikiPageListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_wish_detail, container, false)
     }
 

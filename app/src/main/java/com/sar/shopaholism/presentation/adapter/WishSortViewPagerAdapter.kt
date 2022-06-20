@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.card.MaterialCardView
 import com.sar.shopaholism.R
 import com.sar.shopaholism.domain.entity.Wish
-import com.sar.shopaholism.presentation.presenter.WishSortPresenter
 
 data class SelectionResult(
     val otherWish: Wish,
@@ -18,18 +17,17 @@ data class SelectionResult(
 )
 
 class WishSortViewPagerAdapter(
-    val presenter: WishSortPresenter,
+    private val results: List<SelectionResult>,
     val mainWish: Wish,
-    val otherWishes: List<Wish>
+    val otherWishes: List<Wish>,
+    val onVoteSubmitted: (vote: SelectionResult) -> Unit
 ) : RecyclerView.Adapter<WishSortViewPagerAdapter.ViewHolder>() {
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        // main wish
         val mainCardView: MaterialCardView = itemView.findViewById(R.id.main_cardview)
         val mainWishImage: ImageView = itemView.findViewById(R.id.main_image)
         val mainWishTitle: TextView = itemView.findViewById(R.id.main_wish_title)
 
-        // other wish
         val otherCardView: MaterialCardView = itemView.findViewById(R.id.other_cardview)
         val otherWishImage: ImageView = itemView.findViewById(R.id.other_wish_image)
         val otherWishTitle: TextView = itemView.findViewById(R.id.other_wish_title)
@@ -44,65 +42,60 @@ class WishSortViewPagerAdapter(
         return ViewHolder(view)
     }
 
-    private fun addResult(result: SelectionResult, isPreferred: Boolean) {
-        result.isPreferred = isPreferred
-        presenter.addResult(result)
+    private fun ViewHolder.checkCard(mainCardSelected: Boolean) {
+        mainCardView.isChecked = mainCardSelected
+        otherCardView.isChecked = !mainCardSelected
+    }
+
+    private fun ViewHolder.resetCardSelection() {
+        mainCardView.isChecked = false
+        otherCardView.isChecked = false
+    }
+
+    private fun ViewHolder.restoreSelectionIfAvailable(otherWish: Wish) {
+        val selection =
+            results.findLast { it.otherWish.id == otherWish.id }
+        when (selection != null) {
+            true -> checkCard(!selection.isPreferred)
+            else -> resetCardSelection()
+        }
+    }
+
+    private fun onCardViewClicked(viewHolder: ViewHolder, res: SelectionResult) {
+        viewHolder.checkCard(!res.isPreferred)
+        onVoteSubmitted(res)
+    }
+
+    private fun ImageView.setImageFromWish(wish: Wish) {
+        scaleType = ImageView.ScaleType.CENTER_CROP
+        when (wish.imageUri.isNotBlank()) {
+            true -> {
+                setImageURI(Uri.parse(wish.imageUri))
+            }
+            false -> {
+                setImageResource(R.drawable.no_image_placeholder)
+            }
+        }
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val otherWish: Wish = otherWishes[position]
-
         val result = SelectionResult(
             otherWish = otherWish,
             isPreferred = false
         )
+        holder.restoreSelectionIfAvailable(otherWish)
 
-        // isPreffered is false when the main wish has been selected
-        val cardViewOnClick = { res: SelectionResult, isPreferred: Boolean ->
-            addResult(res, isPreferred)
-            presenter.showNextPage()
-        }
-
-        val checkCard = { checkMainCard: Boolean ->
-            holder.mainCardView.isChecked = checkMainCard
-            holder.otherCardView.isChecked = !checkMainCard
-        }
-
-        // restore selection if data available
-        presenter.model.selectionResults.findLast { res -> res.otherWish.id == otherWish.id }?.let {
-            checkCard(!it.isPreferred)
-        }
-
-        // main wish
-        when (mainWish.imageUri.isNotBlank()) {
-            true -> {
-                holder.mainWishImage.setImageURI(Uri.parse(mainWish.imageUri))
-            }
-            false -> {
-                holder.mainWishImage.setImageResource(R.drawable.no_image_placeholder)
-            }
-        }
-        holder.mainWishImage.scaleType = ImageView.ScaleType.CENTER_CROP
+        holder.mainWishImage.setImageFromWish(mainWish)
         holder.mainWishTitle.text = mainWish.title
         holder.mainCardView.setOnClickListener {
-            checkCard(true)
-            cardViewOnClick(result, false)
+            onCardViewClicked(holder, result.apply { isPreferred = false })
         }
 
-        // other wish
-        when (otherWish.imageUri.isNotBlank()) {
-            true -> {
-                holder.otherWishImage.setImageURI(Uri.parse(otherWish.imageUri))
-            }
-            false -> {
-                holder.otherWishImage.setImageResource(R.drawable.no_image_placeholder)
-            }
-        }
-        holder.otherWishImage.scaleType = ImageView.ScaleType.CENTER_CROP
+        holder.otherWishImage.setImageFromWish(otherWish)
         holder.otherWishTitle.text = otherWish.title
         holder.otherCardView.setOnClickListener {
-            checkCard(false)
-            cardViewOnClick(result, true)
+            onCardViewClicked(holder, result.apply { isPreferred = true })
         }
 
         val pageIndicatorText: String = holder.itemView.context.getString(R.string.page_indicator)

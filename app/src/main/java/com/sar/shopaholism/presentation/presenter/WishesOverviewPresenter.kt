@@ -5,71 +5,70 @@ import com.sar.shopaholism.domain.logger.Logger
 import com.sar.shopaholism.domain.usecase.GetWishesUseCase
 import com.sar.shopaholism.presentation.model.WishesModel
 import com.sar.shopaholism.presentation.view.WishesOverviewView
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import org.koin.core.component.KoinComponent
 
 class WishesOverviewPresenter(
     private val getWishesUseCase: GetWishesUseCase,
     private val model: WishesModel,
     private val logger: Logger
-) :
-    BasePresenter<WishesOverviewView>(),
-    KoinComponent {
+) : BasePresenter<WishesOverviewView>() {
 
-    companion object {
-        private const val TAG: String = "WishesOverviewPresenter"
+    override suspend fun onNewViewAttached() {
+        super.onNewViewAttached()
+        loadData()
     }
 
-    suspend fun loadWishes() = coroutineScope {
-        launch(Dispatchers.Main) {
-            onLoadData()
-        }
+    private fun onDataLoaded() {
+        view?.showLoading(visible = false)
+        showData()
+    }
 
-        // retrieving the wishes from the local db
-        getWishesUseCase.execute()
-            .catch { e -> logger.e(TAG, e.message ?: "") }
-            .collect { wishesFromDb ->
-
-                model.wishes.value?.let {
-                    it.clear()
-                    it.addAll(wishesFromDb)
-
-                    logger.i(
-                        TAG,
-                        message = "Retrieved ${wishesFromDb.size} Wishes from the local Db"
-                    )
-                }
-
-                launch(Dispatchers.Main) {
-                    onDataLoaded()
-                }
-            }
+    private suspend fun loadData() {
+        onLoadData()
+        loadWishes()
+        onDataLoaded()
     }
 
     private fun onLoadData() {
         view?.showLoading(visible = true)
     }
 
-    private fun onDataLoaded() {
+    private suspend fun loadWishes() {
+        val wishes = getWishesUseCase.execute()
+            .catch { e -> logger.e(TAG, e.message ?: "") }
+            .first()
+
+        model.wishes = wishes.toMutableList()
+        logger.i(TAG, message = "Retrieved ${wishes.size} Wishes from the local Db")
+    }
+
+
+    private fun showData() {
         view?.let { view ->
-            model.wishes.value?.let {
-                view.showWishes(it)
-            }
-
-            if (model.wishes.value.isNullOrEmpty()) {
+            if (model.wishes.isEmpty()) {
                 view.showEmptyState()
+            } else {
+                view.showWishes(model.wishes)
             }
+        }
+    }
 
-            view.showLoading(visible = false)
+    fun onWishDeleted() {
+        CoroutineScope(Dispatchers.Main).launch {
+            loadData()
         }
     }
 
     fun navigateToCreateWishFragment() {
         view?.navigateTo(R.id.action_wishesOverviewFragment_to_createWishFragment)
         logger.i(tag = this::class.java.name, message = "Navigated to createWishFragment")
+    }
+
+    companion object {
+        private const val TAG: String = "WishesOverviewPresenter"
     }
 }

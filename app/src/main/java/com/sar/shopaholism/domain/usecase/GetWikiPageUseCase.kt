@@ -10,7 +10,7 @@ class GetWikiPageUseCase(
     private val wikipediaClient: WikipediaClient,
     private val logger: Logger
 ) {
-
+    // TODO: Get limit from storage
     suspend fun execute(title: String, limit: Int = 20): List<WikiPage> {
         try {
             return wikipediaClient.getPages(title, limit)
