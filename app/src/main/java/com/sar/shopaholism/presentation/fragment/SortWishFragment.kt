@@ -46,10 +46,13 @@ class SortWishFragment : BaseFragment<WishSortPresenter, WishSortView>(), WishSo
 
     override fun setData(wish: Wish, otherWishes: List<Wish>) {
         viewPager.adapter = WishSortViewPagerAdapter(
+            results = presenter.getVotes(),
             mainWish = wish,
-            otherWishes = otherWishes,
-            presenter = presenter
-        )
+            otherWishes = otherWishes
+        ) {
+            presenter.addVote(it)
+            presenter.showNextPage()
+        }
     }
 
     override fun getMainWishId(): Long {
@@ -63,13 +66,13 @@ class SortWishFragment : BaseFragment<WishSortPresenter, WishSortView>(), WishSo
             when (nextIndex <= (adapter.itemCount - 1)) {
                 true -> viewPager.setCurrentItem(nextIndex, true)
                 else -> CoroutineScope(Dispatchers.Default).launch {
-                    presenter.submitResult()
+                    presenter.submitVotes()
                 }
             }
         }
     }
 
-    override fun resultSubmitted() {
+    override fun votesSubmitted() {
         findNavController().navigate(R.id.action_sortWishFragment_to_wishesOverviewFragment)
     }
 

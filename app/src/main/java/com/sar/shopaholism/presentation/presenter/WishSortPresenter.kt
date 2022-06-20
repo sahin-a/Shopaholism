@@ -17,7 +17,7 @@ class WishSortPresenter(
     private val getWishUseCase: GetWishUseCase,
     private val getWishesUseCase: GetWishesUseCase,
     private val updateWishPriorityByVotesUseCase: UpdateWishPriorityByVotesUseCase,
-    var model: SortWishModel,
+    private val model: SortWishModel,
     private val logger: Logger,
     private val wishFeedbackService: WishFeedbackService
 ) : BasePresenter<WishSortView>() {
@@ -69,27 +69,14 @@ class WishSortPresenter(
         }
     }
 
-    fun addResult(result: SelectionResult) {
-        val oldResult = model.selectionResults.lastOrNull { it.otherWish.id == result.otherWish.id }
-
-        when (oldResult != null) {
+    fun addVote(vote: SelectionResult) {
+        val oldVote = model.votes.lastOrNull { it.otherWish.id == vote.otherWish.id }
+        when (oldVote != null) {
             true -> {
-                val idx = model.selectionResults.indexOf(oldResult)
-                model.selectionResults[idx] = result
-
-                logger.d(
-                    tag = TAG,
-                    message = "SelectionResult replaced"
-                )
+                val idx = model.votes.indexOf(oldVote)
+                model.votes[idx] = vote
             }
-            else -> {
-                model.selectionResults.add(result)
-
-                logger.d(
-                    tag = TAG,
-                    message = "SelectionResult added"
-                )
-            }
+            else -> model.votes.add(vote)
         }
     }
 
@@ -97,8 +84,8 @@ class WishSortPresenter(
         view?.showNextPage()
     }
 
-    suspend fun submitResult() = coroutineScope {
-        val isVotingComplete = model.selectionResults.count() != model.otherWishes.count()
+    suspend fun submitVotes() = coroutineScope {
+        val isVotingComplete = model.votes.count() != model.otherWishes.count()
         if (isVotingComplete) {
             return@coroutineScope
         }
@@ -109,7 +96,7 @@ class WishSortPresenter(
 
         val summary = VoteSummary(
             model.mainWish!!,
-            model.selectionResults.map {
+            model.votes.map {
                 Vote(it.otherWish, it.isPreferred)
             }
         )
@@ -119,9 +106,11 @@ class WishSortPresenter(
         }
     }
 
+    fun getVotes(): List<SelectionResult> = model.votes
+
     private fun postSubmitResult() {
         wishFeedbackService.wishSuccessfullyRated()
-        view?.resultSubmitted()
+        view?.votesSubmitted()
     }
 
     companion object {
