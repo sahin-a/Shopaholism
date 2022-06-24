@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
-    <ListPreference
+    <com.sar.shopaholism.presentation.settings.views.ListIntPreference
         app:defaultValue="10"
         app:entries="@array/wiki_search_max_results"
         app:entryValues="@array/wiki_search_max_results"

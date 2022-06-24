@@ -1,16 +1,11 @@
 package com.sar.shopaholism.data.local.storage
 
-import com.sar.shopaholism.data.local.source.PreferencesDataSource
+import com.sar.shopaholism.data.local.source.KeyValueDataSource
 
 abstract class Storage<T>(
     private val key: String,
-    private val dataSource: PreferencesDataSource
+    private val dataSource: KeyValueDataSource
 ) {
-    open fun get(): T {
-        return dataSource.getValue(key)
-    }
-
-    open fun set(key: String, value: T) {
-        dataSource.setValue(key, value)
-    }
+    abstract fun get(): T
+    abstract fun set(key: String, value: T)
 }

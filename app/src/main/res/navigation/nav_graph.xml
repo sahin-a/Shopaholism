@@ -70,7 +70,7 @@
         tools:layout="@layout/fragment_wish_detail" />
     <fragment
         android:id="@+id/settingsFragment"
-        android:name="com.sar.shopaholism.SettingsFragment"
+        android:name="com.sar.shopaholism.presentation.settings.SettingsFragment"
         android:label="@string/nav_settings_title"
         tools:layout="@layout/fragment_settings" />
 </navigation>

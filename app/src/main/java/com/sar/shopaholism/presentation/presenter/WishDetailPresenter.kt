@@ -1,5 +1,6 @@
 package com.sar.shopaholism.presentation.presenter
 
+import com.sar.shopaholism.data.local.storage.WikiSearchResultLimitStorage
 import com.sar.shopaholism.domain.entity.WikiPage
 import com.sar.shopaholism.domain.entity.Wish
 import com.sar.shopaholism.domain.exception.WishNotFoundException
@@ -15,6 +16,7 @@ import kotlinx.coroutines.launch
 class WishDetailPresenter(
     private val getWishUseCase: GetWishUseCase,
     private val getWikiPageUseCase: GetWikiPageUseCase,
+    private val wikiSearchResultLimitStorage: WikiSearchResultLimitStorage,
     private val logger: Logger,
     private val model: WishDetailModel
 ) : BasePresenter<WishDetailView>() {
@@ -50,7 +52,7 @@ class WishDetailPresenter(
     }
 
     private suspend fun getWikiEntries(title: String): List<WikiPage> =
-        getWikiPageUseCase.execute(title, 25)
+        getWikiPageUseCase.execute(title, wikiSearchResultLimitStorage.get())
 
     private suspend fun loadData() {
         getWish()?.let { wish ->

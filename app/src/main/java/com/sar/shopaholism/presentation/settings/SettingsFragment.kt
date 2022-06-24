@@ -1,7 +1,8 @@
-package com.sar.shopaholism
+package com.sar.shopaholism.presentation.settings
 
 import android.os.Bundle
 import androidx.preference.PreferenceFragmentCompat
+import com.sar.shopaholism.R
 import com.sar.shopaholism.presentation.view.SettingsView
 
 
@@ -20,4 +21,6 @@ class SettingsFragment : PreferenceFragmentCompat(), SettingsView {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.settings, rootKey)
     }
+
+
 }

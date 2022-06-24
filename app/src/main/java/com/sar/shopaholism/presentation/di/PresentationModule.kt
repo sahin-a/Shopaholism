@@ -15,77 +15,27 @@ import org.koin.dsl.module
 
 private val modules = module {
     single<Logger> { LoggerImpl() }
+    single { WishesRater(get(), get()) }
+    single<Picasso> {
+        Picasso
+            .Builder(androidContext())
+            .build()
+    }
+    single { MediaPlayer() }
+    single<SoundProvider> { SoundProviderImpl(context = androidContext(), mediaPlayer = get()) }
+    single { WishFeedbackService(soundProvider = get()) }
 
-    // Models
     factory { WishesModel() }
     factory { CreateWishModel() }
     factory { SortWishModel() }
     factory { WishDetailModel() }
     factory { WishDeletionModel() }
 
-    // Presenters
-    factory {
-        WishesOverviewPresenter(
-            getWishesUseCase = get(),
-            model = get(),
-            logger = get()
-        )
-    }
-
-    factory {
-        WishCreationPresenter(
-            createWishUseCase = get(),
-            wishFeedbackService = get()
-        )
-    }
-
-    factory {
-        WishEditingPresenter(
-            updateWishUseCase = get(),
-            getWishUseCase = get(),
-            wishFeedbackService = get()
-        )
-    }
-
-    factory {
-        WishDeletionPresenter(
-            deleteWishUseCase = get(),
-            getWishUseCase = get(),
-            wishFeedbackService = get(),
-            model = get()
-        )
-    }
-
-    factory {
-        WishSortPresenter(get(), get(), get(), get(), get(), get())
-    }
-
-    single {
-        WishesRater(
-            updateWishUseCase = get(),
-            getWishesUseCase = get()
-        )
-    }
-
-    factory {
-        WishDetailPresenter(
-            getWishUseCase = get(),
-            logger = get(),
-            getWikiPageUseCase = get(),
-            model = get()
-        )
-    }
-
-    single<Picasso> {
-        Picasso
-            .Builder(androidContext())
-            .build()
-    }
-
-    single { MediaPlayer() }
-
-    single<SoundProvider> { SoundProviderImpl(context = androidContext(), mediaPlayer = get()) }
-    single { WishFeedbackService(soundProvider = get()) }
+    factory { WishesOverviewPresenter(get(), get(), get()) }
+    factory { WishCreationPresenter(get(), get()) }
+    factory { WishEditingPresenter(get(), get(), get()) }
+    factory { WishDeletionPresenter(get(), get(), get(), get()) }
+    factory { WishSortPresenter(get(), get(), get(), get(), get(), get()) }
+    factory { WishDetailPresenter(get(), get(), get(), get(), get()) }
 }
-
 val presentationModules = listOf(modules)

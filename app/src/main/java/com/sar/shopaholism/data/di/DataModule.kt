@@ -6,7 +6,7 @@ import com.github.kittinunf.fuel.core.FuelManager
 import com.sar.shopaholism.data.local.db.WishesDatabase
 import com.sar.shopaholism.data.local.source.PreferencesDataSource
 import com.sar.shopaholism.data.local.source.WishesDataSource
-import com.sar.shopaholism.data.local.storage.Storages
+import com.sar.shopaholism.data.local.storage.WikiSearchResultLimitStorage
 import com.sar.shopaholism.data.repository.WishesRepositoryImpl
 import com.sar.shopaholism.data.web.WebApiClient
 import com.sar.shopaholism.data.web.WebApiClientImpl
@@ -47,7 +47,7 @@ private val repositoryModule = module {
 }
 
 private val storageModule = module {
-    single { Storages(get()) }
+    single { WikiSearchResultLimitStorage(get()) }
 }
 
 val dataModules = databaseModule + apiModule + repositoryModule + storageModule
